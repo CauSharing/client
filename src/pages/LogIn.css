@@ -1,0 +1,82 @@
+.LogIn{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.LogIn .Title{
+    font-size: 80px;
+    width: 100%;
+    text-align: center;
+    margin: 190px 0px 70px 0px;
+}
+.LogIn .Title div{
+    margin: 5px 0px;
+}
+.LogIn .SignIn{
+    display:flex;
+    align-content: center;
+    justify-content: center;
+}
+.LogIn .SignIn form{
+    display:flex;
+    flex-direction: column;
+}
+.LogIn .SignIn input{
+    border: none;
+    background-color:#EFEDF1;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
+    width: 280px;
+    height: 50px;
+    font-size: 21px;
+    border-radius: 10px;
+    color: dimgrey;
+    padding: 0px 10px;
+}
+
+.LogIn .SignIn input:nth-of-type(1){
+    margin-bottom: 8px;
+}
+
+.LogIn .SignIn input:focus::placeholder {       /* Chrome, Safari, Firefox */
+    color: black;
+    opacity: 0.3;
+}
+.LogIn .SignIn input:focus:-ms-input-placeholder {     /* IE, Edge */
+    color: black;
+    opacity: 0.3;
+}
+
+.LogIn .SignIn button{
+    width: 100px;
+    height: 108px;
+    font-size: 27px;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
+    background: linear-gradient(to right,rgba(255,222,222,0.4) , rgba(255,173,157,0.4));
+    color: black;
+    /*background: linear-gradient(to right, rgba(104,176,171,0.6), rgba(0,106,113,0.6));*/ /*내가 원하는 컬러*/
+    margin: 0px 8px;
+}
+
+.LogIn .SignIn button:active{
+    opacity: 0.7;
+}
+.LogIn .Menu{
+    font-size: 22px;
+    display: flex;
+    justify-content: space-around;
+    margin: 44px 0px;
+    width: 410px;
+}
+.LogIn .Menu div{
+    width: 258px;
+    height: 38px;
+}
+
+.LogIn .Menu a:active{
+    opacity: 0.7;
+}
