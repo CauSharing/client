@@ -1,53 +1,54 @@
-import React, {Component } from 'react';
+import React, {Component, useState } from 'react';
 import { Link} from 'react-router-dom';
 import './SignUp.css';
+import '../components/checkEmail'
+import checkCauEmail from "../components/checkEmail";
 
-class EmailField extends Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: '',
-            isCodeSent: false
-        };
-    }
+function EmailUpdate() {
+    const [email, setEmail] = useState("");
 
-    handleSendCode = (e) => {
-        e.preventDefault();
-        alert("Verification code is sent to your email!\nPlease check your email.");
-    }
-    render(){
-        return(
-            <div className='Field'>
-                <div>
-                    <label htmlFor="email">Email</label>
-                </div>
-                <div>
-                    <input type="email" id="email" required/>
-                </div>
-                <div>
-                    <button type="submit" className="sendBtn" onClick={this.handleSendCode}>Send verification code</button>
-                </div>
+    const handleChange = ({target: {value}}) => setEmail(value);
+
+    const handleOnClick = (event) => {
+      event.preventDefault();
+      let message = "";
+      if(!checkCauEmail(email))
+          message = "Please write your Chungang university email!";
+      else
+      {
+          message = "Verification code is sent to "+email+"\nPlease check your email.";
+      }
+      alert(message);
+    };
+
+    return (
+        <div className='Field'>
+            <div>
+                <label htmlFor="email">Email</label>
             </div>
-        );
-    }
+            <div>
+                <input type="email" id="email" required value={email} onChange={handleChange}/>
+            </div>
+            <div>
+                <button className="sendBtn" onClick={handleOnClick}>Send verification code</button>
+            </div>
+        </div>
+    );
 }
 
 class VerificationField extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            isClicked: false,
             isVerified: false,
-            verificationCode: "",
             userVerificationCode: ""
         };
     };
 
     handleOnClick = (e) => {
         e.preventDefault();
-        this.setState({isClicked: true});
-
-        if(this.state.verificationCode === this.state.userVerificationCode)
+        const {verificationCode} = this.props;
+        if(verificationCode === this.state.userVerificationCode || this.state.isVerified)
         {
             this.setState({isVerified: true});
             alert("Your email is verified!");
@@ -57,6 +58,7 @@ class VerificationField extends Component{
             alert("Wrong verification code!");
         }
     }
+
     handleChange = (e) => {
         e.preventDefault();
         this.setState({userVerificationCode: e.target.value});
@@ -64,24 +66,24 @@ class VerificationField extends Component{
 
     render(){
         let check = null;
-        if(this.state.isClicked === true && this.state.isVerified === true)
+        if(this.state.isVerified === true)
         {
-            check = <img src={require("../icons/checked.png").default} alt="checked"/>
+            check = <img src={require("../icons/checked.png").default} alt="checked" />
         }
         else
         {
-            check =<button type="submit" className="checkBtn" value={this.state.userVerificationCode} onClick={(e) =>
-                this.handleOnClick(e)
-                }>check</button>
+            check =<button type="submit"
+                           className="checkBtn"
+                           onClick={this.handleOnClick}>check</button>
         }
 
         return(
             <div className='Field'>
                 <div>
-                    <label for="verification">Verification code</label>
+                    <label htmlFor="verification">Verification code</label>
                 </div>
                 <div>
-                    <input type="text" id="verification" required onChange={this.handleChange}/>
+                    <input type="text" id="verification" required onChange={this.handleChange} value={this.state.userVerificationCode}/>
                 </div>
                 <div>
                     {check}
@@ -95,9 +97,6 @@ class VerificationField extends Component{
 class NickNameField extends Component{
     constructor(props) {
         super(props);
-        this.state = {
-            nickname: "",
-        }
     }
     render(){
         return(
@@ -106,7 +105,7 @@ class NickNameField extends Component{
                     <label htmlFor="nickname">Nickname</label>
                 </div>
                 <div>
-                    <input type="text" id="nickname" required value={this.state.nickname}/>
+                    <input type="text" id="nickname" required value={this.props.nickname}/>
                 </div>
                 <div></div>
             </div>
@@ -129,7 +128,7 @@ class PasswordField extends Component{
 
     render(){
         return(
-            <form>
+            <div>
               <div className='Field'>
                   <div>
                       <label htmlFor='password'>Password</label>
@@ -158,7 +157,7 @@ class PasswordField extends Component{
                         }
                     </div>
                 </div>
-            </form>
+            </div>
         );
     }
 }
@@ -166,23 +165,6 @@ class MajorField extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            department: [
-                {id: 1, name: 'College of Liberal Arts', major: ['Korean Language and Literature','English Language and Literature', 'German Literature', 'French Literature', 'Russian Language and Literature', 'Japanese Language and Literature', 'Chinese Language and Literature', 'Philosophy', 'History']},
-                {id: 2, name: 'College of Social Sciences', major:['Political Science and International Relations','Public Service','Psychology','Library and Information Science','Social Welfare','Media and Communication','Urban Planning and Real Estate', 'Sociology']},
-                {id: 3, name: 'College of Education', major: ['Education', 'Early Childhood Education', 'English Education', 'Physical Education']},
-                {id: 4, name: 'College of Natural Sciences', major:['Physics', 'Chemistry', 'Life Science', 'Mathematics']},
-                {id: 5, name: 'College of Biotechnology and Natural Resources', major:['Biological Resources Engineering', 'Food Engineering', 'Systems Biotechnology']},
-                {id: 6, name: 'College of Engineering', major:['Civil & Environmental Engineering, Urban Design and Study', 'Architecture & Building Science', 'Chemical Engineering and Materials Science', 'Mechanical Engineering', 'Energy Systems Engineering', 'Advanced Materials Engineering']},
-                {id: 7, name: 'College of ICT Engineering', major:['Electrical and Electronics Engineering', 'Integrative Engineering']},
-                {id: 8, name: 'College of Software', major:['Software', 'AI']},
-                {id: 9, name: 'College of Business & Economics', major:['Business Management', 'Economics', 'Applied Statistics', 'Advertising and Public Relations', 'International Logistics', 'Knowledge & Business Administration', 'Industrial Security']},
-                {id: 10, name: 'College of Medicine', major:['Medicine']},
-                {id: 11, name: 'College of Pharmacy', major: ['Pharmacy']},
-                {id: 12, name: 'Red Cross College of Nursing', major:['Nursing']},
-                {id: 13, name: 'College of Art', major:['Performance Video Creation(Seoul)', 'Performance Video Creation(Anseong)', 'Art', 'Design', 'Music', 'Traditional Art', 'Global Arts']},
-                {id: 14, name: 'College of Art and Technology', major:['Computer Art']},
-                {id: 15, name: 'College of Sport Sciences', major:['Sports Science']},
-            ],
             selectedDepartment: 0
         }
     }
@@ -194,6 +176,7 @@ class MajorField extends Component{
     }
 
     render(){
+        const {department} = this.props;
         return(
             <div className='Field'>
                 <div>
@@ -203,7 +186,7 @@ class MajorField extends Component{
                     <select name="department" id="department-select" value={this.state.selectedDepartment} onChange={this.handleOnChange}>
                         {
                             [<option hidden value="">Choose your college...</option> ,
-                            this.state.department.map((department, index) => (
+                                department.map((department, index) => (
                                 <option value={department.id}>{department.name}</option>
                             ))]
                         }
@@ -213,7 +196,7 @@ class MajorField extends Component{
                     <select name="major" id="major-select">
                         {
                             [<option hidden value="">Choose your major...</option> ,
-                            this.state.department[this.state.selectedDepartment].major.map((name, index) => (
+                                department[this.state.selectedDepartment].major.map((name, index) => (
                                 <option value={name}>{name}</option>
                             ))]
                         }
@@ -226,6 +209,18 @@ class MajorField extends Component{
 }
 
 class LanguageField extends Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            language: ""
+        };
+    }
+    handleSelect = (e) => {
+        e.preventDefault();
+        this.setState({
+            language: e.target.value
+        });
+    }
     render(){
         return(
             <div className='Field'>
@@ -233,7 +228,7 @@ class LanguageField extends Component{
                     <label htmlFor="language-select">Most comfortable language</label>
                 </div>
                 <div>
-                    <select id="language-select">
+                    <select id="language-select" value={this.state.language} onSelect={this.handleSelect}>
                         <option value="Choose your language..." hidden>Choose your language...</option>
                         <option value="AF">Afrikaans</option>
                         <option value="SQ">Albanian</option>
@@ -318,19 +313,47 @@ class LanguageField extends Component{
 }
 
 class SignUp extends Component{
+    constructor(props) {
+        super(props);
+        this.state={
+            email: "",
+            verificationCode: "",
+            nickname: "",
+            password: "",
+            major: "",
+            language: ""
+        }
+    }
+
+    handleOnClick = () => {
+        alert(
+            "email: "+this.state.email+"\n"+
+            "nickname: "+this.state.nickname +"\n" +
+            "major: "+this.state.major + "\n" +
+            "language: "+this.state.language+"\n" +
+            "Signed up!!"
+        );
+    }
+
+    handleSubmit = (e) => {
+
+    }
+
     render(){
+        const {verificationCode,department} = this.props;
         return(
-            <form className='SignUp'>
+            <form className='SignUp' onSubmit={this.handleSubmit}>
                 <div className='Title'>Sign Up</div>
-                <form className='Fields'>
-                    <EmailField />
-                    <VerificationField />
+                <div className='Fields'>
+                    {/*<EmailField />*/}
+                    <EmailUpdate />
+                    <VerificationField verificationCode={verificationCode}/>
                     <NickNameField />
                     <PasswordField />
-                    <MajorField />
+                    <MajorField department={department}/>
                     <LanguageField />
-                </form>
-                <Link exact to="/"><button type="submit" className='ok'>OK</button></Link>
+                </div>
+                <Link exact to="/"><button type="submit" className='ok' onClick={this.handleOnClick}>OK</button></Link>
             </form>
 
         );
