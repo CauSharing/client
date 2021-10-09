@@ -9,7 +9,7 @@ class App extends Component{
         super(props);
         this.state = {
             verificationCode: "12345",
-            department: [
+            departmentList: [
                 {id: 1, name: 'College of Liberal Arts', major: ['Korean Language and Literature','English Language and Literature', 'German Literature', 'French Literature', 'Russian Language and Literature', 'Japanese Language and Literature', 'Chinese Language and Literature', 'Philosophy', 'History']},
                 {id: 2, name: 'College of Social Sciences', major:['Political Science and International Relations','Public Service','Psychology','Library and Information Science','Social Welfare','Media and Communication','Urban Planning and Real Estate', 'Sociology']},
                 {id: 3, name: 'College of Education', major: ['Education', 'Early Childhood Education', 'English Education', 'Physical Education']},
@@ -32,7 +32,7 @@ class App extends Component{
     return (
         <>
           <Route exact path='/' component={LogIn} />
-          <Route path="/signUp" render={()=><SignUp department={this.state.department} verificationCode={this.state.verificationCode}/>}/>
+          <Route path="/signUp" render={()=><SignUp departmentList={this.state.departmentList} verificationCode={this.state.verificationCode}/>}/>
         </>
     );
   }
