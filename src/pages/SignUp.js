@@ -113,8 +113,23 @@ function NicknameUpdate({nickname, setNickname}){
 }
 
 function PasswordUpdate({password, setPassword, passwordCheck, setPasswordCheck}){
-    const handlePasswordChange = ({target: {value}}) => setPassword(value);
+    const [isValid, setIsValid] = useState(false);
+
+    const handlePasswordChange = ({target: {value}}) => {
+        setPassword(value);
+        checkPassword(password);
+    }
     const handlePasswordCheckChange = ({target: {value}}) => setPasswordCheck(value);
+    const checkPassword = (password) => {
+        if(password.indexOf(' ') >= 0)
+        {
+            setIsValid(false);
+        }
+        else
+        {
+            setIsValid(true);
+        }
+    }
 
     return(
         <div>
@@ -130,7 +145,23 @@ function PasswordUpdate({password, setPassword, passwordCheck, setPasswordCheck}
                            onChange={handlePasswordChange}
                            value={password}/>
                 </div>
-                <div></div>
+
+                {
+                    password.length>0?
+                        isValid?
+                            <div>
+                                <img src={require("../icons/checked.png").default} alt="checked" />
+                            </div>
+                            :
+                            <div>
+                                <img src={require("../icons/not-checked.png").default} alt="not checked" />
+                                <span>  Password shouldn't have white spaces in it</span>
+                            </div>
+                        :
+                        <div></div>
+                }
+
+
             </div>
             <div className='Field'>
                 <div>
