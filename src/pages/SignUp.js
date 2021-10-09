@@ -5,80 +5,92 @@ import './SignUp.css';
 import '../components/checkEmail'
 import checkCauEmail from "../components/checkEmail";
 
-function EmailUpdate({email, setEmail}){
-    const handleEmailChange = ({target: {value}}) => setEmail(value);
+function EmailUpdate({email, setEmail, setVerificationCode, isVerified, verificationCode, userVerificationCode, setIsVerified, setUserVerificationCode}){
+    const handleEmailChange = ({target: {value}}) => {
+        setEmail(value);
+        setVerificationCode("2345"); // email 바뀔 때마다 verification code도 바뀜
+
+    };
 
     const handleEmailOnClick = (event) => {
         event.preventDefault();
         let message = "";
         if(!checkCauEmail(email))
+        {
             message = "Please write your Chungang university email!";
+        }
         else
         {
             message = "Verification code is sent to "+email+"\nPlease check your email.";
+            setIsVerified(false);
         }
         alert(message);
     };
-    return(
-        <div className='Field'>
-            <div>
-                <label htmlFor="email">Email</label>
-            </div>
-            <div>
-                <input type="email"
-                       id="email"
-                       required
-                       value={email}
-                       onChange={handleEmailChange}/>
-            </div>
-            <div>
-                <button className="sendBtn" onClick={handleEmailOnClick}>Send verification code</button>
-            </div>
-        </div>
-    );
-}
 
-function VerificationCodeUpdate({isVerified, verificationCode, userVerificationCode, setIsVerified, setUserVerificationCode}){
     const handleUserVerificationCodeChange = ({target: {value}}) => setUserVerificationCode(value);
 
     const handleVerificationCodeOnClick = (event) => {
         event.preventDefault();
-        if(verificationCode === userVerificationCode)
+        if(isVerified === false)
         {
-            setIsVerified(true);
-            alert("Your email is verified!");
-        }
-        else
-        {
-            alert("Wrong verification code!");
+            if(verificationCode === userVerificationCode)
+            {
+                setIsVerified(true);
+                alert("Your email is verified!");
+            }
+            else
+            {
+                setIsVerified(false);
+                alert("Wrong verification code!");
+            }
         }
     }
 
     return(
-        <div className='Field'>
-            <div>
-                <label htmlFor="verification">Verification code</label>
+        <div>
+            <div className='Field'>
+                <div>
+                    <label htmlFor="email">Email</label>
+                </div>
+                <div>
+                    <input type="email"
+                           id="email"
+                           required
+                           value={email}
+                           onChange={handleEmailChange}/>
+                </div>
+                <div>
+                    <button className="sendBtn" onClick={handleEmailOnClick}>Send verification code</button>
+                </div>
             </div>
-            <div>
-                <input type="text"
-                       id="verification"
-                       required
-                       value={userVerificationCode}
-                       onChange={handleUserVerificationCodeChange} />
-            </div>
-            <div>
-                {
-                    isVerified ?
-                        <img src={require("../icons/checked.png").default} alt="checked" />
-                        :
-                        <button type="submit"
-                                className="checkBtn"
-                                onClick={handleVerificationCodeOnClick}>check</button>
-                }
+            <div className='Field'>
+                <div>
+                    <label htmlFor="verification">Verification code</label>
+                </div>
+                <div>
+                    <input type="text"
+                           id="verification"
+                           required
+                           value={userVerificationCode}
+                           onChange={handleUserVerificationCodeChange} />
+                </div>
+                <div>
+                    {
+                        isVerified ?
+                            <img src={require("../icons/checked.png").default} alt="checked" />
+                            :
+                            <button type="submit"
+                                    className="checkBtn"
+                                    onClick={handleVerificationCodeOnClick}>check</button>
+                    }
+                </div>
             </div>
         </div>
+
     );
 }
+
+
 
 function NicknameUpdate({nickname, setNickname}){
     const handleNicknameChange = ({target: {value}}) => setNickname(value);
@@ -287,9 +299,10 @@ function LanguageUpdate({language, setLanguage}){
     );
 }
 
-function SignUp({departmentList, verificationCode}){
+function SignUp({departmentList}){
     const {handleSubmit, register} = useForm();
     const [email, setEmail] = useState("");
+    const [verificationCode, setVerificationCode] = useState("12345");
     const [userVerificationCode, setUserVerificationCode] = useState("");
     const [isVerified, setIsVerified] = useState(false);
     const [nickname, setNickname] = useState("");
@@ -298,9 +311,21 @@ function SignUp({departmentList, verificationCode}){
     const [department, setDepartment] = useState("");
     const [major, setMajor] = useState("");
     const [language, setLanguage] = useState("");
+    const [isFill, setIsFill] = useState(false);
 
     const okBtnClick = (event) => {
-        alert("email: "+ email + "\n" + "nickname: "+nickname+"\n"+"major: "+department+" "+major+"\n"+"language: "+language+"\n");
+        if(email === "" || isVerified === false || nickname==="" || department==="" || major==="" || language==="")
+        {
+            event.preventDefault();
+            alert("Please fill out all the boxes");
+            setIsFill(false);
+        }
+        else
+        {
+            alert("email: "+ email + "\n" + "nickname: "+nickname+"\n"+"major: "+department+" "+major+"\n"+"language: "+language+"\n");
+            setIsFill(true);
+        }
+
     }
 
 
@@ -308,14 +333,15 @@ function SignUp({departmentList, verificationCode}){
         <form className='SignUp' >
             <div className='Title'>Sign Up</div>
                 <div className='Fields'>
-                    <EmailUpdate email={email} setEmail={setEmail}/>
-
-                    <VerificationCodeUpdate
+                    <EmailUpdate
+                        email={email}
+                        setEmail={setEmail}
+                        setVerificationCode={setVerificationCode}
                         isVerified={isVerified}
                         verificationCode={verificationCode}
                         userVerificationCode={userVerificationCode}
                         setIsVerified={setIsVerified}
-                        setUserVerificationCode = {setUserVerificationCode} />
+                        setUserVerificationCode = {setUserVerificationCode}/>
 
                     <NicknameUpdate
                         nickname={nickname}
@@ -338,7 +364,8 @@ function SignUp({departmentList, verificationCode}){
                         language={language}
                         setLanguage={setLanguage} />
                 </div>
-            <Link exact to="/"><button type="submit" className='ok' onClick={okBtnClick}>OK</button></Link>
+
+            <Link exact to={isFill? "/": "/signUp"} ><button type="submit" className='ok' onClick={okBtnClick}>OK</button></Link>
         </form>
     )
 }
