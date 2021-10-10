@@ -1,41 +1,17 @@
-import React, {Component}  from "react";
+import React from "react";
 import './App.css';
 import { Route } from 'react-router-dom';
 import LogIn from './pages/LogIn';
 import SignUp from "./pages/SignUp";
 
-class App extends Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            verificationCode: "12345",
-            departmentList: [
-                {id: 1, name: 'College of Liberal Arts', major: ['Korean Language and Literature','English Language and Literature', 'German Literature', 'French Literature', 'Russian Language and Literature', 'Japanese Language and Literature', 'Chinese Language and Literature', 'Philosophy', 'History']},
-                {id: 2, name: 'College of Social Sciences', major:['Political Science and International Relations','Public Service','Psychology','Library and Information Science','Social Welfare','Media and Communication','Urban Planning and Real Estate', 'Sociology']},
-                {id: 3, name: 'College of Education', major: ['Education', 'Early Childhood Education', 'English Education', 'Physical Education']},
-                {id: 4, name: 'College of Natural Sciences', major:['Physics', 'Chemistry', 'Life Science', 'Mathematics']},
-                {id: 5, name: 'College of Biotechnology and Natural Resources', major:['Biological Resources Engineering', 'Food Engineering', 'Systems Biotechnology']},
-                {id: 6, name: 'College of Engineering', major:['Civil & Environmental Engineering, Urban Design and Study', 'Architecture & Building Science', 'Chemical Engineering and Materials Science', 'Mechanical Engineering', 'Energy Systems Engineering', 'Advanced Materials Engineering']},
-                {id: 7, name: 'College of ICT Engineering', major:['Electrical and Electronics Engineering', 'Integrative Engineering']},
-                {id: 8, name: 'College of Software', major:['Software', 'AI']},
-                {id: 9, name: 'College of Business & Economics', major:['Business Management', 'Economics', 'Applied Statistics', 'Advertising and Public Relations', 'International Logistics', 'Knowledge & Business Administration', 'Industrial Security']},
-                {id: 10, name: 'College of Medicine', major:['Medicine']},
-                {id: 11, name: 'College of Pharmacy', major: ['Pharmacy']},
-                {id: 12, name: 'Red Cross College of Nursing', major:['Nursing']},
-                {id: 13, name: 'College of Art', major:['Performance Video Creation(Seoul)', 'Performance Video Creation(Anseong)', 'Art', 'Design', 'Music', 'Traditional Art', 'Global Arts']},
-                {id: 14, name: 'College of Art and Technology', major:['Computer Art']},
-                {id: 15, name: 'College of Sport Sciences', major:['Sports Science']},
-            ]
-        };
-    }
-  render(){
-    return (
-        <>
-          <Route exact path='/' component={LogIn} />
-          <Route path="/signUp" render={()=><SignUp departmentList={this.state.departmentList} verificationCode={this.state.verificationCode}/>}/>
-        </>
+function App(){
+
+    return(
+        <div className="App">
+            <Route exact path='/' component={LogIn} />
+            <Route path="/signUp" render={()=><SignUp/>}/>
+        </div>
     );
-  }
 }
 
 export default App;

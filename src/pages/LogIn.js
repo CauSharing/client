@@ -1,59 +1,57 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import { Link} from 'react-router-dom';
 import './LogIn.css'
+import axios from "axios";
 
-class Title extends Component{
-    render(){
-        return(
-            <div className='Title'>
-                <div>{this.props.line1}</div>
-                <div>{this.props.line2}</div>
-            </div>
-        );
+
+function LogIn(){
+    let line1="Be Friend";
+    let line2="in Chungang";
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleEmailChange = (e) => setEmail(e.target.value);
+    const handlePasswordChange = (e) => setPassword(e.target.value);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const data = {
+            email: email,
+            password: password
+        }
+
+        axios.post('http://3.37.167.224:8080/api/login',data)
+              .then(res => {
+              // 토큰 받기
+                console.log(res.data);
+              })
+              .catch(err =>{
+                console.log(err.data);
+              })
     }
-}
 
-class SignIn extends Component{
-    render(){
-        return(
+    return(
+        <form className='LogIn' onSubmit={handleSubmit}>
+            <div className='Title'>
+                <div>{line1}</div>
+                <div>{line2}</div>
+            </div>
             <div className='SignIn'>
-                <form>
-                    <input type='text' placeholder='ID'/>
-                    <input type='password' placeholder='Password'/>
-                </form>
+                <div className='SignIn__input'>
+                    <input type='email' placeholder='Email' onChange={handleEmailChange} />
+                    <input type='password' placeholder='Password' onChange={handlePasswordChange}/>
+                </div>
                 <button type="submit">Sign in</button>
             </div>
-        );
-    }
-}
-
-class LogInMenu extends Component{
-    render(){
-        return(
             <div className='Menu'>
                 <Link to="/signUp">Sign up</Link>
                 <Link to="/">Lost password?</Link>
             </div>
-        );
-    }
+        </form>
+    );
 }
 
-class LogIn extends Component{
-    constructor(props) {
-        super(props);
-        this.state={
-            title: {line1: "Be Friend", line2: "in Chungang"}
-        }
-    }
-    render(){
-        return(
-            <div className='LogIn'>
-                <Title line1={this.state.title.line1} line2={this.state.title.line2}/>
-                <SignIn />
-                <LogInMenu />
-            </div>
-        );
-    }
-}
 
 export default LogIn;

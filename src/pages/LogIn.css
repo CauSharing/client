@@ -20,7 +20,7 @@
     align-content: center;
     justify-content: center;
 }
-.LogIn .SignIn form{
+.LogIn .SignIn .SignIn__input{
     display:flex;
     flex-direction: column;
 }

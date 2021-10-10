@@ -1,6 +1,7 @@
-import React, {Component, useState } from 'react';
+import React, {useState, useEffect } from 'react';
 import { Link} from 'react-router-dom';
-import {useForm} from 'react-hook-form';
+import {set, useForm} from 'react-hook-form';
+import axios from 'axios';
 import './SignUp.css';
 import '../components/checkEmail'
 import checkCauEmail from "../components/checkEmail";
@@ -119,7 +120,10 @@ function PasswordUpdate({password, setPassword, passwordCheck, setPasswordCheck}
         setPassword(value);
         checkPassword(password);
     }
-    const handlePasswordCheckChange = ({target: {value}}) => setPasswordCheck(value);
+    const handlePasswordCheckChange = ({target: {value}}) => {
+        setPasswordCheck(value);
+    };
+
     const checkPassword = (password) => {
         if(password.indexOf(' ') >= 0)
         {
@@ -195,9 +199,14 @@ function MajorUpdate({departmentList, department, setDepartment, major, setMajor
     const [selectedDepartmentId, setSelectedDepartmentId] = useState(0);
 
     const handleDepartmentOnChange = (event) => {
+        console.log(event.currentTarget.value);
         setSelectedDepartmentId(event.currentTarget.value);
+
         if(selectedDepartmentId > 0)
+        {
+            console.log(department);
             setDepartment(departmentList[selectedDepartmentId-1].name);
+        }
     };
     const handleMajorOnChange = (event) => {
         setMajor(event.currentTarget.value);
@@ -330,8 +339,10 @@ function LanguageUpdate({language, setLanguage}){
     );
 }
 
-function SignUp({departmentList}){
+function SignUp(){
     const {handleSubmit, register} = useForm();
+    const [error, setError] = useState(null);
+
     const [email, setEmail] = useState("");
     const [verificationCode, setVerificationCode] = useState("12345");
     const [userVerificationCode, setUserVerificationCode] = useState("");
@@ -344,8 +355,27 @@ function SignUp({departmentList}){
     const [language, setLanguage] = useState("");
     const [isFill, setIsFill] = useState(false);
 
+    let departmentList = [
+        {id: 1, name: 'College of Liberal Arts', major: ['Korean Language and Literature','English Language and Literature', 'German Literature', 'French Literature', 'Russian Language and Literature', 'Japanese Language and Literature', 'Chinese Language and Literature', 'Philosophy', 'History']},
+        {id: 2, name: 'College of Social Sciences', major:['Political Science and International Relations','Public Service','Psychology','Library and Information Science','Social Welfare','Media and Communication','Urban Planning and Real Estate', 'Sociology']},
+        {id: 3, name: 'College of Education', major: ['Education', 'Early Childhood Education', 'English Education', 'Physical Education']},
+        {id: 4, name: 'College of Natural Sciences', major:['Physics', 'Chemistry', 'Life Science', 'Mathematics']},
+        {id: 5, name: 'College of Biotechnology and Natural Resources', major:['Biological Resources Engineering', 'Food Engineering', 'Systems Biotechnology']},
+        {id: 6, name: 'College of Engineering', major:['Civil & Environmental Engineering, Urban Design and Study', 'Architecture & Building Science', 'Chemical Engineering and Materials Science', 'Mechanical Engineering', 'Energy Systems Engineering', 'Advanced Materials Engineering']},
+        {id: 7, name: 'College of ICT Engineering', major:['Electrical and Electronics Engineering', 'Integrative Engineering']},
+        {id: 8, name: 'College of Software', major:['Software', 'AI']},
+        {id: 9, name: 'College of Business & Economics', major:['Business Management', 'Economics', 'Applied Statistics', 'Advertising and Public Relations', 'International Logistics', 'Knowledge & Business Administration', 'Industrial Security']},
+        {id: 10, name: 'College of Medicine', major:['Medicine']},
+        {id: 11, name: 'College of Pharmacy', major: ['Pharmacy']},
+        {id: 12, name: 'Red Cross College of Nursing', major:['Nursing']},
+        {id: 13, name: 'College of Art', major:['Performance Video Creation(Seoul)', 'Performance Video Creation(Anseong)', 'Art', 'Design', 'Music', 'Traditional Art', 'Global Arts']},
+        {id: 14, name: 'College of Art and Technology', major:['Computer Art']},
+        {id: 15, name: 'College of Sport Sciences', major:['Sports Science']},
+    ];
+
     const okBtnClick = (event) => {
-        if(email === "" || isVerified === false || nickname==="" || department==="" || major==="" || language==="")
+        console.log(email, isVerified, password, passwordCheck, nickname, department, major, language);
+        if(email === "" || isVerified === false || password !== passwordCheck || nickname==="" || department==="" || major==="" || language==="")
         {
             event.preventDefault();
             alert("Please fill out all the boxes");
@@ -358,7 +388,6 @@ function SignUp({departmentList}){
         }
 
     }
-
 
     return(
         <form className='SignUp' >
@@ -382,7 +411,8 @@ function SignUp({departmentList}){
                         password={password}
                         setPassword={setPassword}
                         passwordCheck={passwordCheck}
-                        setPasswordCheck={setPasswordCheck}/>
+                        setPasswordCheck={setPasswordCheck}
+                        />
 
                     <MajorUpdate
                         departmentList={departmentList}
@@ -395,8 +425,13 @@ function SignUp({departmentList}){
                         language={language}
                         setLanguage={setLanguage} />
                 </div>
+            {
+                isFill?
+                    <Link exact to="/" ><button type="submit" className='ok' onClick={okBtnClick}>OK</button></Link>
+                    :
+                    <Link to="/signUp"><button type="submit" className='ok' onClick={okBtnClick}>OK</button></Link>
+            }
 
-            <Link exact to={isFill? "/": "/signUp"} ><button type="submit" className='ok' onClick={okBtnClick}>OK</button></Link>
         </form>
     )
 }
