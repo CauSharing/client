@@ -8,8 +8,10 @@ function AuthRoute({authenticated, component: Component, render, ...rest}){
             render={(props) =>
                 authenticated ? (
                     render ?(
+                        console.log("render props"),
                         render(props)
                     ) : (
+                        console.log("show Component"),
                         <Component {...props} />
                     )
                 ) : (

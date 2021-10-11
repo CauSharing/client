@@ -1,10 +1,7 @@
 import React, {useState} from "react";
 import NewWindow from 'react-new-window'
 
-
-
-function DiaryList(){
-    const [isAddBtnClicked, setIsAddBtnClicked] = useState(false);
+function DiaryList({userToken}){
     const Demo = () => (
       <NewWindow>
         <h1>Hi 👋</h1>

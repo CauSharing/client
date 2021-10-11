@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export function signIn({email, password, setEmail, setPassword}){
+export function signIn({email, password}){
     const data = {
         email: email,
         password: password
@@ -14,19 +14,15 @@ export function signIn({email, password, setEmail, setPassword}){
             if(res.data === "잘못된 아이디 혹은 비밀번호 입니다.")
             {
                 console.log("잘못됨");
-                setEmail("");
-                setPassword("");
+                throw new Error();
             }
             else
                 console.log("로그인됨");
                 token = res.data;
-                setEmail(email);
-                setPassword(password);
+                console.log("auth: ",token);
             })
         .catch(err =>{
-            console.log(err.data);
-            setEmail("");
-            setPassword("");
+            console.log(err);
             })
 
     return token;

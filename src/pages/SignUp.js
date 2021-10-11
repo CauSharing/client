@@ -1,7 +1,5 @@
-import React, {useState, useEffect } from 'react';
+import React, {useState } from 'react';
 import { Link} from 'react-router-dom';
-import {set, useForm} from 'react-hook-form';
-import axios from 'axios';
 import './SignUp.css';
 import checkCauEmail from "../util/checkEmail";
 
@@ -9,7 +7,6 @@ function EmailUpdate({email, setEmail, setVerificationCode, isVerified, verifica
     const handleEmailChange = ({target: {value}}) => {
         setEmail(value);
         setVerificationCode("2345"); // email 바뀔 때마다 verification code도 바뀜
-
     };
 
     const handleEmailOnClick = (event) => {
@@ -339,9 +336,6 @@ function LanguageUpdate({language, setLanguage}){
 }
 
 function SignUp(){
-    const {handleSubmit, register} = useForm();
-    const [error, setError] = useState(null);
-
     const [email, setEmail] = useState("");
     const [verificationCode, setVerificationCode] = useState("12345");
     const [userVerificationCode, setUserVerificationCode] = useState("");
