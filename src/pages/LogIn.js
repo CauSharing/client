@@ -6,6 +6,7 @@ import axios from "axios";
 
 function LogIn({userToken, setUserToken}){
     let history = useHistory();
+    setUserToken(null);
 
     let line1="Be Friend";
     let line2="in Chungang";
@@ -18,6 +19,7 @@ function LogIn({userToken, setUserToken}){
 
     const handleClick = (e) => {
         e.preventDefault();
+        console.log(email, password);
         const data = {
             email: email,
             password: password
@@ -31,6 +33,7 @@ function LogIn({userToken, setUserToken}){
                 if(res.data === "잘못된 아이디 혹은 비밀번호 입니다.")
                 {
                     console.log("잘못됨");
+                    alert("Wrong id or password");
                     throw new Error();
                 }
                 else
@@ -41,8 +44,7 @@ function LogIn({userToken, setUserToken}){
                     history.push('/home');
                 })
             .catch(err =>{
-                   setEmail("");
-                   setPassword("");
+                    console.log(err);
                 });
     };
 
