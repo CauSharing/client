@@ -4,32 +4,21 @@ import './LogIn.css'
 import axios from "axios";
 
 
-function LogIn(){
+function LogIn({authenticated, login}){
     let line1="Be Friend";
     let line2="in Chungang";
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const [isValidUser, setIsValidUser] = useState(false);
+
     const handleEmailChange = (e) => setEmail(e.target.value);
     const handlePasswordChange = (e) => setPassword(e.target.value);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        const data = {
-            email: email,
-            password: password
-        }
-
-        axios.post('http://3.37.167.224:8080/api/login',data)
-              .then(res => {
-              // 토큰 받기
-                console.log(res.data);
-              })
-              .catch(err =>{
-                console.log(err.data);
-              })
+        login({email, password, setEmail, setPassword});
     }
 
     return(
@@ -43,6 +32,9 @@ function LogIn(){
                     <input type='email' placeholder='Email' onChange={handleEmailChange} />
                     <input type='password' placeholder='Password' onChange={handlePasswordChange}/>
                 </div>
+{/*                 <Link to="/home"> */}
+{/*                     <button type="submit">Sign in</button> */}
+{/*                 </Link> */}
                 <button type="submit">Sign in</button>
             </div>
             <div className='Menu'>

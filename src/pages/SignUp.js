@@ -3,8 +3,7 @@ import { Link} from 'react-router-dom';
 import {set, useForm} from 'react-hook-form';
 import axios from 'axios';
 import './SignUp.css';
-import '../components/checkEmail'
-import checkCauEmail from "../components/checkEmail";
+import checkCauEmail from "../util/checkEmail";
 
 function EmailUpdate({email, setEmail, setVerificationCode, isVerified, verificationCode, userVerificationCode, setIsVerified, setUserVerificationCode}){
     const handleEmailChange = ({target: {value}}) => {
