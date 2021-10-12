@@ -1,25 +1,28 @@
-import React, {useState} from "react";
-import Matching from "./Matching";
-function DiaryList({userToken, departmentList}){
-    console.log(userToken);
+import React, {useState, useEffect} from "react";
+import SideBar from "../components/SideBar";
+import Matching from "../components/Matching";
+import "./DiaryList.css";
 
+function DiaryList({userToken, departmentList, diaryList}){
+    console.log(userToken);
     const [matchingSeen, setMatchingSeen] = useState(false);
 
-    const handleClick = () => {
-//         window.open('/matching', '','top=150, left= 400, width=800, height=500, location=no,toolbar=no,titlebar=no, resizable=no,scrollbars=no'
-//             );
-           setMatchingSeen(true);
-    };
-
     return(
-        <div>
-            <h3>This is diary list page!</h3>
-            <button onClick={handleClick}>+</button>
+        <div className="diarylist">
+            <SideBar departmentList={departmentList} setMatchingSeen={setMatchingSeen}/>
             {
                 matchingSeen? <Matching
+                                    matchingSeen={matchingSeen}
                                     setMatchingSeen={setMatchingSeen}
                                     departmentList={departmentList}/> : null
             }
+            {
+                diaryList.map((diary, index) => (
+                   <button>Diary {index+1}</button>
+                ))
+            }
+            <h3>This is diary list page!</h3>
+
         </div>
     );
 }

@@ -5,7 +5,6 @@ import AuthRoute from './util/AuthRoute';
 import LogIn from './pages/LogIn';
 import SignUp from "./pages/SignUp";
 import DiaryList from "./pages/DiaryList";
-import Matching from "./pages/Matching";
 import NotFound from "./pages/NotFound";
 
 function App(){

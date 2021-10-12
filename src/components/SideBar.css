@@ -1,0 +1,49 @@
+.sidebar{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #FFDFAF;
+    width: 276px;
+    height: 100vh;
+    border-radius: 0px 70px 0px 0px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar .sidebar__profileImg{
+    width: 154px;
+    height: 154px;
+    border-radius: 50em;
+
+    margin: 40px 0px 20px 0px;
+}
+
+.sidebar .sidebar__name{
+    font-size: 36px;
+    margin: 10px 0px 70px 0px;
+}
+
+.sidebar__menu{
+    width: 276px;
+
+    background-color: #FFDFAF;
+    border: none;
+
+    font-size: 30px;
+
+    padding: 15px 0px;
+}
+
+.sidbar__logout{
+    position: absolute;
+    left: 110px;
+    bottom: 10px;
+
+    color: dimgrey;
+    text-align: center;
+}

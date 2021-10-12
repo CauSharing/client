@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link, Redirect, useHistory } from 'react-router-dom';
 import './LogIn.css'
 import {signIn} from "../util/auth";
@@ -6,7 +6,11 @@ import axios from "axios";
 
 function LogIn({userToken, setUserToken}){
     let history = useHistory();
-    setUserToken(null);
+
+    // 처음 login화면에 들어올 때는 user token은 null값으로 초기화
+    useEffect(() => {
+        setUserToken(null);
+    }, [] );
 
     let line1="Be Friend";
     let line2="in Chungang";
