@@ -1,9 +1,13 @@
 import React, {useState, useEffect} from "react";
+import { Link} from 'react-router-dom';
 import SideBar from "../components/SideBar";
 import Matching from "../components/Matching";
+import DiaryThumbnail from "../components/DiaryThumbnail";
 import "./DiaryList.css";
 
-function DiaryList({userToken, departmentList, diaryList}){
+import {diaries} from "./sampleDiary.json";
+
+function DiaryList({userToken, departmentList}){
     console.log(userToken);
     const [matchingSeen, setMatchingSeen] = useState(false);
 
@@ -16,13 +20,13 @@ function DiaryList({userToken, departmentList, diaryList}){
                                     setMatchingSeen={setMatchingSeen}
                                     departmentList={departmentList}/> : null
             }
+            <div className="diarylist__list">
             {
-                diaryList.map((diary, index) => (
-                   <button>Diary {index+1}</button>
+                diaries.map((diary, index) => (
+                   <Link style={{ textDecoration: 'none' }}><DiaryThumbnail diary={diary}/></Link>
                 ))
             }
-            <h3>This is diary list page!</h3>
-
+            </div>
         </div>
     );
 }

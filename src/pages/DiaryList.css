@@ -1,7 +1,13 @@
 .diarylist{
     width: 100%;
     height: 100%;
-
     display: flex;
 
+    background-color: white;
+}
+
+.diarylist__list{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px 10px;
 }

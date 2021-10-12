@@ -7,11 +7,11 @@
     height: 100vh;
     border-radius: 0px 70px 0px 0px;
 
-    position: absolute;
+    position: sticky;
     top: 0;
     left: 0;
 
-    margin: 0;
+    margin: 0px 40px 0px 0px;
     padding: 0;
 }
 
@@ -40,10 +40,12 @@
 }
 
 .sidbar__logout{
-    position: absolute;
+    position: fixed;
     left: 110px;
     bottom: 10px;
 
     color: dimgrey;
     text-align: center;
+
+    font-size: 20px;
 }
