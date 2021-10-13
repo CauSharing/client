@@ -1,15 +1,17 @@
 import React, {useState, useEffect} from 'react';
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import './LogIn.css'
-import {signIn} from "../util/auth";
 import axios from "axios";
 
 function LogIn({userToken, setUserToken}){
-    let history = useHistory();
+    const history = useHistory();
 
     // 처음 login화면에 들어올 때는 user token은 null값으로 초기화
     useEffect(() => {
         setUserToken(null);
+        return(
+            localStorage.removeItem('userToken')
+        );
     }, [] );
 
     let line1="Be Friend";
@@ -21,6 +23,12 @@ function LogIn({userToken, setUserToken}){
     const handleEmailChange = (e) => setEmail(e.target.value);
     const handlePasswordChange = (e) => setPassword(e.target.value);
 
+//     window.addEventListener('beforeunload', (event) => {
+//      // 명세에 따라 preventDefault는 호출해야하며, 기본 동작을 방지합니다.
+//      localStorage.removeItem("userToken");
+//      event.preventDefault();
+//
+//      });
     const handleClick = (e) => {
         e.preventDefault();
         console.log(email, password);
@@ -34,19 +42,20 @@ function LogIn({userToken, setUserToken}){
          axios.post('http://3.37.167.224:8080/api/login',data)
             .then(res => {
                 // 토큰 받기
-                if(res.data === "잘못된 아이디 혹은 비밀번호 입니다.")
+                if(res.data.result === false)
                 {
                     console.log("잘못됨");
-                    alert("Wrong id or password");
+                    alert(res.data.description);
                     throw new Error();
                 }
                 else
                     console.log("로그인됨");
-                    token = res.data;
+                    token = res.data.value;
                     console.log("auth: ",token);
                     setUserToken(token);
                     window.localStorage.setItem("userToken", token);
-                    history.push('/home');
+                    window.location.href = "/home";
+//                     history.push("/home");
                 })
             .catch(err =>{
                     console.log(err);

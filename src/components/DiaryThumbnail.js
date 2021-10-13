@@ -11,9 +11,10 @@ function DiaryThumbnail({diary}){
         setMajor(diary.major);
         setImgSrc(diary.imgSrc);
     },[name, major, imgSrc]);
+
     return(
         <div className="diaryThumbnail">
-            <img src={imgSrc}/>
+            <img src={imgSrc} alt={name}/>
             <div className="diaryThumbnail__name">{name}</div>
             <div className="diaryThumbnail__major">{major}</div>
         </div>

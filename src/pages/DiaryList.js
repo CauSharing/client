@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import { Link } from 'react-router-dom';
 import SideBar from "../components/SideBar";
 import Matching from "../components/Matching";
@@ -7,13 +7,13 @@ import "./DiaryList.css";
 
 import {diaries} from "./sampleDiary.json";
 
-function DiaryList({userToken, departmentList}){
-    console.log(userToken);
+function DiaryList({  departmentList}){
+    console.log("render diarylist");
     const [matchingSeen, setMatchingSeen] = useState(false);
 
     return(
         <div className="diarylist">
-            <SideBar departmentList={departmentList} setMatchingSeen={setMatchingSeen}/>
+            <SideBar departmentList={departmentList} setMatchingSeen={setMatchingSeen} />
             {
                 matchingSeen? <Matching
                                     matchingSeen={matchingSeen}

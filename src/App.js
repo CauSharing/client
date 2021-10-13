@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import './App.css';
-import { Route , BrowserRouter as Router, Switch} from 'react-router-dom';
+import { Route , BrowserRouter as Router, Switch, Redirect} from 'react-router-dom';
 import AuthRoute from './util/AuthRoute';
 import LogIn from './pages/LogIn';
 import SignUp from "./pages/SignUp";
@@ -46,13 +46,8 @@ function App(){
                         />
                     <AuthRoute
                         path="/home"
-                        render={()=><DiaryList userToken={userToken} departmentList={departmentList}/>}
+                        renderComp={<DiaryList departmentList={departmentList}/>}
                         />
-{/*                     <AuthRoute */}
-{/*                         authenticated={userToken!==null} */}
-{/*                         path="/home" */}
-{/*                         render={props => <DiaryList userToken={userToken} {...props}/>} */}
-{/*                         /> */}
                     <Route component={NotFound}/>
                 </Switch>
             </Router>
