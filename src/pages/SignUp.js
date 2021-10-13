@@ -2,6 +2,7 @@ import React, {useState } from 'react';
 import { Link} from 'react-router-dom';
 import './SignUp.css';
 import checkCauEmail from "../util/checkEmail";
+import axios from "axios";
 
 function EmailUpdate({email, setEmail, setVerificationCode, isVerified, verificationCode, userVerificationCode, setIsVerified, setUserVerificationCode}){
     const handleEmailChange = ({target: {value}}) => {
@@ -14,20 +15,37 @@ function EmailUpdate({email, setEmail, setVerificationCode, isVerified, verifica
         let message = "";
         if(!checkCauEmail(email))
         {
-            message = "Please write your Chungang university email!";
+            alert("Please write your Chungang university email!");
         }
         else
         {
-            message = "Verification code is sent to "+email+"\nPlease check your email.";
             setIsVerified(false);
+                    axios.get(`http://3.37.167.224:8080/api/email?email=${email}`)
+                                .then(res => {
+                                    if(res.data.result === true)
+                                    {
+                                        alert("Verification code is sent to "+email+"\nPlease check your email. If you can't find email, please check your junk email");
+                                        console.log(res.data.description);
+                                    }
+                                    else
+                                    {
+
+                                        console.log(res.data.description)
+                                        throw new Error();
+                                    }
+                                    })
+                                .catch(err =>{
+                                        console.log(err);
+                                    });
         }
-        alert(message);
+
     };
 
     const handleUserVerificationCodeChange = ({target: {value}}) => setUserVerificationCode(value);
 
     const handleVerificationCodeOnClick = (event) => {
         event.preventDefault();
+
         if(isVerified === false)
         {
             if(verificationCode === userVerificationCode)
@@ -348,8 +366,6 @@ function SignUp({departmentList}){
     const [language, setLanguage] = useState("");
     const [isFill, setIsFill] = useState(false);
 
-
-
     const okBtnClick = (event) => {
         console.log(email, isVerified, password, passwordCheck, nickname, department, major, language);
         if(email === "" || isVerified === false || password !== passwordCheck || nickname==="" || department==="" || major==="" || language==="")
@@ -362,6 +378,7 @@ function SignUp({departmentList}){
         {
             alert("email: "+ email + "\n" + "nickname: "+nickname+"\n"+"major: "+department+" "+major+"\n"+"language: "+language+"\n");
             setIsFill(true);
+
         }
 
     }
@@ -402,6 +419,7 @@ function SignUp({departmentList}){
                         language={language}
                         setLanguage={setLanguage} />
                 </div>
+{/*                 <button type="submit" className='ok' onClick={okBtnClick}>OK</button> */}
             {
                 isFill?
                     <Link exact to="/" ><button type="submit" className='ok' onClick={okBtnClick}>OK</button></Link>
