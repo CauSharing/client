@@ -45,6 +45,7 @@ function LogIn({userToken, setUserToken}){
                     token = res.data;
                     console.log("auth: ",token);
                     setUserToken(token);
+                    window.localStorage.setItem("userToken", token);
                     history.push('/home');
                 })
             .catch(err =>{

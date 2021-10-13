@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import SideBar from "../components/SideBar";
 import Matching from "../components/Matching";
 import DiaryThumbnail from "../components/DiaryThumbnail";
@@ -23,7 +23,7 @@ function DiaryList({userToken, departmentList}){
             <div className="diarylist__list">
             {
                 diaries.map((diary, index) => (
-                   <Link style={{ textDecoration: 'none' }}><DiaryThumbnail diary={diary}/></Link>
+                   <Link style={{ textDecoration: 'none' }}><DiaryThumbnail diary={diary} /></Link>
                 ))
             }
             </div>

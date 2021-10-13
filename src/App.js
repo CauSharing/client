@@ -44,7 +44,7 @@ function App(){
                         path="/signUp"
                         render={()=><SignUp departmentList={departmentList}/>}
                         />
-                    <Route
+                    <AuthRoute
                         path="/home"
                         render={()=><DiaryList userToken={userToken} departmentList={departmentList}/>}
                         />
