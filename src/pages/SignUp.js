@@ -1,5 +1,5 @@
 import React, {useState } from 'react';
-import { Link} from 'react-router-dom';
+import { Link, useHistory} from 'react-router-dom';
 import './SignUp.css';
 import checkCauEmail from "../util/checkEmail";
 import axios from "axios";
@@ -12,48 +12,31 @@ function EmailUpdate({email, setEmail, isVerified, setIsVerified}){
 
     const handleEmailOnClick = (event) => {
         event.preventDefault();
-                   setIsVerified(false);
-                    axios.get(`/api/email`, {params: {email: email}})
-                        .then(res => {
-                            if(res.data.result === true)
-                            {
-                                alert("Verification code is sent to "+email+"\nPlease check your email. If you can't find email, please check your junk email");
-                                console.log(res.data.description);
-                            }
-                            else
-                            {
-                                console.log(res.data.description)
-                                throw new Error();
-                            }
-                        })
-                        .catch(err =>{
-                            console.log(err);
-                        });
-//         let message = "";
-//         if(!checkCauEmail(email))
-//         {
-//             alert("Please write your Chungang university email!");
-//         }
-//         else
-//         {
-//             setIsVerified(false);
-//             axios.get(`http://3.37.167.224:8080/api/email?email=${email}`)
-//                 .then(res => {
-//                     if(res.data.result === true)
-//                     {
-//                         alert("Verification code is sent to "+email+"\nPlease check your email. If you can't find email, please check your junk email");
-//                         console.log(res.data.description);
-//                     }
-//                     else
-//                     {
-//                         console.log(res.data.description)
-//                         throw new Error();
-//                     }
-//                 })
-//                 .catch(err =>{
-//                     console.log(err);
-//                 });
-//         }
+        let message = "";
+        if(!checkCauEmail(email))
+        {
+            alert("Please write your Chungang university email!");
+        }
+        else
+        {
+            setIsVerified(false);
+            axios.get(`/api/email`, {params: {email: email}})
+                .then(res => {
+                    if(res.data.result === true)
+                    {
+                        alert("Verification code is sent to "+email+"\nPlease check your email. If you can't find email, please check your junk email");
+                        console.log(res.data.description);
+                    }
+                    else
+                    {
+                        console.log(res.data.description)
+                        throw new Error();
+                    }
+                })
+                .catch(err =>{
+                    console.log(err);
+                });
+        }
 
     };
 
@@ -64,25 +47,23 @@ function EmailUpdate({email, setEmail, isVerified, setIsVerified}){
         console.log(userVerificationCode, email);
         axios.get(`/api/verify`, {params: {email: email, code: userVerificationCode}})
             .then(res => {
-                console.log(res);
+                if(res.data.result === true)
+                {
+                    setIsVerified(true);
+                    console.log(res.data.description)
+                }
+                else
+                {
+                    setIsVerified(false);
+                    console.log(res.data.description)
+                    throw new Error();
+                }
             })
             .catch(err =>{
+                setIsVerified(false);
                 console.log(err);
                 console.log(err.request);
             });
-//         if(isVerified === false)
-//         {
-//             if(verificationCode === userVerificationCode)
-//             {
-//                 setIsVerified(true);
-//                 alert("Your email is verified!");
-//             }
-//             else
-//             {
-//                 setIsVerified(false);
-//                 alert("Wrong verification code!");
-//             }
-//         }
     }
 
     return(
@@ -151,27 +132,16 @@ function NicknameUpdate({nickname, setNickname}){
     );
 }
 
-function PasswordUpdate({password, setPassword, passwordCheck, setPasswordCheck}){
+function PasswordUpdate({password, setPassword, passwordCheck, setPasswordCheck, checkPassword}){
     const [isValid, setIsValid] = useState(false);
 
     const handlePasswordChange = ({target: {value}}) => {
         setPassword(value);
-        checkPassword(password);
+        setIsValid(checkPassword(password));
     }
     const handlePasswordCheckChange = ({target: {value}}) => {
         setPasswordCheck(value);
     };
-
-    const checkPassword = (password) => {
-        if(password.indexOf(' ') >= 0)
-        {
-            setIsValid(false);
-        }
-        else
-        {
-            setIsValid(true);
-        }
-    }
 
     return(
         <div>
@@ -234,20 +204,13 @@ function PasswordUpdate({password, setPassword, passwordCheck, setPasswordCheck}
 }
 
 function MajorUpdate({departmentList, department, setDepartment, major, setMajor}){
-    const [selectedDepartmentId, setSelectedDepartmentId] = useState(0);
-
     const handleDepartmentOnChange = (event) => {
-        console.log(event.currentTarget.value);
-        setSelectedDepartmentId(event.currentTarget.value);
-
-        if(selectedDepartmentId > 0)
-        {
-            console.log(department);
-            setDepartment(departmentList[selectedDepartmentId-1].name);
-        }
+        setDepartment(event.target.value);
+        console.log(event.target.value);
     };
     const handleMajorOnChange = (event) => {
-        setMajor(event.currentTarget.value);
+        setMajor(event.target.value);
+        console.log(event.target.value);
     };
 
     return(
@@ -256,21 +219,24 @@ function MajorUpdate({departmentList, department, setDepartment, major, setMajor
                 <label htmlFor="department-select">Major</label>
             </div>
             <div>
-                <select name="department" id="department-select" onChange={handleDepartmentOnChange}>
+                <select name="department"
+                        id="department-select"
+                        onChange={handleDepartmentOnChange}
+                        >
+                    <option key={0} value="">Choose your college...</option>
                     {
-                        [<option hidden key={0} value="Choose your college...">Choose your college...</option> ,
-                            departmentList.map((department, index) => (
-                                <option key={department.id} value={department.id}>{department.name}</option>
-                            ))]
+                        departmentList.map((department, index) => (
+                            <option key={department.id} value={department.name}>{department.name}</option>
+                        ))
                     }
                 </select>
             </div>
             <div>
                 <select name="major" id="major-select"  onChange={handleMajorOnChange}>
                     {
-                        selectedDepartmentId > 0 ?
+                        department !== "" ?
                             [<option hidden value="Choose your major..." key={0}>Choose your major...</option> ,
-                                departmentList[selectedDepartmentId-1].major.map((name, index) => (
+                                departmentList.find(d => d.name === department).major.map((name, index) => (
                                     <option key={index+1} value={name}>{name}</option>
                                 ))]
                             :
@@ -286,7 +252,8 @@ function MajorUpdate({departmentList, department, setDepartment, major, setMajor
 
 function LanguageUpdate({language, setLanguage}){
     const handleOnChange = (event) => {
-        setLanguage(event.currentTarget.value);
+        setLanguage(event.target.value);
+        console.log(event.target.value);
     }
     return(
         <div className='Field'>
@@ -378,6 +345,8 @@ function LanguageUpdate({language, setLanguage}){
 }
 
 function SignUp({departmentList}){
+    const history = useHistory();
+
     const [email, setEmail] = useState("");
     const [isVerified, setIsVerified] = useState(false);
     const [nickname, setNickname] = useState("");
@@ -386,23 +355,66 @@ function SignUp({departmentList}){
     const [department, setDepartment] = useState("");
     const [major, setMajor] = useState("");
     const [language, setLanguage] = useState("");
-    const [isFill, setIsFill] = useState(false);
 
-    const okBtnClick = (event) => {
-        console.log(email, isVerified, password, passwordCheck, nickname, department, major, language);
-        if(email === "" || isVerified === false || password !== passwordCheck || nickname==="" || department==="" || major==="" || language==="")
+    const checkVar = () => {
+        if(email === "" || !checkCauEmail(email))
+            return false;
+        if(!isVerified)
+            return false;
+        if(!checkPassword(password) || password != passwordCheck || password==="")
+            return false;
+        if(nickname === "")
+            return false;
+        if(department==="" || major==="")
+            return false;
+        if(language==="")
+            return false;
+        return true;
+    }
+
+    const checkPassword = (password) => {
+        if(password.indexOf(' ') >= 0)
         {
-            event.preventDefault();
-            alert("Please fill out all the boxes");
-            setIsFill(false);
+            return false;
         }
         else
         {
-            alert("email: "+ email + "\n" + "nickname: "+nickname+"\n"+"major: "+department+" "+major+"\n"+"language: "+language+"\n");
-            setIsFill(true);
-
+            return true;
         }
+    }
 
+    const okBtnClick = (event) => {
+                if(!checkVar())
+                {
+                    event.preventDefault();
+                    alert("Please fill out all the boxes correctly");
+                }
+                else
+                {
+                    alert("email: "+ email + "\n" + "nickname: "+nickname+"\n"+"major: "+department+" "+major+"\n"+"language: "+language+"\n");
+                    axios.post("/api/register", {confirmPw: passwordCheck,
+                                                 department: department,
+                                                 email: email,
+                                                 language: language,
+                                                 major: major,
+                                                 nickname: nickname,
+                                                 password: password})
+                            .then(res => {
+                                if(res.data.result === true)
+                                {
+                                    console.log(res.data.description);
+                                    history.push("/");
+                                }
+                                else
+                                {
+                                    console.log(res.data.description)
+                                    throw new Error();
+                                }
+                            })
+                            .catch(err =>{
+                                console.log(err);
+                            });
+                }
     }
 
     return(
@@ -424,6 +436,7 @@ function SignUp({departmentList}){
                         setPassword={setPassword}
                         passwordCheck={passwordCheck}
                         setPasswordCheck={setPasswordCheck}
+                        checkPassword={checkPassword}
                         />
 
                     <MajorUpdate
@@ -437,13 +450,7 @@ function SignUp({departmentList}){
                         language={language}
                         setLanguage={setLanguage} />
                 </div>
-{/*                 <button type="submit" className='ok' onClick={okBtnClick}>OK</button> */}
-            {
-                isFill?
-                    <Link exact to="/" ><button type="submit" className='ok' onClick={okBtnClick}>OK</button></Link>
-                    :
-                    <Link to="/signUp"><button type="submit" className='ok' onClick={okBtnClick}>OK</button></Link>
-            }
+                <button type="submit" className='ok' onClick={okBtnClick}>OK</button>
 
         </form>
     )
