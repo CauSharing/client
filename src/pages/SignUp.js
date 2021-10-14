@@ -4,40 +4,56 @@ import './SignUp.css';
 import checkCauEmail from "../util/checkEmail";
 import axios from "axios";
 
-function EmailUpdate({email, setEmail, setVerificationCode, isVerified, verificationCode, userVerificationCode, setIsVerified, setUserVerificationCode}){
+function EmailUpdate({email, setEmail, isVerified, setIsVerified}){
+    const [userVerificationCode, setUserVerificationCode] = useState("");
     const handleEmailChange = ({target: {value}}) => {
         setEmail(value);
-        setVerificationCode("2345"); // email 바뀔 때마다 verification code도 바뀜
     };
 
     const handleEmailOnClick = (event) => {
         event.preventDefault();
-        let message = "";
-        if(!checkCauEmail(email))
-        {
-            alert("Please write your Chungang university email!");
-        }
-        else
-        {
-            setIsVerified(false);
-                    axios.get(`http://3.37.167.224:8080/api/email?email=${email}`)
-                                .then(res => {
-                                    if(res.data.result === true)
-                                    {
-                                        alert("Verification code is sent to "+email+"\nPlease check your email. If you can't find email, please check your junk email");
-                                        console.log(res.data.description);
-                                    }
-                                    else
-                                    {
-
-                                        console.log(res.data.description)
-                                        throw new Error();
-                                    }
-                                    })
-                                .catch(err =>{
-                                        console.log(err);
-                                    });
-        }
+                   setIsVerified(false);
+                    axios.get(`/api/email`, {params: {email: email}})
+                        .then(res => {
+                            if(res.data.result === true)
+                            {
+                                alert("Verification code is sent to "+email+"\nPlease check your email. If you can't find email, please check your junk email");
+                                console.log(res.data.description);
+                            }
+                            else
+                            {
+                                console.log(res.data.description)
+                                throw new Error();
+                            }
+                        })
+                        .catch(err =>{
+                            console.log(err);
+                        });
+//         let message = "";
+//         if(!checkCauEmail(email))
+//         {
+//             alert("Please write your Chungang university email!");
+//         }
+//         else
+//         {
+//             setIsVerified(false);
+//             axios.get(`http://3.37.167.224:8080/api/email?email=${email}`)
+//                 .then(res => {
+//                     if(res.data.result === true)
+//                     {
+//                         alert("Verification code is sent to "+email+"\nPlease check your email. If you can't find email, please check your junk email");
+//                         console.log(res.data.description);
+//                     }
+//                     else
+//                     {
+//                         console.log(res.data.description)
+//                         throw new Error();
+//                     }
+//                 })
+//                 .catch(err =>{
+//                     console.log(err);
+//                 });
+//         }
 
     };
 
@@ -45,20 +61,28 @@ function EmailUpdate({email, setEmail, setVerificationCode, isVerified, verifica
 
     const handleVerificationCodeOnClick = (event) => {
         event.preventDefault();
-
-        if(isVerified === false)
-        {
-            if(verificationCode === userVerificationCode)
-            {
-                setIsVerified(true);
-                alert("Your email is verified!");
-            }
-            else
-            {
-                setIsVerified(false);
-                alert("Wrong verification code!");
-            }
-        }
+        console.log(userVerificationCode, email);
+        axios.get(`/api/verify`, {params: {email: email, code: userVerificationCode}})
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err =>{
+                console.log(err);
+                console.log(err.request);
+            });
+//         if(isVerified === false)
+//         {
+//             if(verificationCode === userVerificationCode)
+//             {
+//                 setIsVerified(true);
+//                 alert("Your email is verified!");
+//             }
+//             else
+//             {
+//                 setIsVerified(false);
+//                 alert("Wrong verification code!");
+//             }
+//         }
     }
 
     return(
@@ -355,8 +379,6 @@ function LanguageUpdate({language, setLanguage}){
 
 function SignUp({departmentList}){
     const [email, setEmail] = useState("");
-    const [verificationCode, setVerificationCode] = useState("12345");
-    const [userVerificationCode, setUserVerificationCode] = useState("");
     const [isVerified, setIsVerified] = useState(false);
     const [nickname, setNickname] = useState("");
     const [password, setPassword] = useState("");
@@ -390,12 +412,8 @@ function SignUp({departmentList}){
                     <EmailUpdate
                         email={email}
                         setEmail={setEmail}
-                        setVerificationCode={setVerificationCode}
                         isVerified={isVerified}
-                        verificationCode={verificationCode}
-                        userVerificationCode={userVerificationCode}
-                        setIsVerified={setIsVerified}
-                        setUserVerificationCode = {setUserVerificationCode}/>
+                        setIsVerified={setIsVerified}/>
 
                     <NicknameUpdate
                         nickname={nickname}
