@@ -7,11 +7,14 @@ function LogIn({userToken, setUserToken}){
     const history = useHistory();
 
     // 처음 login화면에 들어올 때는 user token은 null값으로 초기화
+//     useEffect(() => {
+//         setUserToken(null);
+//         return(
+//             localStorage.removeItem('userToken')
+//         );
+//     }, [] );
     useEffect(() => {
-        setUserToken(null);
-        return(
-            localStorage.removeItem('userToken')
-        );
+        localStorage.removeItem('userToken');
     }, [] );
 
     let line1="Be Friend";
@@ -39,7 +42,7 @@ function LogIn({userToken, setUserToken}){
 
          let token = null;
 
-         axios.post('http://3.37.167.224:8080/api/login',data)
+         axios.post('/api/login',data)
             .then(res => {
                 // 토큰 받기
                 if(res.data.result === false)
@@ -59,6 +62,7 @@ function LogIn({userToken, setUserToken}){
                 })
             .catch(err =>{
                     console.log(err);
+
                 });
     };
 

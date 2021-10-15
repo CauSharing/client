@@ -45,14 +45,14 @@ function App(){
                         path="/signUp"
                         render={()=><SignUp departmentList={departmentList}/>}
                         />
-{/*                     <AuthRoute */}
-{/*                         path="/home" */}
-{/*                         renderComp={<DiaryList departmentList={departmentList}/>} */}
-{/*                         /> */}
-                                        <Route
-                                            path="/home"
-                                            render={()=><DiaryList departmentList={departmentList}/>}
-                                            />
+                    <AuthRoute
+                        path="/home"
+                        renderComp={<DiaryList departmentList={departmentList}/>}
+                        />
+{/*                                         <Route */}
+{/*                                             path="/home" */}
+{/*                                             render={()=><DiaryList departmentList={departmentList}/>} */}
+{/*                                             /> */}
                     <Route component={NotFound}/>
                 </Switch>
             </Router>

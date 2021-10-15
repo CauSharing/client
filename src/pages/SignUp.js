@@ -29,6 +29,7 @@ function EmailUpdate({email, setEmail, isVerified, setIsVerified}){
                     }
                     else
                     {
+                        alert(res.data.description);
                         console.log(res.data.description)
                         throw new Error();
                     }
@@ -361,7 +362,7 @@ function SignUp({departmentList}){
             return false;
         if(!isVerified)
             return false;
-        if(!checkPassword(password) || password != passwordCheck || password==="")
+        if(!checkPassword(password) || password !== passwordCheck || password==="")
             return false;
         if(nickname === "")
             return false;
@@ -387,7 +388,7 @@ function SignUp({departmentList}){
                 if(!checkVar())
                 {
                     event.preventDefault();
-                    alert("Please fill out all the boxes correctly");
+                    alert("Please check your inputs again");
                 }
                 else
                 {
