@@ -6,6 +6,7 @@ import AuthRoute from './util/AuthRoute';
 import LogIn from './pages/LogIn';
 import SignUp from "./pages/SignUp";
 import DiaryList from "./pages/DiaryList";
+import Diary from "./pages/Diary";
 import NotFound from "./pages/NotFound";
 
 function App(){
@@ -42,17 +43,18 @@ function App(){
                         )}
                     />
                     <Route
-                        path="/signUp"
-                        render={()=><SignUp departmentList={departmentList}/>}
+                        exact path="/signUp"
+                        render={(props)=><SignUp departmentList={departmentList} {...props}/>}
                         />
                     <AuthRoute
-                        path="/home"
-                        renderComp={<DiaryList departmentList={departmentList}/>}
+                        exact path="/home"
+                        render={(props) => <DiaryList departmentList={departmentList}/> }
+//                         renderComp={<DiaryList departmentList={departmentList}/>}
                         />
-{/*                                         <Route */}
-{/*                                             path="/home" */}
-{/*                                             render={()=><DiaryList departmentList={departmentList}/>} */}
-{/*                                             /> */}
+                    <AuthRoute
+                        path="/home/diary/:diaryIdx"
+                        render={(props) => <Diary {...props}/>}
+                        />
                     <Route component={NotFound}/>
                 </Switch>
             </Router>

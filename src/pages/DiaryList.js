@@ -7,7 +7,7 @@ import "./DiaryList.css";
 
 import {diaries} from "./sampleDiary.json";
 
-function DiaryList({  departmentList}){
+function DiaryList({departmentList}){
     console.log("render diarylist");
     const [matchingSeen, setMatchingSeen] = useState(false);
 
@@ -23,7 +23,7 @@ function DiaryList({  departmentList}){
             <div className="diarylist__list">
             {
                 diaries.map((diary, index) => (
-                   <Link style={{ textDecoration: 'none' }}><DiaryThumbnail diary={diary} /></Link>
+                   <Link to={`home/diary/${index}`} style={{ textDecoration: 'none' }}><DiaryThumbnail diary={diary} /></Link>
                 ))
             }
             </div>

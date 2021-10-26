@@ -1,18 +1,19 @@
 import React from "react";
 import {Route, Redirect} from "react-router-dom";
-import DiaryList from "../pages/DiaryList";
 
-function AuthRoute({component: Component, renderComp, ...rest }){
+function AuthRoute({path, render, component: Component, renderComp, ...rest }){
     const token = localStorage.getItem('userToken');
 
     return(
         <Route
+            path={path}
             render={(props) =>
-                token?
+                token ?
                 (
-// {/*                     <DiaryList {...props} /> */}
-                    Component ? <Component {...props} /> : renderComp
-
+                    Component ?
+                        <Component {...props} />
+                        :
+                        render(props)
                 )
                 :
                 (
@@ -21,7 +22,6 @@ function AuthRoute({component: Component, renderComp, ...rest }){
                         to={{pathname: "/", state: {from: props.location} }}
                         />
                 )
-
             }
         />
     );
