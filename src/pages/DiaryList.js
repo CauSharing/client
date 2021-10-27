@@ -20,6 +20,7 @@ function DiaryList({departmentList}){
                    <DiaryThumbnail
                         diary={diary}
                         diaryIdx={index}
+                        departmentList={departmentList}
                         />
                 ))
             }

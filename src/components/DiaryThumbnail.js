@@ -18,7 +18,7 @@ function DiaryThumbnail({diary, diaryIdx, departmentList, setMatchingSeen}){
             to={{
                 pathname: `home/diary/${diaryIdx}`,
                 state: {
-                    departmentList: departmentList
+                    diaryIdx: diaryIdx
                 }
             }}>
                 <div className="diaryThumbnail">
