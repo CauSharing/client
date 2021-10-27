@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
 import "./DiaryThumbnail.css";
 
-function DiaryThumbnail({diary}){
+function DiaryThumbnail({diary, diaryIdx, departmentList, setMatchingSeen}){
     const [name, setName] = useState("");
     const [major, setMajor] = useState("");
     const [imgSrc,setImgSrc] = useState("#");
@@ -13,11 +14,20 @@ function DiaryThumbnail({diary}){
     },[name, major, imgSrc]);
 
     return(
-        <div className="diaryThumbnail">
-            <img src={imgSrc} alt={name}/>
-            <div className="diaryThumbnail__name">{name}</div>
-            <div className="diaryThumbnail__major">{major}</div>
-        </div>
+        <Link
+            to={{
+                pathname: `home/diary/${diaryIdx}`,
+                state: {
+                    departmentList: departmentList
+                }
+            }}>
+                <div className="diaryThumbnail">
+                    <img src={imgSrc} alt={name}/>
+                    <div className="diaryThumbnail__name">{name}</div>
+                    <div className="diaryThumbnail__major">{major}</div>
+                </div>
+        </Link>
+
     );
 }
 

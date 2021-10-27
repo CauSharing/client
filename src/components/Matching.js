@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import './Matching.css';
 
-function Matching({setMatchingSeen, departmentList}){
+function Matching({ matchingSeen, departmentList, setMatchingSeen}){
     const [selectedDepartmentId, setSelectedDepartmentId] = useState(0);
     const [language, setLanguage] = useState("");
 
@@ -25,7 +25,7 @@ function Matching({setMatchingSeen, departmentList}){
             setLanguage(event.target.value);
         };
     return(
-        <form className="matching">
+        <form className={matchingSeen? "showMatching" : "hideMatching"}>
             <div>
                 <button onClick={handleCloseBtnClick} className="matching__closeBtn">x</button>
             </div>

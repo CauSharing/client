@@ -1,12 +1,18 @@
-import React, {useState} from "react";
-import { Link } from 'react-router-dom';
+import React, {useEffect} from "react";
+import { Link ,useParams, useLocation} from 'react-router-dom';
 import SideBar from "../components/SideBar";
 
-function Diary({match}){
+function Diary({}){
     console.log("render diary");
-    console.log(match);
+    const {diaryIdx} = useParams();
+    const location = useLocation();
+    console.log(location.state);
     return(
-        <h1>Diary {match.params.diaryIdx}</h1>
+        <>
+            <h1>Diary {diaryIdx}</h1>
+            <SideBar departmentList={location.state.departmentList}/>
+        </>
+
     );
 }
 

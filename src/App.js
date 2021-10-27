@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import './App.css';
 // import "./scss/main.scss";
-import { Route , BrowserRouter as Router, Switch, Redirect} from 'react-router-dom';
+import { Route , BrowserRouter as Router, Switch, Redirect, withRouter} from 'react-router-dom';
 import AuthRoute from './util/AuthRoute';
 import LogIn from './pages/LogIn';
 import SignUp from "./pages/SignUp";
