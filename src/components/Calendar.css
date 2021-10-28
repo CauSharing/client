@@ -1,0 +1,12 @@
+.calendar-day{
+    width: 596px;
+}
+
+.calendar-day thead{
+    background-color: #D2D2D2;
+}
+
+.calendar-day div{
+    width:152px;
+    height: 120px;
+}
