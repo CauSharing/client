@@ -10,7 +10,7 @@ function Diary({}){
 
     return(
         <>
-{/*              <GroupSidebar diaryIdx={diaryIdx}/> */}
+            <GroupSidebar diaryIdx={diaryIdx}/>
             <Calendar />
         </>
 

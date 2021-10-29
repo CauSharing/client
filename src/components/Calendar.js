@@ -4,53 +4,61 @@ import moment from 'moment';
 import './Calendar.css';
 
 function Calendar(){
-    const [date, setDate] = useState(moment());
-    const [allmonths, setAllMonths] = useState(moment.months());
+//     const [date, setDate] = useState(moment());
+    const [allmonths, setAllMonths] = useState(moment().months());
+    const [firstDayOfMonth, setFirstDayOfMonth] = useState(moment().startOf("month").format("d"));
+    const [daysInMonth, setDaysInMonth] = useState(moment().daysInMonth());
+
+    const [seeingYear, setSeeingYear] = useState(moment().year());
+    const [seeingMonth, setSeeingMonth] = useState(moment().month());
+    const [seeingMonthStr, setSeeingMonthStr] = useState(moment().month(seeingMonth).format("MMMM"));
+
+    const handleChange = (e) => {
+        console.log(e.target.value);
+        let dateArr = e.target.value.split('-');
+        let year = parseInt(dateArr[0]);
+        let month = parseInt(dateArr[1]);
+
+        setSeeingYear(year);
+        setSeeingMonth(month);
+        setFirstDayOfMonth(moment(e.target.value, "YYYY-MM").startOf("month").format("d"));
+        setDaysInMonth(moment(e.target.value).daysInMonth());
+        setSeeingMonthStr(moment().month(month-1).format("MMMM"));
+
+    }
 
     const weekdayshort = moment.weekdaysShort();
     const weekdayshortname = weekdayshort.map(day => {
         return(
             <th key={day} className="week-day">
-            {day}
+                <div>{day}</div>
             </th>
         );
     })
 
-    const firstDayOfMonth = () => {
-        let firstDay = moment(date)
-                        .startOf("month")
-                        .format("d");
-        console.log(firstDay);
-        return firstDay;
-    }
-
     const currentDay = () => {
-        return date.format("D");
+        return moment().format("D");
     };
 
-    const month = () => {
-        return date.format("MMMM");
-    }
-
      let blanks = [];
-     for(let i=0; i<firstDayOfMonth(); i++)
+     for(let i=0; i<firstDayOfMonth; i++)
      {
         blanks.push(
             <td className="calendar-day empty">
                 <Link to="#">
                     <div>
-                        {""}
+
                     </div>
                 </Link>
             </td>
         );
      }
 
-     let daysInMonth=[];
-     for(let d=1; d<=moment(date).daysInMonth(); d++)
+     let days=[];
+     for(let d=1; d<=daysInMonth; d++)
      {
         let curDay = d === currentDay() ? "today" : "";
-        daysInMonth.push(
+        days.push(
             <td key={d} className={`calendar-day ${curDay}`}>
                 <Link to="#">
                     <div>
@@ -61,7 +69,7 @@ function Calendar(){
         );
      }
 
-     var totalSlots = [...blanks, ...daysInMonth];
+     var totalSlots = [...blanks, ...days];
      let rows = [];
      let cells = [];
 
@@ -83,17 +91,22 @@ function Calendar(){
      });
 
     return(
-        <div>
+        <div className="entire-calendar">
             <div className="tail-datetime-calendar">
                 <div className="calendar-navi">
-                {month()}
+                    <div className="calendar-navi__month">{seeingMonthStr}</div>
+                    <input
+                        type="month"
+                        onChange={handleChange}/>
                 </div>
             </div>
-            <table className="calendar-day">
+            <table className="calendar">
                 <thead>
                     <tr>{weekdayshortname}</tr>
                 </thead>
-                <tbody>{daysinmonth}</tbody>
+                <tbody>
+                    {daysinmonth}
+                </tbody>
             </table>
         </div>
     );

@@ -49,12 +49,17 @@ function App(){
                     <AuthRoute
                         exact path="/home"
                         render={(props) => <DiaryList departmentList={departmentList}/> }
-//                         renderComp={<DiaryList departmentList={departmentList}/>}
                         />
                     <AuthRoute
                         path="/home/diary/:diaryIdx"
                         render={(props) => <Diary {...props}/>}
                         />
+{/*                     <Route */}
+{/*                         exact path="/home" */}
+{/*                         render={(props) => <DiaryList departmentList={departmentList}/> } /> */}
+{/*                     <Route */}
+{/*                         exact path="/home/diary/:diaryIdx" */}
+{/*                         render={(props)=><Diary {...props} />} /> */}
                     <Route component={NotFound}/>
                 </Switch>
             </Router>

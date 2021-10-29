@@ -1,12 +1,43 @@
+.entire-calendar{
+    position: absolute;
+    top: 0px;
+    left: 280px;
+}
+.calendar{
+    background-color: white;
+}
+.calendar tr{
+    border-bottom: 1px solid #838383;
+}
+.calendar td{
+    border-right: 1px solid #838383;
+}
+.calendar .empty{
+    border:none;
+}
+.calendar-navi{
+    display: flex;
+}
+.calendar-navi input{
+    width: 150px;
+    /*background-color: transparent;*/
+    /*box-shadow: none;*/
+}
+
+
+.calendar-navi__month{
+    font-size: 48px;
+}
 .calendar-day{
-    width: 596px;
+    width: 500px;
 }
-
-.calendar-day thead{
+.week-day div{
     background-color: #D2D2D2;
+    height: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
-
-.calendar-day div{
-    width:152px;
-    height: 120px;
+.calendar-day{
+    height: 100px;
 }

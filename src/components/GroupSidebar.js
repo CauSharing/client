@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
+import "./SideBar.css";
 
 function GroupSidebar({diaryIdx}){
-    let sample_img = "https://w.namu.la/s/117620dd0a76132d63bc33853346b23acd827bc8914a6390399d1e0916fccee10da3e77dee1ce9c10fe1f8d6ed50562f5d6d18f438193ac5c351e3e01c5521e32484b90ac606432bd306267c801a4bc9787c4bc4d5bb960dcabd13fb6f084f64426bc2677fb84562b66418658186563a";
+    let sample_img = "https://w.namu.la/s/f21af41d2334b16f5da4c187b6f38ee910673da611ac33ec15be826208cdce02afcb2cd7096414957ef6be53537b75547e8e279ad3400029da948e04b955fd33c7a382087a9a6e265553a7eb4e992dc8b11d3007a678a2d90cdf991e057c57e3";
     const [clickedMenu, setIsClickedMenu] = useState("0");
 
 //     useEffect(() => {
