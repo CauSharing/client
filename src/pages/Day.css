@@ -1,0 +1,7 @@
+.day{
+    position: absolute;
+    top: 0px;
+    left: 300px;
+
+    display: flex;
+}

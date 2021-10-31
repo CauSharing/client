@@ -1,17 +1,61 @@
 import React, {useState} from "react";
-import { Link } from 'react-router-dom';
+import { Link, useLocation  } from 'react-router-dom';
 import moment from 'moment';
 import './Calendar.css';
+import PlusBtn from "./PlusBtn";
 
-function Calendar(){
-//     const [date, setDate] = useState(moment());
+/*
+ eventArr = [
+    {id: 0, startDate: "2021-10-29", endDate:"2021-10-30", desc:"party", color: "#111111"},
+    ...
+ ]
+*/
+
+function Day({isBlank, day, event, year, month, location}){
+    return(
+        isBlank?
+            <td className="calendar-day empty">
+                <Link to={`${location.pathname}`}>
+                    <div>
+                    </div>
+                </Link>
+            </td>
+            :
+            <td key={day} className={`calendar-day`}>
+                <Link to={`${location.pathname}/${year}-${month}-${day}`}>
+                    <div>{day}</div>
+
+                    {
+                        event?
+                            <div className={`calendar-day__event`}>
+                                {event}
+                            </div>
+                            :
+                            null
+                    }
+
+                </Link>
+            </td>
+    )
+}
+
+function Calendar({eventData}){
+    const location = useLocation();
+
     const [allmonths, setAllMonths] = useState(moment().months());
     const [firstDayOfMonth, setFirstDayOfMonth] = useState(moment().startOf("month").format("d"));
     const [daysInMonth, setDaysInMonth] = useState(moment().daysInMonth());
 
     const [seeingYear, setSeeingYear] = useState(moment().year());
-    const [seeingMonth, setSeeingMonth] = useState(moment().month());
-    const [seeingMonthStr, setSeeingMonthStr] = useState(moment().month(seeingMonth).format("MMMM"));
+    const [seeingMonth, setSeeingMonth] = useState(moment().month()+1);
+    const [seeingMonthStr, setSeeingMonthStr] = useState(moment().format("MMMM"));
+
+    const eventArr = [];
+    for(var i=1; i<=daysInMonth; i++){
+        eventArr.push({id: i, event: null});
+    }
+
+    // event 부르는 api 호출
 
     const handleChange = (e) => {
         console.log(e.target.value);
@@ -24,7 +68,6 @@ function Calendar(){
         setFirstDayOfMonth(moment(e.target.value, "YYYY-MM").startOf("month").format("d"));
         setDaysInMonth(moment(e.target.value).daysInMonth());
         setSeeingMonthStr(moment().month(month-1).format("MMMM"));
-
     }
 
     const weekdayshort = moment.weekdaysShort();
@@ -44,28 +87,22 @@ function Calendar(){
      for(let i=0; i<firstDayOfMonth; i++)
      {
         blanks.push(
-            <td className="calendar-day empty">
-                <Link to="#">
-                    <div>
-
-                    </div>
-                </Link>
-            </td>
+            <Day
+                isBlank={true}
+                location={location}/>
         );
      }
 
      let days=[];
      for(let d=1; d<=daysInMonth; d++)
      {
-        let curDay = d === currentDay() ? "today" : "";
         days.push(
-            <td key={d} className={`calendar-day ${curDay}`}>
-                <Link to="#">
-                    <div>
-                        {d}
-                    </div>
-                </Link>
-            </td>
+            <Day
+                isBlank={false}
+                day={d}
+                month={seeingMonth}
+                year={seeingYear}
+                location={location}/>
         );
      }
 
@@ -98,6 +135,7 @@ function Calendar(){
                     <input
                         type="month"
                         onChange={handleChange}/>
+                    <PlusBtn />
                 </div>
             </div>
             <table className="calendar">

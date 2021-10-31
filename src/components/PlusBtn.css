@@ -1,0 +1,12 @@
+.plusBtn {
+    background-color: #EDECEC;
+    border: none;
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.25);
+}
+
+.plusBtn img{
+    width: 35px;
+    height: 35px;
+}
