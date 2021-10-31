@@ -1,4 +1,4 @@
-.plusBtn {
+.backBtn {
     width: 60px;
     height: 60px;
     background-color: #EDECEC;
@@ -8,9 +8,11 @@
     justify-content: center;
     align-items: center;
     box-shadow: 5px 5px 10px rgba(0,0,0,0.25);
+
+    margin-right: 10px;
 }
 
-.plusBtn img{
-    width: 35px;
-    height: 35px;
+.backBtn img{
+    width: 30px;
+    height: 30px;
 }
