@@ -12,6 +12,7 @@ import PlusBtn from "./PlusBtn";
 */
 
 function Day({isBlank, day, event, year, month, location}){
+
     return(
         isBlank?
             <td className="calendar-day empty">
@@ -131,10 +132,12 @@ function Calendar({eventData}){
         <div className="entire-calendar">
             <div className="tail-datetime-calendar">
                 <div className="calendar-navi">
-                    <div className="calendar-navi__month">{seeingMonthStr}</div>
-                    <input
-                        type="month"
-                        onChange={handleChange}/>
+                    <div className="calendar-navi__monthIndicator">
+                        <div className="calendar-navi__month">{seeingMonthStr}</div>
+                        <input
+                            type="month"
+                            onChange={handleChange}/>
+                    </div>
                     <PlusBtn />
                 </div>
             </div>
