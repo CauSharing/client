@@ -3,6 +3,7 @@ import { Link, useLocation  } from 'react-router-dom';
 import moment from 'moment';
 import './Calendar.css';
 import PlusBtn from "./PlusBtn";
+import BackBtn from "./BackBtn";
 
 /*
  eventArr = [
@@ -10,6 +11,48 @@ import PlusBtn from "./PlusBtn";
     ...
  ]
 */
+
+function AddEvent({setShowAddEvent}){
+    const [eventName, setEventName] = useState("");
+    const [eventColor, setEventColor] = useState("");
+    const [eventStartDate, setEventStartDate] = useState("");
+    const [eventEndDate, setEventEndDate] = useState("");
+
+    const handleNameChange = (e) => {
+        e.preventDefault();
+        setEventName(e.target.value);
+    }
+    const handleColorChange = (e) => {
+        e.preventDefault();
+        setEventColor(e.target.value);
+    }
+    const handleStartDateChange = (e) => {
+        e.preventDefault();
+        setEventStartDate(e.target.value);
+    }
+    const handleEndDateChange = (e) => {
+        e.preventDefault();
+        setEventEndDate(e.target.value);
+    }
+
+    const handleClick = (e) => {
+//         e.preventDefault();
+        console.log(eventName, eventColor, eventStartDate, eventEndDate);
+    }
+
+    return(
+        <div className="addEvent">
+            <BackBtn setShowContents={setShowAddEvent}/>
+            <form className="addEventForm">
+                <label htmlFor="eventName">Event name</label><input id="eventName" onChange={handleNameChange}/>
+                <label htmlFor="eventColor">Color</label><input type="color" id="eventColor" onChange={handleColorChange}/>
+                <label htmlFor="eventStartDate">Start date</label><input type="date" id="eventStartDate" onChange={handleStartDateChange}/>
+                <label htmlFor="eventEndDate">End date</label><input type="date" id="eventEndDate" onChange={handleEndDateChange}/>
+                <button onClick={handleClick} className="addEventForm__btn">Submit</button>
+            </form>
+        </div>
+    )
+}
 
 function Day({isBlank, day, event, year, month, location}){
 
@@ -50,6 +93,8 @@ function Calendar({eventData}){
     const [seeingYear, setSeeingYear] = useState(moment().year());
     const [seeingMonth, setSeeingMonth] = useState(moment().month()+1);
     const [seeingMonthStr, setSeeingMonthStr] = useState(moment().format("MMMM"));
+
+    const [showAddEvent, setShowAddEvent] = useState(false);
 
     const eventArr = [];
     for(var i=1; i<=daysInMonth; i++){
@@ -129,27 +174,31 @@ function Calendar({eventData}){
      });
 
     return(
-        <div className="entire-calendar">
-            <div className="tail-datetime-calendar">
-                <div className="calendar-navi">
-                    <div className="calendar-navi__monthIndicator">
-                        <div className="calendar-navi__month">{seeingMonthStr}</div>
-                        <input
-                            type="month"
-                            onChange={handleChange}/>
-                    </div>
-                    <PlusBtn />
-                </div>
-            </div>
-            <table className="calendar">
-                <thead>
-                    <tr>{weekdayshortname}</tr>
-                </thead>
-                <tbody>
-                    {daysinmonth}
-                </tbody>
-            </table>
-        </div>
+        showAddEvent ?
+            <AddEvent setShowAddEvent={setShowAddEvent}/>
+            :
+<div className="entire-calendar">
+                                <div className="tail-datetime-calendar">
+                                    <div className="calendar-navi">
+                                        <div className="calendar-navi__monthIndicator">
+                                            <div className="calendar-navi__month">{seeingMonthStr}</div>
+                                            <input
+                                                type="month"
+                                                onChange={handleChange}/>
+                                        </div>
+                                        <PlusBtn setShowContents={setShowAddEvent}/>
+                                    </div>
+                                </div>
+                                <table className="calendar">
+                                    <thead>
+                                        <tr>{weekdayshortname}</tr>
+                                    </thead>
+                                    <tbody>
+                                        {daysinmonth}
+                                    </tbody>
+                                </table>
+                            </div>
+
     );
 }
 

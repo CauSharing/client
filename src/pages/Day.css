@@ -1,7 +1,7 @@
 .entireDay{
     background-color: white;
 }
-.day{
+.day, .addPost{
     position: absolute;
     top: 0px;
     left: 300px;
@@ -99,4 +99,45 @@
 
 .day__comment .day__comment__desc{
     font-size: 18px;
+}
+
+.addPost .addPost__line{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.addPost .addPost__date{
+    font-size: 28px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.addPost .addPost__saveBtn{
+    width: 200px;
+    height: 48px;
+
+    border: none;
+    border-radius: 20px;
+
+    font-size: 24px;
+
+    background-color: #FFDEDE;
+
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.25);
+}
+
+.addPost .addPost__form{
+    background-color: #EDECEC;
+
+    width: 1100px;
+}
+
+.addPost .addPost__form addPost__form__line{
+    display: flex;
+}
+
+.addPost__form__line input{
+    width: 200px;
+    background-color: #E6E6E6;
 }

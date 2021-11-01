@@ -1,11 +1,29 @@
-import React from "react";
-import { useParams} from 'react-router-dom';
+import React  , {useState}from "react";
+import {useParams} from 'react-router-dom';
 import moment from "moment";
 import GroupSidebar from "../components/GroupSidebar";
 import PlusBtn from "../components/PlusBtn";
 import BackBtn from "../components/BackBtn";
 import "./Day.css";
 
+function AddPost({setShowAddPost, year, month, day, dayName}){
+    return(
+        <div className="addPost">
+            <BackBtn setShowContents={setShowAddPost}/>
+            <div className="addPost__line">
+                <div className="addPost__date">{`${year}/${month}/${day}/${dayName}`}</div>
+                <button className="addPost__saveBtn">Save</button>
+            </div>
+            <form className="addPost__form">
+                <div className="addPost__form__line">
+                    <input placeholder="Title"/>
+                    <button></button>
+                </div>
+                <input />
+            </form>
+        </div>
+    )
+}
 function Friend({name, color}){
     const nameStyle = {
         background: color
@@ -60,6 +78,8 @@ function Day({}){
     const dayName = moment(`${year}-${month}-${day}`).format('ddd');
     console.log(year, month, day);
 
+    const [showAddPost, setShowAddPost] = useState(false);
+
     // sample friends
     const friendList = [
         {id: 0, name: "Minju", color: "#FFA897"},
@@ -68,22 +88,29 @@ function Day({}){
     ];
 
     return(
+
         <div className="entireDay">
             <GroupSidebar diaryIdx={diaryIdx}/>
-            <div className="day">
-                <div className="day__btns">
-                    <BackBtn />
-                    <PlusBtn />
-                </div>
-                <div className="day__date">
-                    {`${year}/${month}/${day}/${dayName}`}
-                </div>
-                <FriendList friendList={friendList}/>
-                <Post title="Street Woman Fighter" description="Did you see 'street woman fighter'? it's just soooooo fun. you should really see this.
-                    I just love how girls show their great dancing skill. I think all the dancers there are very professional and cool."/>
-                <Comment name="Minju" color={friendList[0].color} description="I already saw it. I'm a big fan of Honey J in HolyBang. She's amazing"/>
-                <Comment name="Nakyoung" color={friendList[1].color} description="Actually, I think No:ze is the best. "/>
-            </div>
+            {
+            showAddPost ?
+                <AddPost setShowAddPost={setShowAddPost} year={year} month={month} day={day} dayName={dayName}/>
+                :
+                <div className="day">
+                                <div className="day__btns">
+                                    <BackBtn />
+                                    <PlusBtn setShowContents={setShowAddPost}/>
+                                </div>
+                                <div className="day__date">
+                                    {`${year}/${month}/${day}/${dayName}`}
+                                </div>
+                                <FriendList friendList={friendList}/>
+                                <Post title="Street Woman Fighter" description="Did you see 'street woman fighter'? it's just soooooo fun. you should really see this.
+                                    I just love how girls show their great dancing skill. I think all the dancers there are very professional and cool."/>
+                                <Comment name="Minju" color={friendList[0].color} description="I already saw it. I'm a big fan of Honey J in HolyBang. She's amazing"/>
+                                <Comment name="Nakyoung" color={friendList[1].color} description="Actually, I think No:ze is the best. "/>
+                            </div>
+            }
+
         </div>
     );
 }

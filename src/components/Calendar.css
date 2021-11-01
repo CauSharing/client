@@ -1,4 +1,4 @@
-.entire-calendar{
+.entire-calendar, .addEvent{
     position: absolute;
     top: 20px;
     left: 320px;
@@ -57,4 +57,35 @@
 
 .calendar-day__event{
     height: 15px;
+}
+.addEventForm{
+    display: flex;
+    flex-direction: column;
+
+    margin-top: 20px;
+
+}
+
+.addEventForm label,.addEventForm input{
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.addEventForm input{
+    width: 200px;
+}
+
+.addEventForm #eventColor{
+    width: 100px;
+}
+
+.addEventForm__btn{
+    margin-top: 30px;
+    width: 230px;
+    height: 50px;
+    font-size: 24px;
+    border:none;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.25);
+    border-radius: 20px;
+    background-color: #FFDEDE;
 }

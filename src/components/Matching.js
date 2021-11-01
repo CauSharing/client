@@ -1,30 +1,88 @@
 import React, {useState} from "react";
+import axios from "axios";
 import './Matching.css';
 
+function MatchingResult({showMatchingResult, description, setShowMatchingResult}){
+    const handleCloseBtnClick = (e) => {
+        e.preventDefault();
+        setShowMatchingResult(false);
+    };
+    return(
+        <div className={showMatchingResult? "showMatching" : "hideMatching"}>
+                        <div>
+                            <button onClick={handleCloseBtnClick} className="matching__closeBtn">x</button>
+                        </div>
+            <div className="matchingResult__desc">{description}</div>
+        </div>
+    );
+}
 function Matching({ matchingSeen, departmentList, setMatchingSeen}){
-    const [selectedDepartmentId, setSelectedDepartmentId] = useState(0);
+    const [department, setDepartment] = useState("");
+    const [departmentId, setDepartmentId] = useState(null);
+    const [major, setMajor] = useState("");
     const [language, setLanguage] = useState("");
+    const [matchingResult, setMatchingResult] = useState("");
+    const [showMatchingResult, setShowMatchingResult] = useState(false);
 
     const handleDepartmentOnChange = (event) => {
-        console.log(event.currentTarget.value);
-        setSelectedDepartmentId(event.currentTarget.value);
+        event.preventDefault();
+        setDepartment(event.target.value);
+        setDepartmentId(parseInt(departmentList.find(elem => elem.name === event.target.value).id));
     };
+
     const handleMajorOnChange = (event) => {
         event.preventDefault();
+        setMajor(event.target.value);
     };
 
     const handleMatchingBtnClick = (e) => {
         e.preventDefault();
+
+        setMatchingSeen(false);
+
+        const data = {
+            "college": department,
+            "language": language,
+            "major": major
+        };
+
+        const token = localStorage.getItem("userToken");
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+
+         axios.post('/api/matching',data, config)
+            .then(res => {
+                // 토큰 받기
+                if(res.data.result === false)
+                {
+                    console.log(res.data.description);
+                }
+                else
+                    if(res.data.description === "조건에 부합하는 학생이 존재하지 않습니다.")
+                        setMatchingResult("Sorry! We can't find the person who meets the conditions :(\n");
+                    else
+                        setMatchingResult(res.data.description);
+                })
+            .catch(err =>{
+                    console.log(err);
+                });
+
+         setShowMatchingResult(true);
     };
+
     const handleCloseBtnClick = (e) => {
         e.preventDefault();
         setMatchingSeen(false);
     };
-        const handleOnChange = (event) => {
-            event.preventDefault();
-            setLanguage(event.target.value);
-        };
+
+    const handleOnChange = (event) => {
+        event.preventDefault();
+        setLanguage(event.target.value);
+    };
+
     return(
+    <>
         <form className={matchingSeen? "showMatching" : "hideMatching"}>
             <div>
                 <button onClick={handleCloseBtnClick} className="matching__closeBtn">x</button>
@@ -37,15 +95,15 @@ function Matching({ matchingSeen, departmentList, setMatchingSeen}){
                     {
                         [<option hidden key={0} value="Choose college...">Choose college...</option> ,
                             departmentList.map((department, index) => (
-                                <option key={department.id} value={department.id}>{department.name}</option>
+                                <option key={department.id} value={department.name}>{department.name}</option>
                             ))]
                     }
                     </select>
                     <select name="major" id="major-select"  onChange={handleMajorOnChange}>
                     {
-                        selectedDepartmentId > 0 ?
+                        department !== "" ?
                             [<option hidden value="Choose major..." key={0}>Choose major...</option> ,
-                                departmentList[selectedDepartmentId-1].major.map((name, index) => (
+                                departmentList[departmentId-1].major.map((name, index) => (
                                     <option key={index+1} value={name}>{name}</option>
                                 ))]
                             :
@@ -134,6 +192,8 @@ function Matching({ matchingSeen, departmentList, setMatchingSeen}){
             <button className="matching__btn" onClick={handleMatchingBtnClick}>Start Matching</button>
 
         </form>
+        <MatchingResult showMatchingResult={showMatchingResult} description={matchingResult} setShowMatchingResult={setShowMatchingResult}/>
+        </>
     );
 }
 

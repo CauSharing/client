@@ -404,7 +404,8 @@ function SignUp({departmentList}){
                                 if(res.data.result === true)
                                 {
                                     console.log(res.data.description);
-                                    history.push("/");
+//                                     history.push("/");
+                                    window.location.href = "/";
                                 }
                                 else
                                 {

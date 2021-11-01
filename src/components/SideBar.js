@@ -48,8 +48,13 @@ function SideBar({departmentList, user}){
                 <button onClick={handleMatchingSeen} value={1} className={ clickedMenu === "1" ? "clicked" : "notClicked"}>
                     Add Friends
                 </button>
+                <Link to={`/invitation`}>
+                    <button value={2}  className={clickedMenu === "2" ? "clicked" : "notClicked"} onClick={handleClick}>
+                        Invitation
+                    </button>
+                </Link>
                 <Link to="/setting">
-                    <button value={2} className={ clickedMenu === "2" ? "clicked" : "notClicked"} onClick={handleClick}>
+                    <button value={3} className={ clickedMenu === "3" ? "clicked" : "notClicked"} onClick={handleClick}>
                         Setting
                     </button>
                 </Link>
