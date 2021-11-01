@@ -93,3 +93,9 @@
     background-color: rgba(242,187,123,0.7);
 }
 
+.matchingResult__desc{
+    font-size: 40px;
+    height: 400px;
+    display: flex;
+    align-items: center;
+}

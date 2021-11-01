@@ -8,6 +8,7 @@ import SignUp from "./pages/SignUp";
 import DiaryList from "./pages/DiaryList";
 import Diary from "./pages/Diary";
 import Day from "./pages/Day";
+import Invitation from "./pages/Invitation";
 import NotFound from "./pages/NotFound";
 
 function App(){
@@ -59,6 +60,11 @@ function App(){
                         exact path="/home/diary/:diaryIdx/:year-:month-:day"
                         render={(props) => <Day {...props} />}
                         />
+                    <AuthRoute
+                        exact path="/invitation"
+                        render={(props) => <Invitation departmentList={departmentList}/>}
+                        />
+
 {/*                     <Route */}
 {/*                         exact path="/home" */}
 {/*                         render={(props) => <DiaryList departmentList={departmentList}/> } /> */}

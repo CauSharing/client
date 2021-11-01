@@ -57,6 +57,7 @@ function LogIn({userToken, setUserToken}){
                     console.log("auth: ",token);
                     setUserToken(token);
                     window.localStorage.setItem("userToken", token);
+                    window.localStorage.setItem("userEmail", email);
                     window.location.href = "/home";
 //                     history.push("/home");
                 })

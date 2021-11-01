@@ -12,7 +12,7 @@ function DiaryList({departmentList}){
 
     return(
         <div className="diarylist">
-            <SideBar departmentList={departmentList} />
+            <SideBar departmentList={departmentList} clickedMenuId={"0"}/>
             <Matching departmentList={departmentList}/>
             <div className="diarylist__list">
             {

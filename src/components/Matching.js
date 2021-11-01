@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
 import './Matching.css';
 
@@ -35,6 +35,10 @@ function Matching({ matchingSeen, departmentList, setMatchingSeen}){
         setMajor(event.target.value);
     };
 
+    const httpInstance = axios.create({
+        baseURL: []
+    })
+
     const handleMatchingBtnClick = (e) => {
         e.preventDefault();
 
@@ -59,16 +63,13 @@ function Matching({ matchingSeen, departmentList, setMatchingSeen}){
                     console.log(res.data.description);
                 }
                 else
-                    if(res.data.description === "조건에 부합하는 학생이 존재하지 않습니다.")
-                        setMatchingResult("Sorry! We can't find the person who meets the conditions :(\n");
-                    else
-                        setMatchingResult(res.data.description);
+                    setMatchingResult(res.data.description);
                 })
             .catch(err =>{
                     console.log(err);
                 });
 
-         setShowMatchingResult(true);
+        setShowMatchingResult(true);
     };
 
     const handleCloseBtnClick = (e) => {
@@ -193,6 +194,7 @@ function Matching({ matchingSeen, departmentList, setMatchingSeen}){
 
         </form>
         <MatchingResult showMatchingResult={showMatchingResult} description={matchingResult} setShowMatchingResult={setShowMatchingResult}/>
+
         </>
     );
 }
