@@ -102,6 +102,7 @@
 }
 
 .addPost .addPost__line{
+    width: 1180px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -130,14 +131,80 @@
 .addPost .addPost__form{
     background-color: #EDECEC;
 
-    width: 1100px;
+    width: 1180px;
+    height: 550px;
+
+    padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border-radius: 20px;
 }
 
-.addPost .addPost__form addPost__form__line{
+.addPost .addPost__form .addPost__form__line{
+    width: 1180px;
     display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-left: 20px;
 }
 
 .addPost__form__line input{
-    width: 200px;
+    width: 435px;
+    height: 60px;
     background-color: #E6E6E6;
+    font-size: 22px;
+    box-shadow: 0px 5px 10px rgba(0,0,0,0.25);
+    border-radius: 20px;
+    margin-right: 10px;
+}
+
+.addPost__form .addPictureBtn{
+    background-color: #E6E6E6;
+    border: none;
+    width: 200px;
+    height: 60px;
+
+    box-shadow: 0px 5px 10px rgba(0,0,0,0.25);
+    border-radius: 20px;
+
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+
+    margin: 0px;
+
+    padding: 0px 10px;
+}
+
+.addPictureBtn img{
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.addPost__form__desc{
+    border: none;
+    width: 1140px;
+    height: 440px;
+    background-color: #E6E6E6;
+    box-shadow: 0px 5px 10px rgba(0,0,0,0.25);
+    text-align: left;
+
+    border-radius: 20px;
+
+    padding: 10px;
+    resize: none;
+
+    font-size: 18px;
+
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+.addPost__form__desc::placeholder{
+    color: dimgrey;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 22px;
 }
