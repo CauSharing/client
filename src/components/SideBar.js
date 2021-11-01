@@ -4,7 +4,7 @@ import Matching from "../components/Matching";
 import "./SideBar.css";
 
 function SideBar({departmentList, user, clickedMenuId}){
-    let sample_img = "https://w.namu.la/s/117620dd0a76132d63bc33853346b23acd827bc8914a6390399d1e0916fccee10da3e77dee1ce9c10fe1f8d6ed50562f5d6d18f438193ac5c351e3e01c5521e32484b90ac606432bd306267c801a4bc9787c4bc4d5bb960dcabd13fb6f084f64426bc2677fb84562b66418658186563a";
+    let sample_img = "https://w.namu.la/s/adb56b09aef6d27319fe0fed21df3cf9e282fe7964308413845ab53649de0ac7e4003aa7abb7b2fe51b934bfc22b68d7183381a532e6ffca6849ad42672b4fc580161f61963aefaa808acaa4c788504ec2212a4a827718b8451f23098f8f24d7fa2d12cb721787c3cd3e098b609a9555";
     const [clickedMenu, setIsClickedMenu] = useState(clickedMenuId);
     const [matchingSeen, setMatchingSeen] = useState(false);
     console.log("render sidebar");

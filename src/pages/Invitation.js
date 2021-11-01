@@ -39,7 +39,14 @@ function InvitationElem({email}){
             headers: { Authorization: `Bearer ${token}` }
         };
 
-        axios.post('/api/reject',data, config)
+        axios.delete('/api/reject', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            data : {
+                "sender": email
+            }
+        })
             .then(res => {
                 console.log(res);
                 setHideElem(true);
