@@ -16,7 +16,7 @@ function BackBtn({isGoBack, setShowContents}){
 
     return(
         <button className="backBtn" onClick={handleClick}>
-            <img src={PinkBack} />
+            {"<"}
         </button>
     );
 }

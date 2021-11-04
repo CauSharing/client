@@ -1,7 +1,10 @@
 .entire-calendar, .addEvent{
     position: absolute;
-    top: 20px;
+    top: 30px;
     left: 320px;
+}
+.entire-calendar .backBtn{
+    margin-bottom: 10px;
 }
 .calendar{
     background-color: white;
@@ -27,8 +30,10 @@
 }
 .calendar-navi{
     display: flex;
-    margin: 10px;
+    /*margin: 10px;*/
+    margin-bottom: 13px;
     justify-content: space-between;
+    align-items: center;
 }
 /*.calendar .calendar-navi__month{*/
 /*    margin-right: 10px;*/
@@ -41,12 +46,15 @@
 }
 .calendar-navi__monthIndicator{
     display: flex;
-
+    align-items: center;
 }
 .calendar-navi__month{
-    font-size: 48px;
+    font-size: 36px;
 }
 
+.entire-calendar .plusBtn{
+
+}
 .week-day div{
     background-color: #D2D2D2;
     height: 32px;
@@ -58,34 +66,54 @@
 .calendar-day__event{
     height: 15px;
 }
+
+.addEvent{
+    width: 100%;
+}
+.addEvent .addEvent__title{
+    font-size: 36px;
+    width: 60%;
+    border-bottom: 1px solid #7C7C7C;
+    padding: 10px 0px;
+
+    margin-top: 20px;
+}
 .addEventForm{
     display: flex;
     flex-direction: column;
 
-    margin-top: 20px;
+    margin-top: 30px;
 
 }
-
+.addEventForm div{
+    display: flex;
+    align-items: center;
+}
+.addEventForm label{
+    font-size: 22px;
+    width: 120px;
+}
 .addEventForm label,.addEventForm input{
-    margin-bottom: 10px;
+    margin-bottom: 30px;
     text-align: left;
 }
 
 .addEventForm input{
-    width: 200px;
+    width: 500px;
+    height: 36px;
 }
 
 .addEventForm #eventColor{
-    width: 100px;
+    width: 80px;
 }
 
 .addEventForm__btn{
-    margin-top: 30px;
-    width: 230px;
-    height: 50px;
-    font-size: 24px;
+    margin-top: 60px;
+    width: 126px;
+    height: 41px;
+    font-size: 18px;
     border:none;
-    box-shadow: 5px 5px 10px rgba(0,0,0,0.25);
-    border-radius: 20px;
-    background-color: #FFDEDE;
+    border-radius: 5px;
+    background-color: #3181C6;
+    color: white;
 }

@@ -43,11 +43,13 @@ function AddEvent({setShowAddEvent}){
     return(
         <div className="addEvent">
             <BackBtn setShowContents={setShowAddEvent}/>
+            <div className="addEvent__title">Add event</div>
             <form className="addEventForm">
-                <label htmlFor="eventName">Event name</label><input id="eventName" onChange={handleNameChange}/>
-                <label htmlFor="eventColor">Color</label><input type="color" id="eventColor" onChange={handleColorChange}/>
-                <label htmlFor="eventStartDate">Start date</label><input type="date" id="eventStartDate" onChange={handleStartDateChange}/>
-                <label htmlFor="eventEndDate">End date</label><input type="date" id="eventEndDate" onChange={handleEndDateChange}/>
+                <div><label htmlFor="eventName">Event name</label><input id="eventName" onChange={handleNameChange}/></div>
+
+                <div><label htmlFor="eventStartDate">Start date</label><input type="date" id="eventStartDate" onChange={handleStartDateChange}/></div>
+                <div><label htmlFor="eventEndDate">End date</label><input type="date" id="eventEndDate" onChange={handleEndDateChange}/></div>
+                <div><label htmlFor="eventColor">Color</label><input type="color" id="eventColor" onChange={handleColorChange}/></div>
                 <button onClick={handleClick} className="addEventForm__btn">Submit</button>
             </form>
         </div>
@@ -95,6 +97,11 @@ function Calendar({eventData}){
     const [seeingMonthStr, setSeeingMonthStr] = useState(moment().format("MMMM"));
 
     const [showAddEvent, setShowAddEvent] = useState(false);
+
+    const handleClick = (e) => {
+        e.preventDefault();
+        window.location.href = "/home";
+    }
 
     const eventArr = [];
     for(var i=1; i<=daysInMonth; i++){
@@ -179,6 +186,7 @@ function Calendar({eventData}){
             :
 <div className="entire-calendar">
                                 <div className="tail-datetime-calendar">
+                                    <BackBtn isGoBack={true}/>
                                     <div className="calendar-navi">
                                         <div className="calendar-navi__monthIndicator">
                                             <div className="calendar-navi__month">{seeingMonthStr}</div>
@@ -186,7 +194,7 @@ function Calendar({eventData}){
                                                 type="month"
                                                 onChange={handleChange}/>
                                         </div>
-                                        <PlusBtn setShowContents={setShowAddEvent}/>
+                                        <PlusBtn setShowContents={setShowAddEvent} desc={"+ Add Event"}/>
                                     </div>
                                 </div>
                                 <table className="calendar">

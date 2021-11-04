@@ -17,8 +17,9 @@ function LogIn({userToken, setUserToken}){
         localStorage.removeItem('userToken');
     }, [] );
 
-    let line1="Be Friend";
-    let line2="in Chungang";
+    let line1="Salading / CxC";
+//     let line2="in Chungang";
+    let line2 = "";
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

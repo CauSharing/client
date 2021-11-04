@@ -1,16 +1,18 @@
 .plusBtn {
-    width: 50px;
-    height: 50px;
-    background-color: #EDECEC;
+    width: 126px;
+    height: 41px;
+
+    padding: 10px;
+
+    font-size: 18px;
+    color: white;
+    background-color: #3181C6;
+
+    border-radius: 5px;
     border: none;
-    border-radius: 20px;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 5px 5px 10px rgba(0,0,0,0.25);
 }
 
-.plusBtn img{
-    width: 30px;
-    height: 30px;
-}
+/*.plusBtn img{*/
+/*    width: 30px;*/
+/*    height: 30px;*/
+/*}*/

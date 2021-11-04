@@ -2,17 +2,23 @@
     display:flex;
     flex-direction: column;
     align-items: center;
-    background-color: #FFDFAF;
-    width: 276px;
+    background-color: #0060B4;
+    width: 248px;
     height: 100vh;
     border-radius: 0px 70px 0px 0px;
 
-    position: sticky;
+    position: fixed;
     top: 0;
     left: 0;
 
     margin: 0px 40px 0px 0px;
     padding: 0;
+
+    border: none;
+
+    overflow-x: hidden;
+
+    z-index: 1;
 }
 
 .sidebar .sidebar__profileImg{
@@ -20,46 +26,51 @@
     height: 154px;
     border-radius: 50em;
 
-    margin: 40px 0px 20px 0px;
+    margin: 50px 0px 0px 0px;
 }
 
 .sidebar .sidebar__name{
-    font-size: 36px;
+    font-size: 30px;
     border-bottom: solid white;
     width: 100%;
 
     text-align: center;
     padding: 40px 0px;
+    color: white;
 }
 
 .sidebar  .notClicked{
-    width: 276px;
-    background-color: #FFDFAF;
+    width: 248px;
+    background-color: #0060B4;
     border: none;
 
-    font-size: 30px;
+    font-size: 24px;
 
     padding: 15px 0px;
+    color: white;
 }
 .sidebar  .clicked{
-    width: 276px;
-    background-color: #F2BB7B;
+    width: 248px;
+    background-color: white;
     border: none;
 
-    font-size: 30px;
+    font-size: 24px;
 
     padding: 15px 0px;
 
     box-shadow:inset 5px 5px 10px rgba(0,0,0,0.40);
+    color: black;
 }
 
 .sidebar__logout{
     position: fixed;
-    left: 110px;
+    left: 0px;
     bottom: 10px;
 
-    color: dimgrey;
+    width: 248px;
+
+    color: #CACACA;
     text-align: center;
 
-    font-size: 20px;
+    font-size: 18px;
 }
