@@ -4,7 +4,7 @@
     left: 320px;
 }
 .entire-calendar .backBtn{
-    margin-bottom: 10px;
+    margin-bottom: 30px;
 }
 .calendar{
     background-color: white;
@@ -12,7 +12,6 @@
     border-collapse: collapse;
 }
 .calendar tr{
-
     /*border-bottom: 1px solid #838383;*/
 }
 .calendar td{

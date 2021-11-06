@@ -9,6 +9,13 @@ import {diaries} from "./sampleDiary.json";
 
 function DiaryList({departmentList}){
     console.log("render diarylist");
+    const [showAddFriend, setShowAddFriend] = useState(false);
+
+    const handleClick = (e) => {
+        e.preventDefault();
+        setShowAddFriend(true);
+    }
+
     let diaryList = [];
     diaries.map((diary, index) => (
         diaryList.push(<td><DiaryThumbnail
@@ -41,13 +48,18 @@ function DiaryList({departmentList}){
     return(
         <div className="diarylist">
             <SideBar departmentList={departmentList} clickedMenuId={"0"}/>
-            <Matching departmentList={departmentList}/>
-            <div className="diarylist__main">
-                <button className="diarylist__addBtn">+ Add Friend</button>
-                <table className="diarylist__list">
-                    {table}
-                </table>
-            </div>
+            {
+                showAddFriend?
+                <Matching departmentList={departmentList} setShowAddFriend={setShowAddFriend}/>
+                :
+                <div className="diarylist__main">
+                    <button className="diarylist__addBtn" onClick={handleClick}>+ Add Friend</button>
+                    <table className="diarylist__list">
+                        {table}
+                    </table>
+                </div>
+            }
+
         </div>
     );
 }
