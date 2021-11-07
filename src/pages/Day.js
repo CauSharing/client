@@ -22,8 +22,6 @@ function NewComment({imgSrc}){
 
 
 function AddPost({setShowAddPost, year, month, day, dayName}){
-
-
     return(
         <div className="addPost">
             <BackBtn setShowContents={setShowAddPost}/>
@@ -31,7 +29,7 @@ function AddPost({setShowAddPost, year, month, day, dayName}){
                 <div className="addPost__date">{`${year}/${month}/${day}/${dayName}`}</div>
                 <button className="addPost__saveBtn">Save</button>
             </div>
-           <MyEditor />
+           <MyEditor initialValue={"write"} isViewer={false}/>
 
         </div>
     )
@@ -69,7 +67,8 @@ function Post({title, description}){
                 <div className="day__post__title">{title}</div>
                 <button className="day__post__editBtn">Edit</button>
             </div>
-            <div className="day__post__desc">{description}</div>
+            {/* <div className="day__post__desc">{description}</div> */}
+            <MyEditor initialValue={description} isViewer={true}/>
         </div>
     );
 }
@@ -153,6 +152,7 @@ function Day({}){
                                     <Comment name="Minju" color={friendList[0].color} description="I already saw it. I'm a big fan of Honey J in HolyBang. She's amazing" imgSrc={"https://blog.kakaocdn.net/dn/bcZT99/btreTHNIHGx/xy6W9nH6xePSZgk4nK9OH1/img.jpg"}/>
                                     <Comment name="Nakyoung" color={friendList[1].color} description="Actually, I think No:ze is the best. " imgSrc={"https://menu.mt.co.kr/moneyweek/thumb/2021/08/29/06/2021082909088076498_1.jpg"}/>
                                 </div>
+
                             </div>
             }
 

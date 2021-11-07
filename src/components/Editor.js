@@ -1,9 +1,9 @@
-import '@toast-ui/editor/dist/toastui-editor.css';
-import { Editor } from '@toast-ui/react-editor';
+import { Editor, Viewer } from '@toast-ui/react-editor';
 import React, { useRef, useEffect } from 'react';
 import axios from "axios";
+import '@toast-ui/editor/dist/toastui-editor.css';
 
-const MyEditor = () => {
+const MyEditor = ({initialValue, isViewer}) => {
     const editorRef = useRef();
     let imageList = [];
     var re = /(?<alt>!\[[^\]]*\])\((?<filename>.*?)(?=\"|\))\)/g;
@@ -52,19 +52,30 @@ const MyEditor = () => {
     }
     
     return (
-      <>
-        <Editor
-          initialValue="hello react editor world!"
-          previewStyle="vertical"
-          height="600px"
-          initialEditType="wysiwyg"
-          useCommandShortcut={true}
-          ref={editorRef}
-        />
-        <button onClick={btnClickListener}>내용 확인</button>
-      </>
+        isViewer?
+        <div>
+               <Viewer 
+                    initialValue={initialValue}
+                    height="600px"
+               />
+               <script src="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.js"></script>
+        </div>
+        :
+        <>
+            <Editor
+                previewStyle="vertical"
+                height="600px"
+                initialEditType="wysiwyg"
+                useCommandShortcut={true}
+                ref={editorRef}
+                initialValue={initialValue}
+                />
+            <button onClick={btnClickListener}>내용 확인</button>
+        </>
+      
     );
   
   }
 
   export default MyEditor;
+
