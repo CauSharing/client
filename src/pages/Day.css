@@ -229,17 +229,18 @@
 }
 
 .addPost .addPost__saveBtn{
-    width: 200px;
-    height: 48px;
+    width: 150px;
+    height: 40px;
 
     border: none;
-    border-radius: 20px;
+    border-radius: 5px;
 
     font-size: 24px;
 
-    background-color: #FFDEDE;
+    background-color: #3181C6;
+    color: white;
 
-    box-shadow: 5px 5px 10px rgba(0,0,0,0.25);
+    /*box-shadow: 5px 5px 10px rgba(0,0,0,0.25);*/
 }
 
 .addPost .addPost__form{
@@ -322,3 +323,4 @@
     font-family: 'Roboto Condensed', sans-serif;
     font-size: 22px;
 }
+

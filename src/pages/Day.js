@@ -1,11 +1,14 @@
-import React  , {useState, useRef, useEffect}from "react";
+import React, {useState, useRef, useEffect} from "react";
 import {useParams} from 'react-router-dom';
 import moment from "moment";
 import GroupSidebar from "../components/GroupSidebar";
+import axios from "axios";
 import PlusBtn from "../components/PlusBtn";
 import BackBtn from "../components/BackBtn";
 import PinkPlus from "../icons/pink-plus.png";
 import "./Day.css";
+
+import MyEditor from "../components/Editor";
 
 function NewComment({imgSrc}){
     return(
@@ -17,36 +20,9 @@ function NewComment({imgSrc}){
     );
 }
 
+
 function AddPost({setShowAddPost, year, month, day, dayName}){
-  const [file, setFile] = useState('');
-  const [previewURL, setPreviewURL] = useState('');
-  const [preview,setPreview] = useState(null);
-  const fileRef= useRef();
 
-  useEffect(() => {
-    if(file !== '') //처음 파일 등록하지 않았을 때를 방지
-      setPreview(<img className='img_preview' src={previewURL}></img>);
-    return () => {
-    }
-  }, [previewURL]);
-
-  const handleFileOnChange = (event) => {//파일 불러오기
-      event.preventDefault();
-      let file = event.target.files[0];
-      let reader = new FileReader();
-
-      reader.onloadend = (e) => {
-        setFile(file);
-        setPreviewURL(reader.result);
-      }
-      if(file)
-        reader.readAsDataURL(file);
-    }
-
-  const handleFileButtonClick = (e) => {//버튼 대신 클릭하기
-      e.preventDefault();
-      fileRef.current.click(); // file 불러오는 버튼을 대신 클릭함
-    }
 
     return(
         <div className="addPost">
@@ -55,17 +31,8 @@ function AddPost({setShowAddPost, year, month, day, dayName}){
                 <div className="addPost__date">{`${year}/${month}/${day}/${dayName}`}</div>
                 <button className="addPost__saveBtn">Save</button>
             </div>
-            <form className="addPost__form">
-                <div className="addPost__form__line">
-                    <input placeholder="Title"/>
-                    <input ref = {fileRef} hidden = {true} id = "file" type='file' onChange={handleFileOnChange}></input>
-                    <button className="addPictureBtn" onClick={handleFileButtonClick}>
-                        <img src={PinkPlus}/>
-                        Add picture
-                    </button>
-                </div>
-                <textarea  className="addPost__form__desc" placeholder="Description"/>
-            </form>
+           <MyEditor />
+
         </div>
     )
 }

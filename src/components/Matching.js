@@ -52,7 +52,6 @@ function Matching({departmentList, setShowAddFriend}){
 
          axios.post('/api/matching',data, config)
             .then(res => {
-                // 토큰 받기
                 if(res.data.result === false)
                 {
                     console.log(res.data.description);
