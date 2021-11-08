@@ -1,64 +1,48 @@
-.matchingBox{
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 30px;
-    left: 320px;
-    width: 100%;
+.matchingBox {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 30px;
+  left: 320px;
+  width: 100%;
 }
 
-.matchingBox .backBtn{
-    /*margin-top: 30px;*/
+.matchingBox .backBtn {
+  /*margin-top: 30px;*/
 }
-.matchingBox .matching__title{
-    font-size: 36px;
-    width: 60%;
-    border-bottom: 1px solid #7C7C7C;
-    padding: 10px 0px;
+.matchingBox .matching__title {
+  font-size: 36px;
+  width: 60%;
+  border-bottom: 1px solid #7c7c7c;
+  padding: 10px 0px;
 
-    margin-top: 20px;
-}
-
-.matching{
-    display: flex;
-    flex-direction: column;
-
-    margin-top: 30px;
+  margin-top: 20px;
 }
 
-.matching .matching__field{
-    display:flex;
-    width: 100%;
-    margin-bottom: 30px;
-}
-.matching label{
-    font-size: 20px;
-    width: 80%;
-    text-align: left;
-    padding: 10px;
-}
-.matching .matching__field select{
-    width: 25%;
-    margin-right: 10px;
-}
-.matching .matching__btn{
-    margin-top: 20px;
+.matching {
+  display: flex;
+  flex-direction: column;
 
-    color: white;
-    background-color: #3181C6;
-
-    font-size: 20px;
-    width: 201px;
-    height: 48px;
-    border: none;
-    border-radius: 5px;
+  margin-top: 30px;
 }
 
-.matching .matching__btn:active{
-    opacity: 70%;
+.matching .matching__field {
+  display: flex;
+  width: 100%;
+  margin-bottom: 30px;
+}
+.matching label {
+  font-size: 20px;
+  width: 80%;
+  text-align: left;
+  padding: 10px;
+}
+.matching .matching__field select {
+  width: 25%;
+  margin-right: 10px;
 }
 
-.matchingResult__desc{
-    margin-top: 30px;
-    font-size: 20px;
+.matchingResult__desc {
+  margin-top: 30px;
+  font-size: 20px;
 }

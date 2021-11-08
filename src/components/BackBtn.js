@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import PinkBack from "../icons/pink-back.png";
 import "./BackBtn.css";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 function BackBtn({isGoBack, setShowContents}){
     const history = useHistory();
@@ -16,7 +16,8 @@ function BackBtn({isGoBack, setShowContents}){
 
     return(
         <button className="backBtn" onClick={handleClick}>
-            {"<"}
+            {/* {"<"} */}
+            <ArrowBackIcon />
         </button>
     );
 }

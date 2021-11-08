@@ -3,6 +3,36 @@ import axios from "axios";
 import BackBtn from "./BackBtn";
 import './Matching.css';
 
+import { Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
+
+const ColorButton = styled(Button)({
+    width: '201px',
+    height: '48px',
+    boxShadow: 'none',
+    textTransform: 'none',
+    fontSize: '18px',
+    padding: '10px',
+    lineHeight: 1.5,
+    color: 'white',
+    backgroundColor: '#3181C6',
+    borderColor: '#0063cc',
+    fontFamily: 'Roboto Condensed',
+    marginTop: '20px',
+    '&:hover': {
+      backgroundColor: '#4892d2',
+      boxShadow: 'none',
+    },
+    '&:active': {
+      boxShadow: 'none',
+      backgroundColor: '#4892d2',
+    },
+    '&:focus': {
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+    },
+  });
+
+
 function MatchingResult({showMatchingResult, description, setShowMatchingResult}){
     const handleCloseBtnClick = (e) => {
         e.preventDefault();
@@ -180,7 +210,7 @@ function Matching({departmentList, setShowAddFriend}){
                                             <option value="XH">Xhosa</option>
                                         </select>
                         </div>
-                        <button className="matching__btn" onClick={handleMatchingBtnClick}>Start Matching</button>
+                        <ColorButton className="matching__btn" onClick={handleMatchingBtnClick}>Start Matching</ColorButton>
                     </form>
         }
 

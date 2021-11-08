@@ -1,0 +1,11 @@
+.chatBox {
+  position: absolute;
+  top: 0px;
+  left: 248px;
+
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+
+  width: 100vh;
+}

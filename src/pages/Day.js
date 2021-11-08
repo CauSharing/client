@@ -10,12 +10,93 @@ import "./Day.css";
 
 import MyEditor from "../components/Editor";
 
+import { Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
+// import AddIcon from '@mui/icons-material/Add';
+
+const ColorButton = styled(Button)({
+    width: '126px',
+    height: '41px',
+    boxShadow: 'none',
+    textTransform: 'none',
+    fontSize: '18px',
+    padding: '10px',
+    lineHeight: 1.5,
+    color: 'white',
+    backgroundColor: '#3181C6',
+    borderColor: '#0063cc',
+    fontFamily: 'Roboto Condensed',
+    '&:hover': {
+      backgroundColor: '#4892d2',
+      boxShadow: 'none',
+    },
+    '&:active': {
+      boxShadow: 'none',
+      backgroundColor: '#4892d2',
+    },
+    '&:focus': {
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+    },
+  });
+  
+  const ReplyButton = styled(Button)({
+    fontSize: '15px',
+    width: '90px',
+    height: '30px',
+    boxShadow: 'none',
+    textTransform: 'none',
+    padding: '10px',
+    lineHeight: 1.5,
+    color: 'white',
+    backgroundColor: '#3181C6',
+    borderColor: '#0063cc',
+    fontFamily: 'Roboto Condensed',
+    '&:hover': {
+      backgroundColor: '#4892d2',
+      boxShadow: 'none',
+    },
+    '&:active': {
+      boxShadow: 'none',
+      backgroundColor: '#4892d2',
+    },
+    '&:focus': {
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+    },
+  });
+
+  const AddReplyButton = styled(Button)({
+    fontSize: '15px',
+    width: '90px',
+    height: '30px',
+    marginLeft: '10px',
+    boxShadow: 'none',
+    textTransform: 'none',
+    padding: '10px',
+    lineHeight: 1.5,
+    color: 'white',
+    backgroundColor: '#3181C6',
+    borderColor: '#0063cc',
+    fontFamily: 'Roboto Condensed',
+    '&:hover': {
+      backgroundColor: '#4892d2',
+      boxShadow: 'none',
+    },
+    '&:active': {
+      boxShadow: 'none',
+      backgroundColor: '#4892d2',
+    },
+    '&:focus': {
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+    },
+  });
+
 function NewComment({imgSrc}){
     return(
         <div className="day__commentBox__newComment">
             <img src={imgSrc}/>
             <input placeholder="Add Comment"/>
-            <button>+</button>
+            {/* <button>+</button> */}
+            <AddReplyButton >+</AddReplyButton>
         </div>
     );
 }
@@ -27,7 +108,7 @@ function AddPost({setShowAddPost, year, month, day, dayName}){
             <BackBtn setShowContents={setShowAddPost}/>
             <div className="addPost__line">
                 <div className="addPost__date">{`${year}/${month}/${day}/${dayName}`}</div>
-                <button className="addPost__saveBtn">Save</button>
+                <ColorButton>Save</ColorButton>
             </div>
            <MyEditor initialValue={"write"} isViewer={false}/>
 
@@ -65,7 +146,7 @@ function Post({title, description}){
         <div className="day__post">
             <div className="day__post__line">
                 <div className="day__post__title">{title}</div>
-                <button className="day__post__editBtn">Edit</button>
+                <ColorButton className="day__post__editBtn">Edit</ColorButton>
             </div>
             {/* <div className="day__post__desc">{description}</div> */}
             <MyEditor initialValue={description} isViewer={true}/>
@@ -92,7 +173,8 @@ function Comment({name, description, color, imgSrc}){
         {/*             <div className="day__comment__name" style={nameStyle}>{name}</div> */}
                     <div className="day__comment__desc">{description}</div>
                 </div>
-                <button onClick={handleClick}>{seeReply? "Hide Reply":"See Reply"}</button>
+                {/* <button onClick={handleClick}>{seeReply? "Hide Reply":"See Reply"}</button> */}
+                <ReplyButton variant="outlined" size="small" onClick={handleClick}>{seeReply? "Hide Reply":"See Reply"}</ReplyButton>
             </div>
 
             {

@@ -11,6 +11,35 @@ import BackBtn from "./BackBtn";
     ...
  ]
 */
+import { Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
+
+const ColorButton = styled(Button)({
+    width: '126px',
+    height: '41px',
+    boxShadow: 'none',
+    textTransform: 'none',
+    fontSize: '18px',
+    padding: '10px',
+    lineHeight: 1.5,
+    color: 'white',
+    backgroundColor: '#3181C6',
+    borderColor: '#0063cc',
+    fontFamily: 'Roboto Condensed',
+    marginTop: '60px',
+    '&:hover': {
+      backgroundColor: '#4892d2',
+      boxShadow: 'none',
+    },
+    '&:active': {
+      boxShadow: 'none',
+      backgroundColor: '#4892d2',
+    },
+    '&:focus': {
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+    },
+  });
+
 
 function AddEvent({setShowAddEvent}){
     const [eventName, setEventName] = useState("");
@@ -50,7 +79,8 @@ function AddEvent({setShowAddEvent}){
                 <div><label htmlFor="eventStartDate">Start date</label><input type="date" id="eventStartDate" onChange={handleStartDateChange}/></div>
                 <div><label htmlFor="eventEndDate">End date</label><input type="date" id="eventEndDate" onChange={handleEndDateChange}/></div>
                 <div><label htmlFor="eventColor">Color</label><input type="color" id="eventColor" onChange={handleColorChange}/></div>
-                <button onClick={handleClick} className="addEventForm__btn">Submit</button>
+                {/* <button onClick={handleClick} className="addEventForm__btn">Submit</button> */}
+                <ColorButton onClick={handleClick} className="addEventForm__btn">Submit</ColorButton>
             </form>
         </div>
     )
