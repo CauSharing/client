@@ -17,7 +17,7 @@ function LogIn({userToken, setUserToken}){
         localStorage.removeItem('userToken');
     }, [] );
 
-    let line1="Salading / CxC";
+    let line1="CxC";
 //     let line2="in Chungang";
     let line2 = "";
 

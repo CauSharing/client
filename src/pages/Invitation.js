@@ -182,6 +182,7 @@ function Invitation({departmentList}){
             });
     },[]);
 
+    // 샘플 데이터
     // const invitationData = [
     //     {
     //         invitePerson: "emma2007@cau.ac.kr",

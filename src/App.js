@@ -11,7 +11,9 @@ import Day from "./pages/Day";
 import Invitation from "./pages/Invitation";
 import Chat from "./pages/Chat";
 import EditPost from "./pages/EditPost";
-import GroupFriendList from "./pages/GroupFriendList";
+// import GroupFriendList from "./pages/GroupFriendList";
+import MySetting from "./pages/MySetting";
+import EditProfile from "./pages/EditProfile";
 import NotFound from "./pages/NotFound";
 
 function App(){
@@ -55,6 +57,7 @@ function App(){
                         exact path="/home"
                         render={(props) => <DiaryList departmentList={departmentList}/> }
                         />
+
                     <AuthRoute
                         exact path="/home/diary/:diaryIdx"
                         render={(props) => <Diary {...props}/>}
@@ -78,6 +81,14 @@ function App(){
                     <AuthRoute
                         exact path="/home/diary/:diaryIdx/:year-:month-:day/:postIdx/edit"
                         render={(props) => <EditPost />}
+                        />
+                    <AuthRoute
+                        exact path="/setting"
+                        render={(props) => <MySetting departmentList={departmentList}/> }
+                        />
+                    <AuthRoute
+                        exact path="/setting/edit-profile"
+                        render={(props) => <EditProfile departmentList={departmentList} />}
                         />
                     {/* <Route
                         exact path="/home"

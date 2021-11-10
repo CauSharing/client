@@ -1,0 +1,21 @@
+.entireMySetting {
+  position: absolute;
+  top: 0px;
+  left: 300px;
+
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+
+  width: 100vh;
+}
+
+.mySetting__title {
+  font-size: 36px;
+  width: 100%;
+  border-bottom: 1px solid #7c7c7c;
+  padding: 10px 0px;
+
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
