@@ -66,7 +66,7 @@ function EditLine({originalDesc, editDescriptionList}){
             var l = [];
             for(var j=0; j<diff.length; j++){
                 if(diff[j][0] === -1){
-                    l.push(<span style={{backgroundColor: "#FE8F8F"}}>{diff[j][1]}</span>);
+                    l.push(<span style={{backgroundColor: "#FE8F8F", textDecoration: "line-through"}}>{diff[j][1]}</span>);
                 }
                 else if(diff[j][0] === 0){
                     l.push(<span>{diff[j][1]}</span>);
