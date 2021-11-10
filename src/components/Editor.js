@@ -40,9 +40,12 @@ const MyEditor = ({initialValue, isViewer}) => {
     const btnClickListener = () => {
       const editorInstance = editorRef.current.getInstance();
       const getContent_md = editorInstance.getMarkdown();
+      const getContent_html = editorInstance.getHTML();
   
       console.log("markdown--");
       console.log(getContent_md);
+      console.log("html--");
+      console.log(getContent_html);
   
       var _finalImageList = [...getContent_md.matchAll(re)];
       var finalImageList = [];

@@ -5,12 +5,18 @@ import './Calendar.css';
 import PlusBtn from "./PlusBtn";
 import BackBtn from "./BackBtn";
 
+
 /*
  eventArr = [
     {id: 0, startDate: "2021-10-29", endDate:"2021-10-30", desc:"party", color: "#111111"},
     ...
  ]
 */
+import TextField from '@mui/material/TextField';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
+
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
@@ -128,6 +134,9 @@ function Calendar({eventData}){
 
     const [showAddEvent, setShowAddEvent] = useState(false);
 
+    const [value, setValue] = useState(null);
+
+
     const handleClick = (e) => {
         e.preventDefault();
         window.location.href = "/home";
@@ -214,7 +223,7 @@ function Calendar({eventData}){
         showAddEvent ?
             <AddEvent setShowAddEvent={setShowAddEvent}/>
             :
-<div className="entire-calendar">
+        <div className="entire-calendar">
                                 <div className="tail-datetime-calendar">
                                     <BackBtn isGoBack={true}/>
                                     <div className="calendar-navi">
@@ -223,6 +232,19 @@ function Calendar({eventData}){
                                             <input
                                                 type="month"
                                                 onChange={handleChange}/>
+                                               {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                               <DatePicker
+                                                    views={['year', 'month']}
+                                                    label="Year and Month"
+                                                    minDate={new Date('2000-01-01')}
+                                                    maxDate={new Date('2100-12-31')}
+                                                    value={value}
+                                                    onChange={(newValue) => {
+                                                        setValue(newValue);
+                                                    }}
+                                                    renderInput={(params) => <TextField {...params} helperText={null} />}
+                                                    />
+                                                </LocalizationProvider> */}
                                         </div>
                                         <PlusBtn setShowContents={setShowAddEvent} desc={"+ Add Event"}/>
                                     </div>

@@ -10,6 +10,7 @@ import Diary from "./pages/Diary";
 import Day from "./pages/Day";
 import Invitation from "./pages/Invitation";
 import Chat from "./pages/Chat";
+import EditPost from "./pages/EditPost";
 import NotFound from "./pages/NotFound";
 
 function App(){
@@ -49,7 +50,7 @@ function App(){
                         exact path="/signUp"
                         render={(props)=><SignUp departmentList={departmentList} {...props}/>}
                         />
-                    {/* <AuthRoute
+                    <AuthRoute
                         exact path="/home"
                         render={(props) => <DiaryList departmentList={departmentList}/> }
                         />
@@ -66,29 +67,33 @@ function App(){
                         render={(props) => <Invitation departmentList={departmentList}/>}
                         />
                     <AuthRoute
+                        exact path='/home/diary/:diaryIdx/chat'
+                        render={(props) => <Chat /> }
+                        />
+                    <AuthRoute
+                        exact path="/home/diary/:diaryIdx/:year-:month-:day/:postIdx/edit"
+                        render={(props) => <EditPost />}
+                        />
+                    {/* <Route
+                        exact path="/home"
+                        render={(props) => <DiaryList departmentList={departmentList}/> }
+                        />
+                    <Route
+                        exact path="/home/diary/:diaryIdx"
+                        render={(props) => <Diary {...props}/>}
+                        />
+                    <Route
+                        exact path="/home/diary/:diaryIdx/:year-:month-:day"
+                        render={(props) => <Day {...props} />}
+                        />
+                    <Route
+                        exact path="/invitation"
+                        render={(props) => <Invitation departmentList={departmentList}/>}
+                        />
+                    <Route
                         exact path='/home/diary/:diaryIdx/chat'
                         render={(props) => <Chat /> }
                         /> */}
-                    <Route
-                        exact path="/home"
-                        render={(props) => <DiaryList departmentList={departmentList}/> }
-                        />
-                    <Route
-                        exact path="/home/diary/:diaryIdx"
-                        render={(props) => <Diary {...props}/>}
-                        />
-                    <Route
-                        exact path="/home/diary/:diaryIdx/:year-:month-:day"
-                        render={(props) => <Day {...props} />}
-                        />
-                    <Route
-                        exact path="/invitation"
-                        render={(props) => <Invitation departmentList={departmentList}/>}
-                        />
-                    <Route
-                        exact path='/home/diary/:diaryIdx/chat'
-                        render={(props) => <Chat /> }
-                        />
                     <Route component={NotFound}/>
                 </Switch>
             </Router>

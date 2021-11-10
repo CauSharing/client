@@ -9,6 +9,7 @@ import PinkPlus from "../icons/pink-plus.png";
 import "./Day.css";
 
 import MyEditor from "../components/Editor";
+import EditPost from "./EditPost";
 
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -141,12 +142,16 @@ function FriendList({friendList}){
     );
 }
 
-function Post({title, description}){
+function Post({title, description, postIdx}){
+    const handleClick = (e) => {
+        e.preventDefault();
+        window.location.replace(window.location.href + `/${postIdx}/edit`);
+    }
     return(
         <div className="day__post">
             <div className="day__post__line">
                 <div className="day__post__title">{title}</div>
-                <ColorButton className="day__post__editBtn">Edit</ColorButton>
+                <ColorButton className="day__post__editBtn" onClick={handleClick}>Edit</ColorButton>
             </div>
             {/* <div className="day__post__desc">{description}</div> */}
             <MyEditor initialValue={description} isViewer={true}/>
@@ -188,6 +193,7 @@ function Comment({name, description, color, imgSrc}){
         </div>
     );
 }
+
 function Day({}){
     let sample_img = "https://w.namu.la/s/adb56b09aef6d27319fe0fed21df3cf9e282fe7964308413845ab53649de0ac7e4003aa7abb7b2fe51b934bfc22b68d7183381a532e6ffca6849ad42672b4fc580161f61963aefaa808acaa4c788504ec2212a4a827718b8451f23098f8f24d7fa2d12cb721787c3cd3e098b609a9555";
     const {diaryIdx, year, month, day} = useParams();
@@ -222,8 +228,12 @@ function Day({}){
                                     <FriendList friendList={friendList}/>
                                     <PlusBtn setShowContents={setShowAddPost} desc={"+ Add Post"}/>
                                 </div>
-                                <Post title="Street Woman Fighter" description="Did you see 'street woman fighter'? it's just soooooo fun. you should really see this.
-                                    I just love how girls show their great dancing skill. I think all the dancers there are very professional and cool."/>
+                                <Post 
+                                    title="Street Woman Fighter" 
+                                    description="Did you see 'street woman fighter'? it's just soooooo fun. you should really see this.
+                                    I just love how girls show their great dancing skill. I think all the dancers there are very professional and cool."
+                                    postIdx={0}
+                                    />
 
                                 <div className="day__commentBox">
                                     <div className="day__commentBox__title">

@@ -1,0 +1,124 @@
+.editPost {
+  position: absolute;
+  top: 0px;
+  left: 300px;
+
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+
+  width: 100vh;
+}
+
+.editPost .backBtn {
+  margin-bottom: 30px;
+}
+
+.editPost__line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 1200px;
+  margin-bottom: 30px;
+}
+
+.editPost__dayName {
+  font-size: 24px;
+}
+
+.editPost__main {
+  display: flex;
+  flex-direction: column;
+}
+
+.editPost__main__title {
+  width: 1200px;
+  font-size: 32px;
+  margin-bottom: 23px;
+}
+.editPost__main__line {
+  display: flex;
+  align-items: center;
+  width: 1200px;
+
+  margin: 20px 0px;
+}
+
+.editPost__main__line div {
+  width: 50%;
+  font-size: 18px;
+  color: #3181c6;
+
+  padding: 0px 5px;
+}
+
+/* .editPost__main__line div:nth-of-type(1) {
+  border-right: 1px solid #8c8c8c;
+} */
+/* .editPost__main__line div:nth-of-type(2) {
+  padding-left: 20px;
+} */
+
+.editPost__main__Desc {
+  width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.editPost__main__section {
+  display: flex;
+  align-items: center;
+  width: 1200px;
+}
+
+/* .editPost__main__section:nth-of-type(1) {
+  border-right: 1px solid #8c8c8c;
+}
+.editPost__main__section:nth-of-type(2) {
+  padding-left: 20px;
+} */
+
+.editPost__descLine,
+.editPost__orgDescLine {
+  width: 50%;
+  border-bottom: 1px dotted #8c8c8c;
+  font-size: 18px;
+}
+
+.editPost__orgDescLine {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  border-right: 1px solid #8c8c8c;
+}
+.editPost__descLine div,
+.editPost__orgDescLine div {
+  height: 18px;
+  padding: 10px 5px;
+
+  display: flex;
+  align-items: center;
+
+  margin: 5px 0px;
+}
+
+.editPost__descLine input {
+  font-size: 18px;
+  background-color: transparent;
+  border-bottom: 1px solid black;
+  border-radius: 0px;
+  padding: 10px 5px;
+
+  height: 18px;
+  margin: 5px 0px;
+}
+
+.editPost__descLine div div:nth-of-type(1) {
+  width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
