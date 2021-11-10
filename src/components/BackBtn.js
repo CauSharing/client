@@ -3,11 +3,12 @@ import { useHistory } from "react-router-dom";
 import "./BackBtn.css";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-function BackBtn({isGoBack, setShowContents}){
+function BackBtn({nextLoc, setShowContents}){
     const history = useHistory();
     const handleClick = (e) => {
-        if(isGoBack)
-            history.goBack();
+       
+        if(nextLoc)
+            window.location.replace(nextLoc);
         else
         {
             setShowContents(false);

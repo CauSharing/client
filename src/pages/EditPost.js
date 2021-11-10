@@ -86,8 +86,10 @@ function EditLine({originalDesc, editDescriptionList}){
 
     return(
         <div  className="editPost__descLine">
-            
-            <input value={originalDesc}/>
+            <div>
+                <input value={originalDesc}/>
+                <Button variant="outlined" >Submit</Button>
+            </div>
             {
                 editCompList.map(elem => 
                     <div>
@@ -119,7 +121,7 @@ function EditPost({}){
         // postIdx에 해당하는 html글 불러오기
         setTitle("Street woman fighter");
         var el = document.createElement( 'html' );
-        el.innerHTML = `<p><img src="https://myrecord.s3.ap-northeast-2.amazonaws.com/e191db4e-a079-43c1-a2f6-a5291857a17d.png" alt="alt text" contenteditable="false"><img class="ProseMirror-separator"><br class="ProseMirror-trailingBreak"></p><p>Did you saw 'street woman fighter'? it's just soooooo fun.</p><p>you should really see this.</p><p>I just love how girls show their great dancing skill.</p><p>I think all the dancers there are very professional and cool.</p>`;
+        el.innerHTML = `<p><img src="https://myrecord.s3.ap-northeast-2.amazonaws.com/e191db4e-a079-43c1-a2f6-a5291857a17d.png" alt="alt text" contenteditable="false"><img class="ProseMirror-separator"><br class="ProseMirror-trailingBreak"></p><p>Did you saw 'street woman fighter'? it's just soooooo fun.</p><p>you should have really seen this.</p><p>I just love how girls show their great dancing skill.</p><p>I think all the dancers there are very professional and cool.</p>`;
         
         var ps = el.querySelectorAll("p");
         var list = [];
@@ -157,11 +159,6 @@ function EditPost({}){
             editDict[elem.lineIdx] = [elem];
     });
 
-    // let editCompList = [];
-    // for(var key in editDict){
-    //     editCompList.push(<EditLine originalDesc={descriptionList[key]} editDescriptionList = {editDict[key]} /> );
-    // }
-
     let totalList = [];
     for(var i=0; i<lineCnt; i++){
         totalList.push(
@@ -185,7 +182,7 @@ function EditPost({}){
             <GroupSidebar />
             <div className="editPost">
                 <div className="editPost__backBtn">
-                    <BackBtn isGoBack={true}/>
+                    <BackBtn nextLoc={`/home/diary/${diaryIdx}/${year}-${month}-${day}`}/>
                 </div>
                 <div className="editPost__line">
                     <div className="editPost__dayName">

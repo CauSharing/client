@@ -219,7 +219,7 @@ function Day({}){
                 :
                 <div className="day">
                                 <div className="day__btns">
-                                    <BackBtn isGoBack={true}/>
+                                    <BackBtn nextLoc={`/home/diary/${diaryIdx}`}/>
                                 </div>
                                 <div className="day__date">
                                     {`${year}/${month}/${day}/${dayName}`}

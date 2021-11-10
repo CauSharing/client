@@ -206,7 +206,7 @@
   flex-direction: column;
 }
 .addPost .addPost__line {
-  width: 1180px;
+  width: 1200px;
   display: flex;
   /* justify-content: space-between; */
   align-items: center;
@@ -216,10 +216,10 @@
   font-size: 28px;
   margin-bottom: 30px;
   margin-top: 30px;
-  margin-right: 460px;
+  margin-right: 440px;
 }
 
-.addPost .addPost__form {
+/* .addPost .addPost__form {
   background-color: #edecec;
 
   width: 1180px;
@@ -240,9 +240,9 @@
   align-items: center;
   margin-bottom: 20px;
   margin-left: 20px;
-}
+} */
 
-.addPost__form__line input {
+/* .addPost__form__line input {
   width: 435px;
   height: 60px;
   background-color: #e6e6e6;
@@ -298,4 +298,4 @@
   color: dimgrey;
   font-family: "Roboto Condensed", sans-serif;
   font-size: 22px;
-}
+} */

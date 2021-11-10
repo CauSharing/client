@@ -1,57 +1,61 @@
-.invitation{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    background-color: white;
+.invitation {
+  background-color: white;
 }
 
-.invitation .invitation__list{
-    display: flex;
-    flex-direction: column;
+.invitation .invitation__list {
+  position: absolute;
+  top: 0px;
+  left: 300px;
 
-    margin-top: 30px;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
 
-    background-color: #F3F3F3;
-
-    width: 1140px;
-
-    border-radius: 20px;
-
-    padding: 20px;
+  width: 100vh;
 }
 
-.invitation__list__title{
-    font-size: 40px;
-    margin-bottom: 20px;
+.invitation__list__title {
+  font-size: 36px;
+  width: 100%;
+  border-bottom: 1px solid #7c7c7c;
+  padding: 10px 0px;
+
+  margin-top: 20px;
 }
-.invitation__elem{
-    display: flex;
-    margin: 10px;
-    align-items: center;
+/* .invitation__elem {
+  display: flex;
+  margin: 10px;
+  align-items: center;
 }
 
-.invitation__elem__email{
-    width: 300px;
-    font-size: 20px;
+.invitation__elem__email {
+  width: 300px;
+  font-size: 20px;
 }
 
-.invitation__elem__acceptBtn, .invitation__elem__refuseBtn{
-    border: none;
-    border-radius: 10px;
-    padding: 10px;
-    margin-right: 10px;
-    font-size: 18px;
+.invitation__elem__acceptBtn,
+.invitation__elem__refuseBtn {
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  margin-right: 10px;
+  font-size: 18px;
 
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.25);
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25);
 }
 
-.invitation__elem__acceptBtn{
-    background-color: #FFDEDE;
+.invitation__elem__acceptBtn {
+  background-color: #ffdede;
 }
-.invitation__elem__refuseBtn{
-    background-color: #C7EDFD;
+.invitation__elem__refuseBtn {
+  background-color: #c7edfd;
+} */
+
+.hidden {
+  visibility: hidden;
 }
 
-.hidden{
-    visibility: hidden;
+.invitation__list__alert {
+  margin-top: 20px;
+  font-size: 20px;
 }

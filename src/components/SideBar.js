@@ -50,7 +50,7 @@ function SideBar({departmentList, user, clickedMenuId}){
 {/*                 </button> */}
                 <Link to={`/invitation`}>
                     <button value={2}  className={clickedMenu === "2" ? "clicked" : "notClicked"} onClick={handleClick}>
-                        Invitation
+                        Invitation list
                     </button>
                 </Link>
                 <Link to="/setting">

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { Link, useLocation  } from 'react-router-dom';
 import moment from 'moment';
-import './Calendar.css';
+
 import PlusBtn from "./PlusBtn";
 import BackBtn from "./BackBtn";
 
@@ -15,10 +15,13 @@ import BackBtn from "./BackBtn";
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
+import StaticDatePicker from '@mui/lab/StaticDatePicker';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
-import { Button } from '@mui/material';
+import { Button , IconButton} from '@mui/material';
 import { styled } from '@mui/material/styles';
+
+import './Calendar.css';
 
 const ColorButton = styled(Button)({
     width: '126px',
@@ -45,6 +48,7 @@ const ColorButton = styled(Button)({
       boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
     },
   });
+
 
 
 function AddEvent({setShowAddEvent}){
@@ -134,12 +138,17 @@ function Calendar({eventData}){
 
     const [showAddEvent, setShowAddEvent] = useState(false);
 
-    const [value, setValue] = useState(null);
+    const [showDatePicker, setShowDatePicker] = useState(false);
 
 
     const handleClick = (e) => {
         e.preventDefault();
         window.location.href = "/home";
+    }
+
+    const handleCalendarBtn = (e) => {
+        e.preventDefault();
+        setShowDatePicker(!showDatePicker);
     }
 
     const eventArr = [];
@@ -149,18 +158,18 @@ function Calendar({eventData}){
 
     // event 부르는 api 호출
 
-    const handleChange = (e) => {
-        console.log(e.target.value);
-        let dateArr = e.target.value.split('-');
-        let year = parseInt(dateArr[0]);
-        let month = parseInt(dateArr[1]);
+    // const handleChange = (e) => {
+    //     console.log(e.target.value);
+    //     let dateArr = e.target.value.split('-');
+    //     let year = parseInt(dateArr[0]);
+    //     let month = parseInt(dateArr[1]);
 
-        setSeeingYear(year);
-        setSeeingMonth(month);
-        setFirstDayOfMonth(moment(e.target.value, "YYYY-MM").startOf("month").format("d"));
-        setDaysInMonth(moment(e.target.value).daysInMonth());
-        setSeeingMonthStr(moment().month(month-1).format("MMMM"));
-    }
+    //     setSeeingYear(year);
+    //     setSeeingMonth(month);
+    //     setFirstDayOfMonth(moment(e.target.value, "YYYY-MM").startOf("month").format("d"));
+    //     setDaysInMonth(moment(e.target.value).daysInMonth());
+    //     setSeeingMonthStr(moment().month(month-1).format("MMMM"));
+    // }
 
     const weekdayshort = moment.weekdaysShort();
     const weekdayshortname = weekdayshort.map(day => {
@@ -225,27 +234,35 @@ function Calendar({eventData}){
             :
         <div className="entire-calendar">
                                 <div className="tail-datetime-calendar">
-                                    <BackBtn isGoBack={true}/>
+                                    <BackBtn nextLoc={"/home"}/>
                                     <div className="calendar-navi">
                                         <div className="calendar-navi__monthIndicator">
                                             <div className="calendar-navi__month">{seeingMonthStr}</div>
-                                            <input
-                                                type="month"
-                                                onChange={handleChange}/>
-                                               {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                               <DatePicker
-                                                    views={['year', 'month']}
-                                                    label="Year and Month"
+                                            <IconButton onClick={handleCalendarBtn} color="primary"><CalendarTodayIcon /></IconButton>
+                                        {showDatePicker?
+                                            <LocalizationProvider dateAdapter={AdapterDateFns} className="datePicker">
+                                                <StaticDatePicker
+                                                    displayStaticWrapperAs="desktop"
+                                                    openTo="year"
                                                     minDate={new Date('2000-01-01')}
-                                                    maxDate={new Date('2100-12-31')}
-                                                    value={value}
+                                                        maxDate={new Date('2100-12-31')}
+                                                    // value={value}
                                                     onChange={(newValue) => {
-                                                        setValue(newValue);
+                                                        var date = new Date(newValue);
+                                                        setSeeingYear(date.getFullYear());
+                                                        setSeeingMonth(date.getMonth());
+                                                        setFirstDayOfMonth(moment(date, "YYYY-MM").startOf("month").format("d"));
+                                                        setDaysInMonth(moment(date).daysInMonth());
+                                                        setSeeingMonthStr(moment().month(date.getMonth()).format("MMMM"));
                                                     }}
-                                                    renderInput={(params) => <TextField {...params} helperText={null} />}
-                                                    />
-                                                </LocalizationProvider> */}
+                                                    renderInput={(params) => <TextField {...params} />}
+                                                />
+                                            </LocalizationProvider>
+                                            : null
+                                            }
+                                        
                                         </div>
+                                        
                                         <PlusBtn setShowContents={setShowAddEvent} desc={"+ Add Event"}/>
                                     </div>
                                 </div>

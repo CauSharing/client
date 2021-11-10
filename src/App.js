@@ -11,6 +11,7 @@ import Day from "./pages/Day";
 import Invitation from "./pages/Invitation";
 import Chat from "./pages/Chat";
 import EditPost from "./pages/EditPost";
+import GroupFriendList from "./pages/GroupFriendList";
 import NotFound from "./pages/NotFound";
 
 function App(){
@@ -66,6 +67,10 @@ function App(){
                         exact path="/invitation"
                         render={(props) => <Invitation departmentList={departmentList}/>}
                         />
+                    {/* <AuthRoute
+                        exact path="/home/diary/:diaryIdx/friendList"
+                        render={(props) => <GroupFriendList />}
+                        /> */}
                     <AuthRoute
                         exact path='/home/diary/:diaryIdx/chat'
                         render={(props) => <Chat /> }

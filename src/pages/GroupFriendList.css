@@ -1,0 +1,18 @@
+.entireGroupFriendList {
+  position: absolute;
+  top: 0px;
+  left: 300px;
+
+  padding-top: 20px;
+
+  width: 100%;
+}
+
+.groupFriendList__title {
+  font-size: 36px;
+  width: 60%;
+  border-bottom: 1px solid #7c7c7c;
+  padding: 10px 0px;
+
+  margin-top: 20px;
+}

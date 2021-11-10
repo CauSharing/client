@@ -96,12 +96,12 @@
 .editPost__descLine div,
 .editPost__orgDescLine div {
   height: 18px;
-  padding: 10px 5px;
+  padding: 13px 5px;
 
   display: flex;
   align-items: center;
 
-  margin: 5px 0px;
+  /* margin: 5px 0px; */
 }
 
 .editPost__descLine input {
@@ -112,11 +112,12 @@
   padding: 10px 5px;
 
   height: 18px;
-  margin: 5px 0px;
+  /* margin: 5px 0px; */
 }
 
 .editPost__descLine div div:nth-of-type(1) {
   width: 80px;
+  padding: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
