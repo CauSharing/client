@@ -219,6 +219,15 @@
   margin-right: 440px;
 }
 
+.addPost__title {
+  width: 500px;
+  background-color: transparent;
+  border-bottom: 1px solid black;
+  border-radius: 0px;
+
+  margin-bottom: 15px;
+}
+
 /* .addPost .addPost__form {
   background-color: #edecec;
 

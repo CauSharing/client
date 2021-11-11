@@ -63,7 +63,7 @@ function App(){
                         render={(props) => <Diary {...props}/>}
                         />
                     <AuthRoute
-                        exact path="/home/diary/:diaryIdx/:year-:month-:day"
+                        exact path="/home/diary/:groupIdx/:year-:month-:day"
                         render={(props) => <Day {...props} />}
                         />
                     <AuthRoute

@@ -3,7 +3,7 @@ import React, { useRef, useEffect } from 'react';
 import axios from "axios";
 import '@toast-ui/editor/dist/toastui-editor.css';
 
-const MyEditor = ({initialValue, isViewer}) => {
+const MyEditor = ({initialValue, isViewer, setContent}) => {
     const editorRef = useRef();
     let imageList = [];
     var re = /(?<alt>!\[[^\]]*\])\((?<filename>.*?)(?=\"|\))\)/g;
@@ -72,6 +72,12 @@ const MyEditor = ({initialValue, isViewer}) => {
                 useCommandShortcut={true}
                 ref={editorRef}
                 initialValue={initialValue}
+                onChange={() => {
+                  const editorInstance = editorRef.current.getInstance();
+                  const getContent_html = editorInstance.getHTML();
+                  console.log(getContent_html);
+                  setContent(getContent_html);
+                }}
                 />
             <button onClick={btnClickListener}>내용 확인</button>
         </>

@@ -15,34 +15,34 @@ import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // import AddIcon from '@mui/icons-material/Add';
 
-import ListSubheader from '@mui/material/ListSubheader';
+// import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
-// import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
+// import ListItemButton from '@mui/material/ListItemButton';
 // import ListItemIcon from '@mui/material/ListItemIcon';
 // import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import FolderIcon from '@mui/icons-material/Folder';
-import DeleteIcon from '@mui/icons-material/Delete';
+// import Collapse from '@mui/material/Collapse';
+// import InboxIcon from '@mui/icons-material/MoveToInbox';
+// import DraftsIcon from '@mui/icons-material/Drafts';
+// import SendIcon from '@mui/icons-material/Send';
+// import ExpandLess from '@mui/icons-material/ExpandLess';
+// import ExpandMore from '@mui/icons-material/ExpandMore';
+// import StarBorder from '@mui/icons-material/StarBorder';
+// import List from '@mui/material/List';
+// import ListItem from '@mui/material/ListItem';
+// import ListItemAvatar from '@mui/material/ListItemAvatar';
+// import ListItemIcon from '@mui/material/ListItemIcon';
+// import ListItemText from '@mui/material/ListItemText';
+// import Avatar from '@mui/material/Avatar';
+// import IconButton from '@mui/material/IconButton';
+// import FormGroup from '@mui/material/FormGroup';
+// import FormControlLabel from '@mui/material/FormControlLabel';
+// import Checkbox from '@mui/material/Checkbox';
+// import Grid from '@mui/material/Grid';
+// import Typography from '@mui/material/Typography';
+// import FolderIcon from '@mui/icons-material/Folder';
+// import DeleteIcon from '@mui/icons-material/Delete';
 
-import TextField from '@mui/material/TextField';
+// import TextField from '@mui/material/TextField';
 
 let sample_img = "https://w.namu.la/s/adb56b09aef6d27319fe0fed21df3cf9e282fe7964308413845ab53649de0ac7e4003aa7abb7b2fe51b934bfc22b68d7183381a532e6ffca6849ad42672b4fc580161f61963aefaa808acaa4c788504ec2212a4a827718b8451f23098f8f24d7fa2d12cb721787c3cd3e098b609a9555";
 const ColorButton = styled(Button)({
@@ -146,16 +146,49 @@ function NewComment({imgSrc}){
 }
 
 
-function AddPost({setShowAddPost, year, month, day, dayName}){
+function AddPost({matchingRoomId, setShowAddPost, year, month, day, dayName}){
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+
+    const handleSaveBtn = () => {
+        const token = localStorage.getItem("userToken");
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+
+        const sendData = {
+            "content": content,
+            "matchingRoomId": matchingRoomId,
+            "postDate": new Date(),
+            "title": title
+        };    
+
+        // console.log(sendData);
+        axios.post('/api/createPost',sendData, config)
+        .then(res => {
+            console.log(res);
+            if(res.data.result){
+                alert("saved");
+                
+            }
+            else{
+                alert(res.data.description);
+            }
+        })
+        .catch(err =>{
+            console.log(err);
+        });
+    };
+
     return(
         <div className="addPost">
             <BackBtn setShowContents={setShowAddPost}/>
             <div className="addPost__line">
                 <div className="addPost__date">{`${year}/${month}/${day}/${dayName}`}</div>
-                <ColorButton>Save</ColorButton>
+                <ColorButton onClick={handleSaveBtn}>Save</ColorButton>
             </div>
-           <MyEditor initialValue={"write"} isViewer={false}/>
-
+            <input className="addPost__title" placeholder="Title" onChange={(e) => setTitle(e.target.value)}/>
+           <MyEditor initialValue={""} isViewer={false} setContent={setContent}/>
         </div>
     )
 }
@@ -284,7 +317,7 @@ function CommentList({commentList}){
 }
 function Day({}){
     
-    const {diaryIdx, year, month, day} = useParams();
+    const {groupIdx, year, month, day} = useParams();
     const dayName = moment(`${year}-${month}-${day}`).format('ddd');
     console.log(year, month, day);
 
@@ -332,41 +365,45 @@ function Day({}){
             writer: "jk",
             imgSrc: sample_img
         },
-    ]
+    ];
 
     return(
 
         <div className="entireDay">
-            <GroupSidebar diaryIdx={diaryIdx}/>
+            <GroupSidebar diaryIdx={groupIdx}/>
             {
             showAddPost ?
-                <AddPost setShowAddPost={setShowAddPost} year={year} month={month} day={day} dayName={dayName}/>
+                <AddPost 
+                    setShowAddPost={setShowAddPost} 
+                    year={year} 
+                    month={month} 
+                    day={day} 
+                    dayName={dayName}
+                    matchingRoomId={groupIdx}/>
                 :
                 <div className="day">
-                                <div className="day__btns">
-                                    <BackBtn nextLoc={`/home/diary/${diaryIdx}`}/>
-                                </div>
-                                <div className="day__date">
-                                    {`${year}/${month}/${day}/${dayName}`}
-                                </div>
-                                <div className="day__line">
-                                    <FriendList friendList={friendList}/>
-                                    <PlusBtn setShowContents={setShowAddPost} desc={"+ Add Post"}/>
-                                </div>
-                                <Post 
-                                    title="Street Woman Fighter" 
-                                    description="Did you see 'street woman fighter'? it's just soooooo fun. you should really see this.
-                                    I just love how girls show their great dancing skill. I think all the dancers there are very professional and cool."
-                                    postIdx={0}
-                                    />
-                                <div className="day__commentBox__title">
-                                    <div>Comment</div>
-                                    <div>{commentList.length}</div>
-                                </div>
-                                <CommentList commentList={commentList} />
-                                
-
-                            </div>
+                    <div className="day__btns">
+                        <BackBtn nextLoc={`/home/diary/${groupIdx}`}/>
+                    </div>
+                    <div className="day__date">
+                        {`${year}/${month}/${day}/${dayName}`}
+                    </div>
+                    <div className="day__line">
+                        <FriendList friendList={friendList}/>
+                        <PlusBtn setShowContents={setShowAddPost} desc={"+ Add Post"}/>
+                    </div>
+                    <Post 
+                        title="Street Woman Fighter" 
+                        description="Did you see 'street woman fighter'? it's just soooooo fun. you should really see this.
+                        I just love how girls show their great dancing skill. I think all the dancers there are very professional and cool."
+                        postIdx={0}
+                        />
+                    <div className="day__commentBox__title">
+                        <div>Comment</div>
+                        <div>{commentList.length}</div>
+                    </div>
+                    <CommentList commentList={commentList} />
+                </div>
             }
 
         </div>
