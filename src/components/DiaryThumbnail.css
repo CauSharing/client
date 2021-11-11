@@ -1,34 +1,50 @@
-.diaryThumbnail{
-    width: 200px;
-    height: 280px;
+.diaryThumbnail {
+  width: 200px;
+  height: 280px;
 
-    background-color: white;
+  background-color: white;
 
-    border-radius: 5px;
+  border-radius: 5px;
 
-    margin: 20px;
+  margin: 20px;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-    padding: 15px;
+  padding: 15px;
 
-    box-shadow: 0.05em 0.2em 0.3em rgba(0,0,0,0.25);
+  box-shadow: 0.05em 0.2em 0.3em rgba(0, 0, 0, 0.25);
 }
 
-.diaryThumbnail img{
-    width: 150px;
-    height: 150px;
-    border-radius: 50em;
+.diaryThumbnail__groupImg {
+  width: 150px;
+  height: 150px;
+  /* border-radius: 50em; */
 
-    margin: 20px 0px 30px 0px;
-}
-.diaryThumbnail .diaryThumbnail__name{
-    font-size: 24px;
-    margin-bottom: 10px;
+  margin: 20px 0px 30px 0px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.diaryThumbnail .diaryThumbnail__major{
-    font-size: 18px;
+.diaryThumbnail img {
+  /* width: 150px;
+  height: 150px; */
+  border-radius: 50em;
+
+  /* margin: 20px 0px 30px 0px; */
+}
+.diaryThumbnail .diaryThumbnail__name {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.diaryThumbnail .diaryThumbnail__major {
+  font-size: 18px;
+}
+
+.groupIcon {
+  transform: scale(5);
 }

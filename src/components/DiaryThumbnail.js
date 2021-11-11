@@ -2,29 +2,38 @@ import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import "./DiaryThumbnail.css";
 
-function DiaryThumbnail({diary, diaryIdx, departmentList, setMatchingSeen}){
-    const [name, setName] = useState("");
-    const [major, setMajor] = useState("");
-    const [imgSrc,setImgSrc] = useState("#");
+import GroupIcon from '@mui/icons-material/Group';
 
-    useEffect(() => {
-        setName(diary.name);
-        setMajor(diary.major);
-        setImgSrc(diary.imgSrc);
-    },[name, major, imgSrc]);
+function DiaryThumbnail({groupName, groupImg, groupUserList, groupIdx}){
+    // const [name, setName] = useState("");
+    // const [major, setMajor] = useState("");
+    // const [imgSrc,setImgSrc] = useState("#");
+
+    // useEffect(() => {
+    //     setName(diary.name);
+    //     setMajor(diary.major);
+    //     setImgSrc(diary.imgSrc);
+    // },[name, major, imgSrc]);
 
     return(
         <Link
             to={{
-                pathname: `home/diary/${diaryIdx}`,
+                pathname: `home/diary/${groupIdx}`,
                 state: {
-                    diaryIdx: diaryIdx,
+                    groupIdx: groupIdx,
                 }
             }}>
                 <div className="diaryThumbnail">
-                    <img src={imgSrc} alt={name}/>
-                    <div className="diaryThumbnail__name">{name}</div>
-                    <div className="diaryThumbnail__major">{major}</div>
+                    <div className="diaryThumbnail__groupImg">
+                    {
+                        groupImg?
+                        <img src={groupImg} alt={groupName}/>
+                        :
+                        <GroupIcon className="groupIcon" color="primary"/>
+                    }
+                    </div>
+                    <div className="diaryThumbnail__name">{groupName}</div>
+                    {/* <div className="diaryThumbnail__major">{major}</div> */}
                 </div>
         </Link>
 

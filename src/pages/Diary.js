@@ -6,11 +6,11 @@ import Calendar from "../components/Calendar";
 
 function Diary({}){
     console.log("render diary");
-    const {diaryIdx} = useParams();
+    const {groupIdx} = useParams();
 
     return(
         <>
-            <GroupSidebar diaryIdx={diaryIdx}/>
+            <GroupSidebar diaryIdx={groupIdx}/>
             <Calendar />
         </>
 

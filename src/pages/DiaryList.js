@@ -1,5 +1,6 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { Link } from 'react-router-dom';
+import axios from "axios";
 import SideBar from "../components/SideBar";
 import Matching from "../components/Matching";
 import DiaryThumbnail from "../components/DiaryThumbnail";
@@ -39,18 +40,41 @@ const ColorButton = styled(Button)({
 function DiaryList({departmentList}){
     console.log("render diarylist");
     const [showAddFriend, setShowAddFriend] = useState(false);
+    const [matchingRoomList, setMatchingRoomList] = useState([]);
 
     const handleClick = (e) => {
         e.preventDefault();
         setShowAddFriend(true);
     }
 
+    const token = localStorage.getItem("userToken");
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+
+    useEffect(() => {
+        axios.get('/api/roomList', config)
+           .then(res => {
+               console.log(res);
+               if(res.data.result){
+                    setMatchingRoomList(res.data.value);
+               }
+               else{
+                   alert("error!");
+               }
+           })
+           .catch(err =>{
+               console.log(err);
+           });
+    },[]);
+
     let diaryList = [];
-    diaries.map((diary, index) => (
+    matchingRoomList.map((diary, index) => (
         diaryList.push(<td><DiaryThumbnail
-                                    diary={diary}
-                                    diaryIdx={index}
-                                    departmentList={departmentList}
+                                    groupName={diary.matchingRoomName? diary.matchingRoomName: `Group ${index+1}`}
+                                    groupImg={diary.matchingRoomImage}
+                                    groupUserList={diary.userList}
+                                    groupIdx={diary.matchingRoomId}
                                 /></td>)
 
     ));

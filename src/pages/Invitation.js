@@ -109,7 +109,6 @@ function InvitationElem({email, img, major, nickname}){
              data: { "matchingroomId": 0,
                     "sender": email}, 
             headers: { "Authorization":  `Bearer ${token}`} })
-        // axios.delete('/api/reject', {data: sendData, config})
             .then(res => {
                 console.log(res);
                 if(res.data.result){
