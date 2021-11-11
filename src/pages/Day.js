@@ -15,6 +15,36 @@ import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // import AddIcon from '@mui/icons-material/Add';
 
+import ListSubheader from '@mui/material/ListSubheader';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Collapse from '@mui/material/Collapse';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import DraftsIcon from '@mui/icons-material/Drafts';
+import SendIcon from '@mui/icons-material/Send';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import StarBorder from '@mui/icons-material/StarBorder';
+// import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+// import ListItemIcon from '@mui/material/ListItemIcon';
+// import ListItemText from '@mui/material/ListItemText';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import FolderIcon from '@mui/icons-material/Folder';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+import TextField from '@mui/material/TextField';
+
+let sample_img = "https://w.namu.la/s/adb56b09aef6d27319fe0fed21df3cf9e282fe7964308413845ab53649de0ac7e4003aa7abb7b2fe51b934bfc22b68d7183381a532e6ffca6849ad42672b4fc580161f61963aefaa808acaa4c788504ec2212a4a827718b8451f23098f8f24d7fa2d12cb721787c3cd3e098b609a9555";
 const ColorButton = styled(Button)({
     width: '126px',
     height: '41px',
@@ -41,7 +71,7 @@ const ColorButton = styled(Button)({
   });
   
   const ReplyButton = styled(Button)({
-    fontSize: '15px',
+    fontSize: '13px',
     width: '90px',
     height: '30px',
     boxShadow: 'none',
@@ -52,6 +82,7 @@ const ColorButton = styled(Button)({
     backgroundColor: '#3181C6',
     borderColor: '#0063cc',
     fontFamily: 'Roboto Condensed',
+    marginLeft: '10px',
     '&:hover': {
       backgroundColor: '#4892d2',
       boxShadow: 'none',
@@ -66,7 +97,7 @@ const ColorButton = styled(Button)({
   });
 
   const AddReplyButton = styled(Button)({
-    fontSize: '15px',
+    fontSize: '13px',
     width: '90px',
     height: '30px',
     marginLeft: '10px',
@@ -93,6 +124,18 @@ const ColorButton = styled(Button)({
 
 function NewComment({imgSrc}){
     return(
+        // <ListItem style={{width:"1000px", marginBottom: "15px"}}>
+        //     <ListItemAvatar>
+        //         <Avatar src={imgSrc}>
+        //         </Avatar>
+        //     </ListItemAvatar>
+        //     <TextField
+        //         label="Add comment"
+        //         variant="standard"
+        //         style={{width: "800px"}}
+        //         />
+        //     <AddReplyButton >+</AddReplyButton>
+        // </ListItem>
         <div className="day__commentBox__newComment">
             <img src={imgSrc}/>
             <input placeholder="Add Comment"/>
@@ -159,11 +202,17 @@ function Post({title, description, postIdx}){
     );
 }
 
-function Comment({name, description, color, imgSrc}){
-//     const nameStyle = {
-//         background: color
-//     };
+function Comment({childComment, commentDate, content, writer, imgSrc}){
+    // const nameStyle = {
+    //     background: color
+    // };
     const [seeReply, setSeeReply] = useState(false);
+    // const [open, setOpen] = useState(true);
+
+    // const handleOpenReply = () => {
+    //   setOpen(!open);
+    // };
+    const [cDate, setCDate] = useState(new Date(commentDate));
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -174,28 +223,67 @@ function Comment({name, description, color, imgSrc}){
             <div className="day__comment__section">
                 <div className="day__comment__left">
                     <img src={imgSrc}/>
-                    <div className="day__comment__name" >{name}</div>
-        {/*             <div className="day__comment__name" style={nameStyle}>{name}</div> */}
-                    <div className="day__comment__desc">{description}</div>
+                    <div className="day__comment__name" >{writer}</div>
+                    <div className="day__comment__desc">{content}</div>
                 </div>
-                {/* <button onClick={handleClick}>{seeReply? "Hide Reply":"See Reply"}</button> */}
                 <ReplyButton variant="outlined" size="small" onClick={handleClick}>{seeReply? "Hide Reply":"See Reply"}</ReplyButton>
             </div>
-
             {
                 seeReply?
-                    <div className="day__comment__replyBox">
-                        <NewComment imgSrc={"#"} />
-                    </div>
+                    <CommentList commentList={childComment} />
                     :
                     null
             }
         </div>
+        // <>
+        //     <ListItem style={{width: "1000px",  marginBottom: "15px", display: "flex", flexDirection:"column"}}>
+        //         <div style={{display: "flex"}}>
+        //       <ListItemAvatar>
+        //         <Avatar src={imgSrc}></Avatar>
+        //       </ListItemAvatar>
+        //       <ListItemText primary={writer} secondary={`${cDate.getFullYear()}-${cDate.getMonth()}-${cDate.getDate()}`} style={{width:"200px"}} />
+        //       <ListItemText primary={content} style={{width: "800px"}}/>
+        //       <ReplyButton variant="outlined" size="small" onClick={handleClick}>{seeReply? "Hide Reply":"See Reply"}</ReplyButton>
+        //       </div>
+        //       {seeReply ? 
+        //         <CommentList commentList={childComment} />
+        //         :       
+        //         null}
+              
+        //     </ListItem>
+
+        // </>
     );
 }
 
+function CommentList({commentList}){
+    return(
+        <div className="day__commentBox">
+
+            <List
+                sx={{ bgcolor: 'background.paper' }}
+                component="nav"
+                aria-labelledby="nested-list-subheader"
+                >
+                    <NewComment imgSrc={sample_img} />
+                    {
+                        commentList.map(elem => 
+                            <Comment 
+                                childComment={elem.childComment}
+                                commentDate={elem.commentDate}
+                                content={elem.content}
+                                writer={elem.writer}
+                                imgSrc={elem.imgSrc} />)
+                    }
+            </List>
+            
+                
+            
+        </div>
+    );
+}
 function Day({}){
-    let sample_img = "https://w.namu.la/s/adb56b09aef6d27319fe0fed21df3cf9e282fe7964308413845ab53649de0ac7e4003aa7abb7b2fe51b934bfc22b68d7183381a532e6ffca6849ad42672b4fc580161f61963aefaa808acaa4c788504ec2212a4a827718b8451f23098f8f24d7fa2d12cb721787c3cd3e098b609a9555";
+    
     const {diaryIdx, year, month, day} = useParams();
     const dayName = moment(`${year}-${month}-${day}`).format('ddd');
     console.log(year, month, day);
@@ -208,6 +296,43 @@ function Day({}){
         {id: 1, name: "Nakyoung", color: "#B6E8FD"},
         {id: 2, name: "Jikyang", color: "#FEBBFF"}
     ];
+
+    // sample comment list
+    const commentList = [
+        {
+            childComment: [
+                {
+                    childComment: [],
+                    commentDate: "2021-11-10T20:33:02.724Z",
+                    commentId: 0,
+                    content: "string",
+                    writer: "string",
+                    imgSrc: sample_img
+                },
+            ],
+            commentDate: "2021-11-10T20:33:02.724Z",
+            commentId: 0,
+            content: "string",
+            writer: "mj",
+            imgSrc: sample_img
+        },
+        {
+            childComment: [],
+            commentDate: "2021-11-10T20:33:02.724Z",
+            commentId: 0,
+            content: "string",
+            writer: "nk",
+            imgSrc: sample_img
+        },
+        {
+            childComment: [],
+            commentDate: "2021-11-10T20:33:02.724Z",
+            commentId: 0,
+            content: "string",
+            writer: "jk",
+            imgSrc: sample_img
+        },
+    ]
 
     return(
 
@@ -234,16 +359,12 @@ function Day({}){
                                     I just love how girls show their great dancing skill. I think all the dancers there are very professional and cool."
                                     postIdx={0}
                                     />
-
-                                <div className="day__commentBox">
-                                    <div className="day__commentBox__title">
-                                        <div>Comment</div>
-                                        <div>2</div>
-                                    </div>
-                                    <NewComment imgSrc={sample_img}/>
-                                    <Comment name="Minju" color={friendList[0].color} description="I already saw it. I'm a big fan of Honey J in HolyBang. She's amazing" imgSrc={"https://blog.kakaocdn.net/dn/bcZT99/btreTHNIHGx/xy6W9nH6xePSZgk4nK9OH1/img.jpg"}/>
-                                    <Comment name="Nakyoung" color={friendList[1].color} description="Actually, I think No:ze is the best. " imgSrc={"https://menu.mt.co.kr/moneyweek/thumb/2021/08/29/06/2021082909088076498_1.jpg"}/>
+                                <div className="day__commentBox__title">
+                                    <div>Comment</div>
+                                    <div>{commentList.length}</div>
                                 </div>
+                                <CommentList commentList={commentList} />
+                                
 
                             </div>
             }

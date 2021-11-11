@@ -25,11 +25,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import "./invitation.css";
 
-function Alert({open, handleClose, isAccept, nickname}){
+function Alert({open, handleYes, handleNo, isAccept, nickname}){
     return(
         <Dialog
             open={open}
-            onClose={handleClose}
+            onClose={handleNo}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
@@ -52,15 +52,17 @@ function Alert({open, handleClose, isAccept, nickname}){
             </DialogContentText>
             </DialogContent>
             <DialogActions>
-            <Button onClick={handleClose}>No</Button>
-            <Button onClick={handleClose} autoFocus>
+            <Button onClick={handleNo}>
+                No
+            </Button>
+            <Button onClick={handleYes} autoFocus>
                 Yes
             </Button>
             </DialogActions>
         </Dialog>
     );
 }
-function InvitationElem({matchingroomId, email, img, major, nickname}){
+function InvitationElem({email, img, major, nickname}){
     const [hideElem, setHideElem] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -68,7 +70,7 @@ function InvitationElem({matchingroomId, email, img, major, nickname}){
     const [openRefuseAlert, setOpenRefuseAlert] = useState(false);
 
     const sendData = {
-        "matchingroomId": matchingroomId,
+        "matchingroomId": 0,
         "sender": email
     };
 
@@ -80,15 +82,19 @@ function InvitationElem({matchingroomId, email, img, major, nickname}){
     const handleAcceptClose = () => {
         setOpenAcceptAlert(false);
         setIsLoading(true);
-        const data = {
-            "matchingroomId": matchingroomId,
-            "sender": email
-        };
 
         axios.post('/api/accept',sendData, config)
             .then(res => {
                 console.log(res);
-                setHideElem(true);
+                if(res.data.result){
+                    
+                    setHideElem(true);
+                }
+                else{
+                    alert(res.data.description);
+                }
+
+                
             })
             .catch(err =>{
                 console.log(err);
@@ -99,12 +105,20 @@ function InvitationElem({matchingroomId, email, img, major, nickname}){
     const handleRefuseClose = () => {
         setOpenRefuseAlert(false);
         setIsLoading(true);
-
-
-        axios.delete('/api/reject', sendData, config)
+        axios.delete('/api/reject', {
+             data: { "matchingroomId": 0,
+                    "sender": email}, 
+            headers: { "Authorization":  `Bearer ${token}`} })
+        // axios.delete('/api/reject', {data: sendData, config})
             .then(res => {
                 console.log(res);
-                setHideElem(true);
+                if(res.data.result){
+                    
+                    setHideElem(true);
+                }
+                else{
+                    alert(res.data.description);
+                }
             })
             .catch(err =>{
                 console.log(err);
@@ -127,8 +141,8 @@ function InvitationElem({matchingroomId, email, img, major, nickname}){
         null
         :
         <>
-        <Alert open={openAcceptAlert} handleClose={handleAcceptClose} isAccept={true} nickname={nickname} />
-        <Alert open={openRefuseAlert} handleClose={handleRefuseClose} isAccept={false} nickname={nickname} />
+        <Alert open={openAcceptAlert} handleYes={handleAcceptClose} handleNo={(e) => {e.preventDefault(); setOpenAcceptAlert(false);}} isAccept={true} nickname={nickname} />
+        <Alert open={openRefuseAlert} handleYes={handleRefuseClose} handleNo={(e) => {e.preventDefault(); setOpenAcceptAlert(false);}} isAccept={false} nickname={nickname} />
         <ListItem>
         {
             isLoading?
@@ -169,12 +183,14 @@ function Invitation({departmentList}){
         axios.get('/api/invitedList', config)
             .then(res => {
                 var list = res.data.value.invitationList;
-                let set = new Set();
-                list.forEach((elem) => {
-                    set.add(elem.invitePerson);
-                });
+                // console.log(list);
+                // let set = new Set();
+                // list.forEach((elem) => {
+                //     set.add(elem.invitePerson);
+                // });
 
-                setInvitationList(Array.from(set));
+                // setInvitationList(Array.from(set));
+                setInvitationList(list);
             })
 
             .catch(err =>{

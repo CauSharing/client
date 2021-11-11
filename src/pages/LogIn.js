@@ -1,7 +1,27 @@
 import React, {useState, useEffect} from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import './LogIn.css'
+
 import axios from "axios";
+
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
+
+import './LogIn.css'
+
+const LoginBtn = styled(Button)({
+    width: "100px",
+    height: "108px",
+    fontSize: "24px",
+    border: "none",
+    borderRadius: "5px",
+    /*box-shadow: 0px 4px 10px rgba(0,0,0,0.25);*/
+    background: "#0148A0",
+    color: "#FFFFFF",
+    marginLeft: "8px",
+    marginRight: "8px",
+    fontFamily:"Roboto Condensed"
+});
 
 function LogIn({userToken, setUserToken}){
     const history = useHistory();
@@ -76,10 +96,23 @@ function LogIn({userToken, setUserToken}){
             </div>
             <div className='SignIn'>
                 <div className='SignIn__input'>
-                    <input type='email' placeholder='Email' onChange={handleEmailChange} />
-                    <input type='password' placeholder='Password' onChange={handlePasswordChange}/>
+                    <TextField id="standard-basic" label="Email" variant="standard" onChange={handleEmailChange} style={{    width: "280px",
+                            height: "50px"}}/>
+                    <TextField
+                        id="standard-password-input"
+                        label="Password"
+                        type="password"
+                        autoComplete="current-password"
+                        variant="standard"
+                        onChange={handlePasswordChange}
+                        style={{    width: "280px",
+                            height: "50px"}}
+                        />
+                    {/* <input type='email' placeholder='Email' onChange={handleEmailChange} />
+                    <input type='password' placeholder='Password' onChange={handlePasswordChange}/> */}
                 </div>
-                <button type="submit" onClick={handleClick}>Sign in</button>
+                <LoginBtn onClick={handleClick}>{"Sign in"}</LoginBtn>
+                {/* <button type="submit" onClick={handleClick}>Sign in</button> */}
             </div>
             <div className='Menu'>
                 <Link to="/signUp">Sign up</Link>
