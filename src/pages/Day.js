@@ -42,7 +42,7 @@ import List from '@mui/material/List';
 // import FolderIcon from '@mui/icons-material/Folder';
 // import DeleteIcon from '@mui/icons-material/Delete';
 
-// import TextField from '@mui/material/TextField';
+import TextField from '@mui/material/TextField';
 
 let sample_img = "https://w.namu.la/s/adb56b09aef6d27319fe0fed21df3cf9e282fe7964308413845ab53649de0ac7e4003aa7abb7b2fe51b934bfc22b68d7183381a532e6ffca6849ad42672b4fc580161f61963aefaa808acaa4c788504ec2212a4a827718b8451f23098f8f24d7fa2d12cb721787c3cd3e098b609a9555";
 const ColorButton = styled(Button)({
@@ -169,7 +169,7 @@ function AddPost({matchingRoomId, setShowAddPost, year, month, day, dayName}){
             console.log(res);
             if(res.data.result){
                 alert("saved");
-                
+
             }
             else{
                 alert(res.data.description);
@@ -187,7 +187,13 @@ function AddPost({matchingRoomId, setShowAddPost, year, month, day, dayName}){
                 <div className="addPost__date">{`${year}/${month}/${day}/${dayName}`}</div>
                 <ColorButton onClick={handleSaveBtn}>Save</ColorButton>
             </div>
-            <input className="addPost__title" placeholder="Title" onChange={(e) => setTitle(e.target.value)}/>
+            <TextField 
+                id="standard-basic" 
+                label="Title" 
+                variant="standard" 
+                style={{marginBottom: "15px"}}
+                onChange={(e) => setTitle(e.target.value)}/>
+            {/* <input className="addPost__title" placeholder="Title" onChange={(e) => setTitle(e.target.value)}/> */}
            <MyEditor initialValue={""} isViewer={false} setContent={setContent}/>
         </div>
     )
