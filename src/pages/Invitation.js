@@ -141,7 +141,7 @@ function InvitationElem({email, img, major, nickname}){
         :
         <>
         <Alert open={openAcceptAlert} handleYes={handleAcceptClose} handleNo={(e) => {e.preventDefault(); setOpenAcceptAlert(false);}} isAccept={true} nickname={nickname} />
-        <Alert open={openRefuseAlert} handleYes={handleRefuseClose} handleNo={(e) => {e.preventDefault(); setOpenAcceptAlert(false);}} isAccept={false} nickname={nickname} />
+        <Alert open={openRefuseAlert} handleYes={handleRefuseClose} handleNo={(e) => {e.preventDefault(); setOpenRefuseAlert(false);}} isAccept={false} nickname={nickname} />
         <ListItem>
         {
             isLoading?

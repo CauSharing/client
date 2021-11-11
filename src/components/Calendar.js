@@ -128,7 +128,6 @@ function Day({isBlank, day, event, year, month, location}){
 function Calendar({eventData}){
     const location = useLocation();
 
-    const [allmonths, setAllMonths] = useState(moment().months());
     const [firstDayOfMonth, setFirstDayOfMonth] = useState(moment().startOf("month").format("d"));
     const [daysInMonth, setDaysInMonth] = useState(moment().daysInMonth());
 
@@ -140,6 +139,7 @@ function Calendar({eventData}){
 
     const [showDatePicker, setShowDatePicker] = useState(false);
 
+    const [datePickerVal, setDatePickerVal] = useState(new Date());
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -233,48 +233,48 @@ function Calendar({eventData}){
             <AddEvent setShowAddEvent={setShowAddEvent}/>
             :
         <div className="entire-calendar">
-                                <div className="tail-datetime-calendar">
-                                    <BackBtn nextLoc={"/home"}/>
-                                    <div className="calendar-navi">
-                                        <div className="calendar-navi__monthIndicator">
-                                            <div className="calendar-navi__month">{seeingMonthStr}</div>
-                                            <IconButton onClick={handleCalendarBtn} color="primary"><CalendarTodayIcon /></IconButton>
-                                        {showDatePicker?
-                                            <LocalizationProvider dateAdapter={AdapterDateFns} className="datePicker">
-                                                <StaticDatePicker
-                                                    displayStaticWrapperAs="desktop"
-                                                    openTo="year"
-                                                    minDate={new Date('2000-01-01')}
-                                                        maxDate={new Date('2100-12-31')}
-                                                    // value={value}
-                                                    onChange={(newValue) => {
-                                                        var date = new Date(newValue);
-                                                        setSeeingYear(date.getFullYear());
-                                                        setSeeingMonth(date.getMonth());
-                                                        setFirstDayOfMonth(moment(date, "YYYY-MM").startOf("month").format("d"));
-                                                        setDaysInMonth(moment(date).daysInMonth());
-                                                        setSeeingMonthStr(moment().month(date.getMonth()).format("MMMM"));
-                                                    }}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                            : null
-                                            }
-                                        
-                                        </div>
-                                        
-                                        <PlusBtn setShowContents={setShowAddEvent} desc={"+ Add Event"}/>
-                                    </div>
-                                </div>
-                                <table className="calendar">
-                                    <thead>
-                                        <tr>{weekdayshortname}</tr>
-                                    </thead>
-                                    <tbody>
-                                        {daysinmonth}
-                                    </tbody>
-                                </table>
-                            </div>
+            <div className="tail-datetime-calendar">
+                <BackBtn nextLoc={"/home"}/>
+                <div className="calendar-navi">
+                    <div className="calendar-navi__monthIndicator">
+                        <div className="calendar-navi__month">{seeingMonthStr}</div>
+                        <IconButton onClick={handleCalendarBtn} color="primary"><CalendarTodayIcon /></IconButton>
+                    {showDatePicker?
+                        <LocalizationProvider dateAdapter={AdapterDateFns} className="datePicker">
+                            <StaticDatePicker
+                                displayStaticWrapperAs="desktop"
+                                openTo="year"
+                                minDate={new Date('2000-01-01')}
+                                maxDate={new Date('2100-12-31')}
+                                value={datePickerVal}
+                                onChange={(newValue) => {
+                                    var date = new Date(newValue);
+                                    setSeeingYear(date.getFullYear());
+                                    setSeeingMonth(date.getMonth()+1);
+                                    setFirstDayOfMonth(moment(date, "YYYY-MM").startOf("month").format("d"));
+                                    setDaysInMonth(moment(date).daysInMonth());
+                                    setSeeingMonthStr(moment().month(date.getMonth()).format("MMMM"));
+                                }}
+                                renderInput={(params) => <TextField {...params} />}
+                            />
+                        </LocalizationProvider>
+                        : null
+                        }
+                    
+                    </div>
+                    
+                    <PlusBtn setShowContents={setShowAddEvent} desc={"+ Add Event"}/>
+                </div>
+            </div>
+            <table className="calendar">
+                <thead>
+                    <tr>{weekdayshortname}</tr>
+                </thead>
+                <tbody>
+                    {daysinmonth}
+                </tbody>
+            </table>
+        </div>
 
     );
 }

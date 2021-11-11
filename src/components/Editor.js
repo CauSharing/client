@@ -79,7 +79,7 @@ const MyEditor = ({initialValue, isViewer, setContent}) => {
                   setContent(getContent_html);
                 }}
                 />
-            <button onClick={btnClickListener}>내용 확인</button>
+           
         </>
       
     );
