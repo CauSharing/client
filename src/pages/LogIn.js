@@ -23,7 +23,7 @@ const LoginBtn = styled(Button)({
     fontFamily:"Roboto Condensed"
 });
 
-function LogIn({userToken, setUserToken}){
+function LogIn({userToken, setUserInfo}){
     const history = useHistory();
 
     // 처음 login화면에 들어올 때는 user token은 null값으로 초기화
@@ -63,7 +63,7 @@ function LogIn({userToken, setUserToken}){
 
          let token = null;
 
-         axios.post('/api/login',data)
+        axios.post('/api/login',data)
             .then(res => {
                 // 토큰 받기
                 if(res.data.result === false)
@@ -74,17 +74,35 @@ function LogIn({userToken, setUserToken}){
                 }
                 else
                     console.log("로그인됨");
-                    token = res.data.value;
-                    console.log("auth: ",token);
-                    setUserToken(token);
+                    token = res.data.value.jwtToken;
+                    // console.log("auth: ",token);
+                    // console.log(res.data.value);
+                    // setUserInfo({
+                    //     token: token,
+                    //     email: res.data.value.email,
+                    //     nickname: res.data.value.nickname,
+                    //     department: res.data.value.department,
+                    //     major: res.data.value.major,
+                    //     image: res.data.value.image,
+                    //     language: res.data.value.language
+                    // });
+                    // setUserToken(token);
+                    // setUserEmail(res.data.value.email);
+                    // setUserNickname(res.data.value.nickname);
+                    // setUserDepartment(res.data.value.department);
+                    // setUserMajor(res.data.value.major);
+                    // setUserImage(res.data.value.image);
+                    // setUserLanguage(res.data.value.language);
+
                     window.localStorage.setItem("userToken", token);
-                    window.localStorage.setItem("userEmail", email);
-                    window.location.href = "/home";
+
+
+                    window.location.replace("/home");
+                    // window.location.href = "/home";
 //                     history.push("/home");
                 })
             .catch(err =>{
                     console.log(err);
-
                 });
     };
 
@@ -106,7 +124,7 @@ function LogIn({userToken, setUserToken}){
                         variant="standard"
                         onChange={handlePasswordChange}
                         style={{    width: "280px",
-                            height: "50px"}}
+                                    height: "50px"}}
                         />
                     {/* <input type='email' placeholder='Email' onChange={handleEmailChange} />
                     <input type='password' placeholder='Password' onChange={handlePasswordChange}/> */}

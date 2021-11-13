@@ -6,10 +6,10 @@ import Matching from "../components/Matching";
 import DiaryThumbnail from "../components/DiaryThumbnail";
 import "./DiaryList.css";
 
-import { Button } from '@mui/material';
+import { Button, Grid, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-import {diaries} from "./sampleDiary.json";
+// import {diaries} from "./sampleDiary.json";
 
 const ColorButton = styled(Button)({
     width: '126px',
@@ -37,7 +37,8 @@ const ColorButton = styled(Button)({
     },
   });
 
-function DiaryList({departmentList}){
+
+function DiaryList({departmentList, userEmail, userNickname, userDepartment, userMajor, userImage, userLanguage}){
     console.log("render diarylist");
     const [showAddFriend, setShowAddFriend] = useState(false);
     const [matchingRoomList, setMatchingRoomList] = useState([]);
@@ -53,6 +54,7 @@ function DiaryList({departmentList}){
     };
 
     useEffect(() => {
+        console.log("diarylist-user information: ", userEmail, userNickname, userDepartment, userMajor, userImage, userLanguage);
         axios.get('/api/roomList', config)
            .then(res => {
                console.log(res);
@@ -79,24 +81,24 @@ function DiaryList({departmentList}){
 
     ));
 
-    let rows = [];
-    let cells= [];
-     diaryList.forEach((row, i) => {
-        if(i%4 !== 0){
-            cells.push(row);
-        }else{
-            rows.push(cells);
-            cells = [];
-            cells.push(row);
-        }
-        if(i === diaryList.length - 1){
-            rows.push(cells);
-        }
-     });
+    // let rows = [];
+    // let cells= [];
+    //  diaryList.forEach((row, i) => {
+    //     if(i%4 !== 0){
+    //         cells.push(row);
+    //     }else{
+    //         rows.push(cells);
+    //         cells = [];
+    //         cells.push(row);
+    //     }
+    //     if(i === diaryList.length - 1){
+    //         rows.push(cells);
+    //     }
+    //  });
 
-     let table = rows.map((d, i) => {
-        return <tr>{d}</tr>;
-     });
+    //  let table = rows.map((d, i) => {
+    //     return <tr>{d}</tr>;
+    //  });
 
     return(
         <div className="diarylist">
@@ -107,9 +109,18 @@ function DiaryList({departmentList}){
                 :
                 <div className="diarylist__main">
                     <ColorButton variant="contained" className="diarylist__addBtn" onClick={handleClick}>+ Add Friend</ColorButton>
-                    <table className="diarylist__list">
+                    {/* <table className="diarylist__list">
                         {table}
-                    </table>
+                    </table> */}
+                <Box sx={{ flexGrow: 1 }}>
+                <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                    {diaryList.map((elem, index) => (
+                    <Grid item xs={2} sm={4} md={4} key={index}>
+                        {elem}
+                    </Grid>
+                    ))}
+                </Grid>
+                </Box>
                 </div>
             }
 

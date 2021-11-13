@@ -17,7 +17,16 @@ import EditProfile from "./pages/EditProfile";
 import NotFound from "./pages/NotFound";
 
 function App(){
-    const [userToken, setUserToken] = useState(null);
+    console.log("render app");
+    let userToken, userEmail, userNickname, userDepartment, userMajor,userImage, userLanguage;
+    // const [userToken, setUserToken] = useState(null);
+    // const [userEmail, setUserEmail] = useState(null);
+    // const [userNickname, setUserNickname] = useState(null);
+    // const [userDepartment, setUserDepartment] = useState(null);
+    // const [userMajor, setUserMajor] = useState(null);
+    // const [userImage, setUserImage]= useState(null);
+    // const [userLanguage, setUserLanguage] = useState(null);
+
     const departmentList = [
         {id: "1", name: 'College of Liberal Arts', major: ['Korean Language and Literature','English Language and Literature', 'German Literature', 'French Literature', 'Russian Language and Literature', 'Japanese Language and Literature', 'Chinese Language and Literature', 'Philosophy', 'History']},
         {id: "2", name: 'College of Social Sciences', major:['Political Science and International Relations','Public Service','Psychology','Library and Information Science','Social Welfare','Media and Communication','Urban Planning and Real Estate', 'Sociology']},
@@ -36,6 +45,20 @@ function App(){
         {id: "15", name: 'College of Sport Sciences', major:['Sports Science']},
     ];
 
+    const setUserInfo = ({token, email, nickname, department, major,image, language}) => {
+        userToken = token;
+        userEmail = email;
+        userNickname = nickname;
+        userDepartment = department;
+        userMajor = major;
+        userImage = image;
+        userLanguage = language;
+    }
+
+    // useEffect(() => {
+        
+    // }, [userToken, userEmail, userNickname, userDepartment, userMajor, userImage, userLanguage]);
+
     return(
         <>
             <Router>
@@ -45,7 +68,14 @@ function App(){
                         render={props => (
                             <LogIn
                                 userToken = {userToken}
-                                setUserToken = {setUserToken}
+                                setUserInfo = {setUserInfo}
+                                // setUserToken = {setUserToken}
+                                // setUserEmail = {setUserEmail}
+                                // setUserNickname = {setUserNickname}
+                                // setUserDepartment = {setUserDepartment}
+                                // setUserMajor = {setUserMajor}
+                                // setUserImage = {setUserImage}
+                                // setUserLanguage = {setUserLanguage}
                                 {...props} />
                         )}
                     />
@@ -55,7 +85,15 @@ function App(){
                         />
                     <AuthRoute
                         exact path="/home"
-                        render={(props) => <DiaryList departmentList={departmentList}/> }
+                        render={(props) => <DiaryList 
+                                                departmentList={departmentList}
+                                                userEmail={userEmail}
+                                                userNickname={userNickname}
+                                                userDepartment={userDepartment}
+                                                userMajor={userMajor}
+                                                userImage={userImage}
+                                                userLanguage={userLanguage}
+                                                {...props}/> }
                         />
 
                     <AuthRoute
