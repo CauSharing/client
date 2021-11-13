@@ -105,7 +105,7 @@ function DiaryList({departmentList, userEmail, userNickname, userDepartment, use
             <SideBar departmentList={departmentList} clickedMenuId={"0"}/>
             {
                 showAddFriend?
-                <Matching departmentList={departmentList} setShowAddFriend={setShowAddFriend}/>
+                <Matching departmentList={departmentList} setShowAddFriend={setShowAddFriend} showAddFriend={showAddFriend}/>
                 :
                 <div className="diarylist__main">
                     <ColorButton variant="contained" className="diarylist__addBtn" onClick={handleClick}>+ Add Friend</ColorButton>
