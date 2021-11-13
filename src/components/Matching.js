@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useMemo, useEffect} from "react";
 import axios from "axios";
 import BackBtn from "./BackBtn";
 import './Matching.css';
 
-import { Button } from '@mui/material';
+import { Box, Button, LinearProgress  ,InputLabel,MenuItem,FormControl ,Select} from '@mui/material';
 import { styled } from '@mui/material/styles';
+// import styled from 'styled-components';/
 
 const ColorButton = styled(Button)({
     width: '201px',
@@ -44,6 +45,22 @@ function MatchingResult({showMatchingResult, description, setShowMatchingResult}
         </div>
     );
 }
+
+function MatchingLoading(){
+    return(
+        <div className="matching__loading">
+        {/* <Box sx={{width: 300}}>
+            <LinearProgress />
+        </Box> */}
+            <div className="matching__loading__desc">
+                <span>We are looking for a friend you would like</span>
+                <span className="dot1">.</span>
+                <span className="dot2">.</span>
+                <span className="dot3">.</span>
+            </div>      
+    </div>
+    );
+}
 function Matching({departmentList, setShowAddFriend}){
     const [department, setDepartment] = useState("");
     const [departmentId, setDepartmentId] = useState(null);
@@ -52,7 +69,13 @@ function Matching({departmentList, setShowAddFriend}){
     const [matchingResult, setMatchingResult] = useState("");
     const [showMatchingResult, setShowMatchingResult] = useState(false);
 
-    const handleDepartmentOnChange = (event) => {
+    const [showMatchingLoading, setShowMatchingLoading] = useState(false);
+
+    // let majorList = [];
+
+    // const majorList = useMemo(() => departmentList.find(elem => elem.name === department), [department]);
+
+    const handleDepartmentOnChange = async (event) => {
         event.preventDefault();
         setDepartment(event.target.value);
         setDepartmentId(parseInt(departmentList.find(elem => elem.name === event.target.value).id));
@@ -63,9 +86,10 @@ function Matching({departmentList, setShowAddFriend}){
         setMajor(event.target.value);
     };
 
-    const httpInstance = axios.create({
-        baseURL: []
-    })
+    const handleLanguageChange = (event) => {
+        event.preventDefault();
+        setLanguage(event.target.value);
+    };
 
     const handleMatchingBtnClick = (e) => {
         e.preventDefault();
@@ -75,6 +99,7 @@ function Matching({departmentList, setShowAddFriend}){
             "major": major
         };
 
+        setShowMatchingLoading(true);
         const token = localStorage.getItem("userToken");
         const config = {
             headers: { Authorization: `Bearer ${token}` }
@@ -93,13 +118,11 @@ function Matching({departmentList, setShowAddFriend}){
                     console.log(err);
                 });
 
+        setShowMatchingLoading(false);
         setShowMatchingResult(true);
     };
 
-    const handleOnChange = (event) => {
-        event.preventDefault();
-        setLanguage(event.target.value);
-    };
+
 
     return(
     <div className="matchingBox">
@@ -109,109 +132,130 @@ function Matching({departmentList, setShowAddFriend}){
             showMatchingResult ?
             <MatchingResult showMatchingResult={showMatchingResult} description={matchingResult} setShowMatchingResult={setShowMatchingResult}/>
             :
-            <form className="matching">
-                        <label>Select the major you are interested in</label>
-                        <div className="matching__field">
-                                <select name="department" id="department-select" onChange={handleDepartmentOnChange}>
-                                {
-                                    [<option hidden key={0} value="Choose college...">Choose college...</option> ,
-                                        departmentList.map((department, index) => (
-                                            <option key={department.id} value={department.name}>{department.name}</option>
-                                        ))]
-                                }
-                                </select>
-                                <select name="major" id="major-select"  onChange={handleMajorOnChange}>
-                                {
-                                    department !== "" ?
-                                        [<option hidden value="Choose major..." key={0}>Choose major...</option> ,
-                                            departmentList[departmentId-1].major.map((name, index) => (
-                                                <option key={index+1} value={name}>{name}</option>
-                                            ))]
-                                        :
-                                        <option hidden value="Choose your major..." key={0}>Choose major...</option>
-                                }
-                                </select>
-                        </div>
-                        <label>Select the language you want to learn</label>
-                        <div className="matching__field">
-                        <select id="language-select" value={language} onChange={handleOnChange}>
-                                            <option value="Choose language..." hidden>Choose language...</option>
-                                            <option value="AF">Afrikaans</option>
-                                            <option value="SQ">Albanian</option>
-                                            <option value="AR">Arabic</option>
-                                            <option value="HY">Armenian</option>
-                                            <option value="EU">Basque</option>
-                                            <option value="BN">Bengali</option>
-                                            <option value="BG">Bulgarian</option>
-                                            <option value="CA">Catalan</option>
-                                            <option value="KM">Cambodian</option>
-                                            <option value="ZH">Chinese (Mandarin)</option>
-                                            <option value="HR">Croatian</option>
-                                            <option value="CS">Czech</option>
-                                            <option value="DA">Danish</option>
-                                            <option value="NL">Dutch</option>
-                                            <option value="EN">English</option>
-                                            <option value="ET">Estonian</option>
-                                            <option value="FJ">Fiji</option>
-                                            <option value="FI">Finnish</option>
-                                            <option value="FR">French</option>
-                                            <option value="KA">Georgian</option>
-                                            <option value="DE">German</option>
-                                            <option value="EL">Greek</option>
-                                            <option value="GU">Gujarati</option>
-                                            <option value="HE">Hebrew</option>
-                                            <option value="HI">Hindi</option>
-                                            <option value="HU">Hungarian</option>
-                                            <option value="IS">Icelandic</option>
-                                            <option value="ID">Indonesian</option>
-                                            <option value="GA">Irish</option>
-                                            <option value="IT">Italian</option>
-                                            <option value="JA">Japanese</option>
-                                            <option value="JW">Javanese</option>
-                                            <option value="KO">Korean</option>
-                                            <option value="LA">Latin</option>
-                                            <option value="LV">Latvian</option>
-                                            <option value="LT">Lithuanian</option>
-                                            <option value="MK">Macedonian</option>
-                                            <option value="MS">Malay</option>
-                                            <option value="ML">Malayalam</option>
-                                            <option value="MT">Maltese</option>
-                                            <option value="MI">Maori</option>
-                                            <option value="MR">Marathi</option>
-                                            <option value="MN">Mongolian</option>
-                                            <option value="NE">Nepali</option>
-                                            <option value="NO">Norwegian</option>
-                                            <option value="FA">Persian</option>
-                                            <option value="PL">Polish</option>
-                                            <option value="PT">Portuguese</option>
-                                            <option value="PA">Punjabi</option>
-                                            <option value="QU">Quechua</option>
-                                            <option value="RO">Romanian</option>
-                                            <option value="RU">Russian</option>
-                                            <option value="SM">Samoan</option>
-                                            <option value="SR">Serbian</option>
-                                            <option value="SK">Slovak</option>
-                                            <option value="SL">Slovenian</option>
-                                            <option value="ES">Spanish</option>
-                                            <option value="SW">Swahili</option>
-                                            <option value="SV">Swedish </option>
-                                            <option value="TA">Tamil</option>
-                                            <option value="TT">Tatar</option>
-                                            <option value="TE">Telugu</option>
-                                            <option value="TH">Thai</option>
-                                            <option value="BO">Tibetan</option>
-                                            <option value="TO">Tonga</option>
-                                            <option value="TR">Turkish</option>
-                                            <option value="UK">Ukrainian</option>
-                                            <option value="UR">Urdu</option>
-                                            <option value="UZ">Uzbek</option>
-                                            <option value="VI">Vietnamese</option>
-                                            <option value="CY">Welsh</option>
-                                            <option value="XH">Xhosa</option>
-                                        </select>
-                        </div>
-                        <ColorButton className="matching__btn" onClick={handleMatchingBtnClick}>Start Matching</ColorButton>
-                    </form>
+            showMatchingLoading?
+            <MatchingLoading />
+            :
+            <>
+            <div className="matching__field">
+                <FormControl variant="standard" sx={{minWidth: 300, marginRight: 2}}>
+                    <InputLabel id="select-college">College</InputLabel>
+                    <Select
+                        labelId="select-college"
+                        value={department}
+                        label="College"
+                        onChange={handleDepartmentOnChange}
+                    >
+                    {
+                        departmentList.map(department => 
+                            <MenuItem value={department.name}>{department.name}</MenuItem>
+                        )
+                    }
+                    </Select>
+                </FormControl>
+                <FormControl variant="standard" sx={{minWidth: 300}}>
+                    <InputLabel id="select-major">Major</InputLabel>
+                    <Select
+                        labelId="select-major"
+                        value={major}
+                        label="Major"
+                        onChange={handleMajorOnChange}
+                    >
+                    {
+                        department === ""?
+                        null
+                        :
+                        departmentList[departmentId-1].major.map((name, index) => (
+                            <MenuItem value={name}>{name}</MenuItem>
+                        ))
+                    }
+                    </Select>
+                </FormControl>
+            </div>
+            <div className="matching__field">
+                <FormControl variant="standard"sx={{minWidth: 300}} >
+                    <InputLabel id="select-language">Language</InputLabel>
+                    <Select
+                        labelId="select-language"
+                        value={language}
+                        label="Language"
+                        onChange={handleLanguageChange}>
+                        <MenuItem value="AF">Afrikaans</MenuItem>
+                        <MenuItem value="SQ">Albanian</MenuItem>
+                        <MenuItem value="AR">Arabic</MenuItem>
+                        <MenuItem value="HY">Armenian</MenuItem>
+                        <MenuItem value="EU">Basque</MenuItem>
+                        <MenuItem value="BN">Bengali</MenuItem>
+                        <MenuItem value="BG">Bulgarian</MenuItem>
+                        <MenuItem value="CA">Catalan</MenuItem>
+                        <MenuItem value="KM">Cambodian</MenuItem>
+                        <MenuItem value="ZH">Chinese (Mandarin)</MenuItem>
+                        <MenuItem value="HR">Croatian</MenuItem>
+                        <MenuItem value="CS">Czech</MenuItem>
+                        <MenuItem value="DA">Danish</MenuItem>
+                        <MenuItem value="NL">Dutch</MenuItem>
+                        <MenuItem value="EN">English</MenuItem>
+                        <MenuItem value="ET">Estonian</MenuItem>
+                        <MenuItem value="FJ">Fiji</MenuItem>
+                        <MenuItem value="FI">Finnish</MenuItem>
+                        <MenuItem value="FR">French</MenuItem>
+                        <MenuItem value="KA">Georgian</MenuItem>
+                        <MenuItem value="DE">German</MenuItem>
+                        <MenuItem value="EL">Greek</MenuItem>
+                        <MenuItem value="GU">Gujarati</MenuItem>
+                        <MenuItem value="HE">Hebrew</MenuItem>
+                        <MenuItem value="HI">Hindi</MenuItem>
+                        <MenuItem value="HU">Hungarian</MenuItem>
+                        <MenuItem value="IS">Icelandic</MenuItem>
+                        <MenuItem value="ID">Indonesian</MenuItem>
+                        <MenuItem value="GA">Irish</MenuItem>
+                        <MenuItem value="IT">Italian</MenuItem>
+                        <MenuItem value="JA">Japanese</MenuItem>
+                        <MenuItem value="JW">Javanese</MenuItem>
+                        <MenuItem value="KO">Korean</MenuItem>
+                        <MenuItem value="LA">Latin</MenuItem>
+                        <MenuItem value="LV">Latvian</MenuItem>
+                        <MenuItem value="LT">Lithuanian</MenuItem>
+                        <MenuItem value="MK">Macedonian</MenuItem>
+                        <MenuItem value="MS">Malay</MenuItem>
+                        <MenuItem value="ML">Malayalam</MenuItem>
+                        <MenuItem value="MT">Maltese</MenuItem>
+                        <MenuItem value="MI">Maori</MenuItem>
+                        <MenuItem value="MR">Marathi</MenuItem>
+                        <MenuItem value="MN">Mongolian</MenuItem>
+                        <MenuItem value="NE">Nepali</MenuItem>
+                        <MenuItem value="NO">Norwegian</MenuItem>
+                        <MenuItem value="FA">Persian</MenuItem>
+                        <MenuItem value="PL">Polish</MenuItem>
+                        <MenuItem value="PT">Portuguese</MenuItem>
+                        <MenuItem value="PA">Punjabi</MenuItem>
+                        <MenuItem value="QU">Quechua</MenuItem>
+                        <MenuItem value="RO">Romanian</MenuItem>
+                        <MenuItem value="RU">Russian</MenuItem>
+                        <MenuItem value="SM">Samoan</MenuItem>
+                        <MenuItem value="SR">Serbian</MenuItem>
+                        <MenuItem value="SK">Slovak</MenuItem>
+                        <MenuItem value="SL">Slovenian</MenuItem>
+                        <MenuItem value="ES">Spanish</MenuItem>
+                        <MenuItem value="SW">Swahili</MenuItem>
+                        <MenuItem value="SV">Swedish </MenuItem>
+                        <MenuItem value="TA">Tamil</MenuItem>
+                        <MenuItem value="TT">Tatar</MenuItem>
+                        <MenuItem value="TE">Telugu</MenuItem>
+                        <MenuItem value="TH">Thai</MenuItem>
+                        <MenuItem value="BO">Tibetan</MenuItem>
+                        <MenuItem value="TO">Tonga</MenuItem>
+                        <MenuItem value="TR">Turkish</MenuItem>
+                        <MenuItem value="UK">Ukrainian</MenuItem>
+                        <MenuItem value="UR">Urdu</MenuItem>
+                        <MenuItem value="UZ">Uzbek</MenuItem>
+                        <MenuItem value="VI">Vietnamese</MenuItem>
+                        <MenuItem value="CY">Welsh</MenuItem>
+                        <MenuItem value="XH">Xhosa</MenuItem>
+                    </Select>
+                </FormControl>
+            </div>
+            <ColorButton className="matching__btn" onClick={handleMatchingBtnClick}>Start Matching</ColorButton>
+            </>
         }
 
 
