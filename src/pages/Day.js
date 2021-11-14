@@ -159,11 +159,11 @@ function AddPost({matchingRoomId, setShowAddPost, year, month, day, dayName}){
         const sendData = {
             "content": content,
             "matchingRoomId": matchingRoomId,
-            "postDate": new Date(),
+            "postDate": `${year}-${month<10? `0${month}`:month}-${day<10? `0${day}`: day}T05:50:27.917Z`,
             "title": title
         };    
 
-        // console.log(sendData);
+        console.log(sendData);
         axios.post('/api/createPost',sendData, config)
         .then(res => {
             console.log(res);
@@ -329,6 +329,8 @@ function Day({}){
 
     const [showAddPost, setShowAddPost] = useState(false);
 
+    const [postList, setPostList] = useState([]);
+
     // sample friends
     const friendList = [
         {id: 0, name: "Minju", color: "#FFA897"},
@@ -373,6 +375,22 @@ function Day({}){
         },
     ];
 
+    useEffect(() => {
+        const token = localStorage.getItem("userToken");
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+
+        axios.get(`/api/postList?matchingroomId=${groupIdx}&postDate=${`${year}-${month<10? `0${month}`: month}-${day<10? `0${day}`: day}`}`,config)
+            .then(res => {
+                setPostList(res.data.value);
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    },[]);
+
     return(
 
         <div className="entireDay">
@@ -398,12 +416,15 @@ function Day({}){
                         <FriendList friendList={friendList}/>
                         <PlusBtn setShowContents={setShowAddPost} desc={"+ Add Post"}/>
                     </div>
-                    <Post 
-                        title="Street Woman Fighter" 
-                        description="Did you see 'street woman fighter'? it's just soooooo fun. you should really see this.
-                        I just love how girls show their great dancing skill. I think all the dancers there are very professional and cool."
-                        postIdx={0}
-                        />
+                    {
+                        postList.map(post =>                 
+                            <Post 
+                                title={post.title}
+                                description={post.content}
+                                postIdx={post.Id}
+                                />)
+                    }
+
                     <div className="day__commentBox__title">
                         <div>Comment</div>
                         <div>{commentList.length}</div>

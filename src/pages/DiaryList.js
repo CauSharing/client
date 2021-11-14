@@ -54,11 +54,12 @@ function DiaryList({departmentList, userEmail, userNickname, userDepartment, use
     };
 
     useEffect(() => {
-        console.log("diarylist-user information: ", userEmail, userNickname, userDepartment, userMajor, userImage, userLanguage);
+        // console.log("diarylist-user information: ", userEmail, userNickname, userDepartment, userMajor, userImage, userLanguage);
         axios.get('/api/roomList', config)
            .then(res => {
                console.log(res);
                if(res.data.result){
+                   
                     setMatchingRoomList(res.data.value);
                }
                else{

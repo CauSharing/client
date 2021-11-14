@@ -95,8 +95,6 @@ function LogIn({userToken, setUserInfo}){
                     // setUserLanguage(res.data.value.language);
 
                     window.localStorage.setItem("userToken", token);
-
-
                     window.location.replace("/home");
                     // window.location.href = "/home";
 //                     history.push("/home");
