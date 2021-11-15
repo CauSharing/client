@@ -3,6 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 
 import axios from "axios";
 
+
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
@@ -34,7 +35,8 @@ function LogIn({userToken, setUserInfo}){
 //         );
 //     }, [] );
     useEffect(() => {
-        localStorage.removeItem('userToken');
+        // localStorage.removeItem('userToken');
+        localStorage.clear();
     }, [] );
 
     let line1="CxC";
@@ -61,10 +63,9 @@ function LogIn({userToken, setUserInfo}){
             password: password
         };
 
-         let token = null;
-
-        axios.post('/api/login',data)
+        axios.post('/api/login',data, {withCredentials: true})
             .then(res => {
+                console.log(res);
                 // 토큰 받기
                 if(res.data.result === false)
                 {
@@ -74,7 +75,8 @@ function LogIn({userToken, setUserInfo}){
                 }
                 else
                     console.log("로그인됨");
-                    token = res.data.value.jwtToken;
+                    const token = res.data.value.jwtToken;
+
                     // console.log("auth: ",token);
                     // console.log(res.data.value);
                     // setUserInfo({
@@ -96,8 +98,6 @@ function LogIn({userToken, setUserInfo}){
 
                     window.localStorage.setItem("userToken", token);
                     window.location.replace("/home");
-                    // window.location.href = "/home";
-//                     history.push("/home");
                 })
             .catch(err =>{
                     console.log(err);

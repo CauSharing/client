@@ -70,32 +70,29 @@ function Matching({departmentList, setShowAddFriend, showAddFriend}){
 
     const [showMatchingLoading, setShowMatchingLoading] = useState(false);
 
-    useEffect(() => {
-
-    }, []);
-
-    // let majorList = [];
-
-    // const majorList = useMemo(() => departmentList.find(elem => elem.name === department), [department]);
-
     const handleDepartmentOnChange = async (event) => {
-        event.preventDefault();
+        // event.preventDefault();
         setDepartment(event.target.value);
         setDepartmentId(parseInt(departmentList.find(elem => elem.name === event.target.value).id));
     };
 
     const handleMajorOnChange = (event) => {
-        event.preventDefault();
+        // event.preventDefault();
         setMajor(event.target.value);
     };
 
     const handleLanguageChange = (event) => {
-        event.preventDefault();
+        // event.preventDefault();
         setLanguage(event.target.value);
     };
 
-    const handleMatchingBtnClick = (e) => {
-        e.preventDefault();
+    const handleCloseBtn = (e) => {
+        // e.preventDefault();
+        setShowAddFriend(false);
+    }
+
+    const handleMatchingBtnClick = async (e) => {
+        // e.preventDefault();
         const data = {
             "college": department,
             "language": language,
@@ -103,13 +100,16 @@ function Matching({departmentList, setShowAddFriend, showAddFriend}){
         };
 
         setShowMatchingLoading(true);
+
         const token = localStorage.getItem("userToken");
         const config = {
+            timeout: 3000,
             headers: { Authorization: `Bearer ${token}` }
         };
 
          axios.post('/api/matching',data, config)
             .then(res => {
+                console.log(res);
                 if(res.data.result === false)
                 {
                     console.log(res.data.description);
@@ -125,10 +125,14 @@ function Matching({departmentList, setShowAddFriend, showAddFriend}){
         setShowMatchingResult(true);
     };
 
-
-
     return(
-        <Dialog open={showAddFriend} onClose={(e) => {e.preventDefault(); setShowAddFriend(false);}}>
+        <Dialog 
+            open={showAddFriend} 
+            onClose={(e, reason) => {
+                if(!(showMatchingLoading)){
+                    e.preventDefault(); 
+                    setShowAddFriend(false);
+                }}}>
         {/* <div className="matchingBox"> */}
             {/* <BackBtn setShowContents={setShowAddFriend}/> */}
             <DialogTitle sx={{display:"flex", justifyContent:"center", fontSize: 25, fontFamily:"Roboto Condensed"}}>Add Friend</DialogTitle>
@@ -260,7 +264,16 @@ function Matching({departmentList, setShowAddFriend, showAddFriend}){
             }
                 </DialogContentText>
                 <DialogActions sx={{display:"flex", justifyContent: "center"}}>
-                <ColorButton className="matching__btn" onClick={handleMatchingBtnClick}>Start Matching</ColorButton>
+                {
+                    showMatchingResult ?
+                    <ColorButton className="matching__btn" onClick={handleCloseBtn}>Close</ColorButton>
+                    :
+                    showMatchingLoading?
+                    null
+                    :
+                    <ColorButton className="matching__btn" onClick={handleMatchingBtnClick}>Start Matching</ColorButton>
+                }
+                
                 </DialogActions>
             </DialogContent>
             {/* <div className="matching__title">Find your friend</div> */}
