@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, createContext} from "react";
 import './App.css';
 // import "./scss/main.scss";
 import { Route , BrowserRouter as Router, Switch, Redirect, withRouter} from 'react-router-dom';
@@ -16,16 +16,11 @@ import MySetting from "./pages/MySetting";
 import EditProfile from "./pages/EditProfile";
 import NotFound from "./pages/NotFound";
 
+export const UserContext = createContext(null);
+
 function App(){
+    const [user, setUser] = useState(null);
     console.log("render app");
-    let userToken, userEmail, userNickname, userDepartment, userMajor,userImage, userLanguage;
-    // const [userToken, setUserToken] = useState(null);
-    // const [userEmail, setUserEmail] = useState(null);
-    // const [userNickname, setUserNickname] = useState(null);
-    // const [userDepartment, setUserDepartment] = useState(null);
-    // const [userMajor, setUserMajor] = useState(null);
-    // const [userImage, setUserImage]= useState(null);
-    // const [userLanguage, setUserLanguage] = useState(null);
 
     const departmentList = [
         {id: "1", name: 'College of Liberal Arts', major: ['Korean Language and Literature','English Language and Literature', 'German Literature', 'French Literature', 'Russian Language and Literature', 'Japanese Language and Literature', 'Chinese Language and Literature', 'Philosophy', 'History']},
@@ -45,37 +40,16 @@ function App(){
         {id: "15", name: 'College of Sport Sciences', major:['Sports Science']},
     ];
 
-    const setUserInfo = ({token, email, nickname, department, major,image, language}) => {
-        userToken = token;
-        userEmail = email;
-        userNickname = nickname;
-        userDepartment = department;
-        userMajor = major;
-        userImage = image;
-        userLanguage = language;
-    }
-
-    // useEffect(() => {
-        
-    // }, [userToken, userEmail, userNickname, userDepartment, userMajor, userImage, userLanguage]);
-
     return(
         <>
+        <UserContext.Provider value={user} >
             <Router>
                 <Switch>
                     <Route
                         exact path='/'
                         render={props => (
                             <LogIn
-                                userToken = {userToken}
-                                setUserInfo = {setUserInfo}
-                                // setUserToken = {setUserToken}
-                                // setUserEmail = {setUserEmail}
-                                // setUserNickname = {setUserNickname}
-                                // setUserDepartment = {setUserDepartment}
-                                // setUserMajor = {setUserMajor}
-                                // setUserImage = {setUserImage}
-                                // setUserLanguage = {setUserLanguage}
+                                setUser = {setUser}
                                 {...props} />
                         )}
                     />
@@ -87,12 +61,6 @@ function App(){
                         exact path="/home"
                         render={(props) => <DiaryList 
                                                 departmentList={departmentList}
-                                                userEmail={userEmail}
-                                                userNickname={userNickname}
-                                                userDepartment={userDepartment}
-                                                userMajor={userMajor}
-                                                userImage={userImage}
-                                                userLanguage={userLanguage}
                                                 {...props}/> }
                         />
 
@@ -151,6 +119,7 @@ function App(){
                     <Route component={NotFound}/>
                 </Switch>
             </Router>
+            </UserContext.Provider>
         </>
     );
 }
