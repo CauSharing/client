@@ -4,10 +4,12 @@ import './SignUp.css';
 import {checkCauEmail, checkEmail} from "../util/checkEmail";
 import axios from "axios";
 
-import { InputLabel,MenuItem,FormControl ,Select, TextField, Button, Box, Icon } from '@mui/material';
+import { InputLabel,MenuItem,FormControl ,Select, TextField, Box } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { styled } from '@mui/material/styles';
+
+import BackBtn from "../components/BackBtn";
 
 
 const ColorBtn = styled(LoadingButton)({
@@ -511,7 +513,12 @@ function SignUp({departmentList}){
     return(
         <div 
             className='SignUp'>
-            <div className='Title'>Sign Up</div>
+                <BackBtn nextLoc={"/"}/>
+            <div className='Title'>
+                
+                <div>Sign Up</div>
+                
+            </div>
             <EmailUpdate
                 email={email}
                 setEmail={setEmail}

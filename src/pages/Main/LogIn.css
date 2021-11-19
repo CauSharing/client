@@ -1,15 +1,23 @@
-.LogIn {
+.login__title {
+  font-size: 48px;
+}
+.login__signUpDesc {
+  margin-right: 10px;
+}
+.login__signUpLink {
+  color: #3181c6;
+}
+/* .LogIn {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-.LogIn .Title {
-  font-size: 80px;
+} */
+/* .LogIn .Title {
+  font-size: 48px;
   width: 100%;
-  text-align: center;
   margin: 240px 0px 70px 0px;
 }
 .LogIn .Title div {
@@ -19,7 +27,7 @@
   display: flex;
   align-content: center;
   justify-content: center;
-}
+} */
 /* .LogIn .SignIn .SignIn__input{
     display:flex;
     flex-direction: column;
@@ -51,7 +59,7 @@
     opacity: 0.8;
 } */
 
-.SignIn__input {
+/* .SignIn__input {
   display: flex;
   flex-direction: column;
 }
@@ -61,7 +69,7 @@
   font-size: 24px;
   border: none;
   border-radius: 5px;
-  /*box-shadow: 0px 4px 10px rgba(0,0,0,0.25);*/
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
   background: #0148a0;
   color: #ffffff;
   margin: 0px 8px;
@@ -84,4 +92,4 @@
 
 .LogIn .Menu a:active {
   opacity: 0.7;
-}
+} */

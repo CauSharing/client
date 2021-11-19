@@ -1,0 +1,13 @@
+.main__title {
+  font-family: "Roboto Condensed";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  color: #000000;
+
+  padding-left: 30px;
+}

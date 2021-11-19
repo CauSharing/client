@@ -1,9 +1,10 @@
-import React, {useState, useEffect, createContext} from "react";
+import React, {useState, useEffect} from "react";
 import './App.css';
 // import "./scss/main.scss";
 import { Route , BrowserRouter as Router, Switch, Redirect, withRouter} from 'react-router-dom';
 import AuthRoute from './util/AuthRoute';
-import LogIn from './pages/LogIn';
+import Main from './pages/Main/Main';
+// import LogIn from './pages/Main/LogIn';
 import SignUp from "./pages/SignUp";
 import DiaryList from "./pages/DiaryList";
 import Diary from "./pages/Diary";
@@ -16,10 +17,25 @@ import MySetting from "./pages/MySetting";
 import EditProfile from "./pages/EditProfile";
 import NotFound from "./pages/NotFound";
 
-export const UserContext = createContext(null);
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const lightTheme = createTheme({
+    typography:{
+        fontFamily: 'Roboto Condensed'
+    },
+    palette:{
+        type: 'light',
+        primary: {
+            main: '#0148A0',
+        },
+        secondary:{
+            main: '#646464',
+            light: '#E9E9E9'
+        }
+    }
+})
 
 function App(){
-    const [user, setUser] = useState(null);
     console.log("render app");
 
     const departmentList = [
@@ -42,17 +58,19 @@ function App(){
 
     return(
         <>
-        <UserContext.Provider value={user} >
+            <ThemeProvider theme={lightTheme}>
             <Router>
                 <Switch>
                     <Route
                         exact path='/'
                         render={props => (
-                            <LogIn
-                                setUser = {setUser}
-                                {...props} />
+                            <Main {...props} />
                         )}
                     />
+                    {/* <Route
+                        exact path="/login"
+                        render={(props)=><LogIn setUser={setUser} {...props} />}
+                    /> */}
                     <Route
                         exact path="/signUp"
                         render={(props)=><SignUp departmentList={departmentList} {...props}/>}
@@ -76,10 +94,6 @@ function App(){
                         exact path="/invitation"
                         render={(props) => <Invitation departmentList={departmentList}/>}
                         />
-                    {/* <AuthRoute
-                        exact path="/home/diary/:diaryIdx/friendList"
-                        render={(props) => <GroupFriendList />}
-                        /> */}
                     <AuthRoute
                         exact path='/home/diary/:diaryIdx/chat'
                         render={(props) => <Chat /> }
@@ -96,30 +110,10 @@ function App(){
                         exact path="/setting/edit-profile"
                         render={(props) => <EditProfile departmentList={departmentList} />}
                         />
-                    {/* <Route
-                        exact path="/home"
-                        render={(props) => <DiaryList departmentList={departmentList}/> }
-                        />
-                    <Route
-                        exact path="/home/diary/:diaryIdx"
-                        render={(props) => <Diary {...props}/>}
-                        />
-                    <Route
-                        exact path="/home/diary/:diaryIdx/:year-:month-:day"
-                        render={(props) => <Day {...props} />}
-                        />
-                    <Route
-                        exact path="/invitation"
-                        render={(props) => <Invitation departmentList={departmentList}/>}
-                        />
-                    <Route
-                        exact path='/home/diary/:diaryIdx/chat'
-                        render={(props) => <Chat /> }
-                        /> */}
                     <Route component={NotFound}/>
                 </Switch>
             </Router>
-            </UserContext.Provider>
+            </ThemeProvider>
         </>
     );
 }
