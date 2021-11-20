@@ -1,22 +1,26 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import "./SideBar.css";
 
 
 function SideBar({clickedMenuId}){
-    let sample_img = "https://w.namu.la/s/adb56b09aef6d27319fe0fed21df3cf9e282fe7964308413845ab53649de0ac7e4003aa7abb7b2fe51b934bfc22b68d7183381a532e6ffca6849ad42672b4fc580161f61963aefaa808acaa4c788504ec2212a4a827718b8451f23098f8f24d7fa2d12cb721787c3cd3e098b609a9555";
+    const [user, setUser] = useState(null);
     const [clickedMenu, setIsClickedMenu] = useState(clickedMenuId);
-    console.log("render sidebar");
 
     const handleClick = (e) => {
+        e.preventDefault();
         setIsClickedMenu(e.target.value);
     }
+
+    useEffect(() => {
+        setUser(JSON.parse(window.localStorage.getItem('user')));
+    }, []);
 
     return(
         <>
             <div className="sidebar">
-                <img src={sample_img} className="sidebar__profileImg"/>
-                <div className="sidebar__name">No:ze</div>
+                <img src={user? user.image : '#'} className="sidebar__profileImg"/>
+                <div className="sidebar__name">{user? user.nickname : "undefined"}</div>
                 <Link to="/home">
                     <button value={0} className={ clickedMenu === "0" ? "clicked" : "notClicked"} onClick={handleClick}>
                         Home

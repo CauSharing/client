@@ -41,7 +41,7 @@ function Menu({value, handleChange}){
 
     return(
         <Box sx={{width: '100vw', display: "flex", alignItems:"center", justifyContent:"space-between",
-        paddingRight:"30px", paddingTop:"10px"}}>
+        paddingRight:"30px", paddingTop:"10px", height:'10vh'}}>
             <div className="main__title">
                 CxC
             </div>

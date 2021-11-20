@@ -10,7 +10,7 @@ function SignInTabPanel({value, index}){
             hidden={value !== index}
         >
         {value === index && (
-            <Box sx={{width: "100vw", display:"flex", height:"80vh"}}>
+            <Box sx={{width: "100%", display:"flex", height:"85vh", alignItems:"center"}}>
                 <Box sx={{width:"50%"}}></Box>
                 <LogIn />
             </Box>

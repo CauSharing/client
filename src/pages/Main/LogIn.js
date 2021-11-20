@@ -44,10 +44,7 @@ function LogIn(){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    useEffect(() => {
-        // localStorage.removeItem('userToken');
-        localStorage.clear();
-    }, [] );
+
 
 
     const handleEmailChange = (e) => setEmail(e.target.value);
@@ -65,7 +62,6 @@ function LogIn(){
 
         axios.post('/api/login',data, {withCredentials: true})
             .then(res => {
-                console.log(res);
                 if(res.data.result === false)
                 {
                     console.log("잘못됨");
@@ -76,6 +72,9 @@ function LogIn(){
                     console.log("로그인됨");
                     const token = res.data.value.jwtToken;
 
+                    window.localStorage.setItem("user", JSON.stringify(res.data.value));
+
+                    console.log(window.localStorage.getItem('user'));
                     // setUser({
                     //     email: res.data.value.email,
                     //     nickname: res.data.value.nickname,

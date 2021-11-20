@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Menu from './Menu';
 import HomeTabPanel from './HomeTabPanel';
 import AboutUsTablePanel from "./AboutUsTablePanel";
@@ -6,6 +6,11 @@ import SignInTabPanel from "./SignInTabPanel";
 import './Main.css';
 
 function Main(){
+  useEffect(() => {
+    // localStorage.removeItem('userToken');
+    localStorage.clear();
+}, [] );
+
   const [value, setValue] = useState('1');
 
   const handleChange = (e, newValue) => {
