@@ -6,7 +6,7 @@ import Matching from "../components/Matching";
 import DiaryThumbnail from "../components/DiaryThumbnail";
 import "./DiaryList.css";
 
-import { Button, Grid, Box } from '@mui/material';
+import { Button, Grid, Box , Typography} from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 // import {diaries} from "./sampleDiary.json";
@@ -42,6 +42,7 @@ function DiaryList({departmentList, userEmail, userNickname, userDepartment, use
     console.log("render diarylist");
     const [showAddFriend, setShowAddFriend] = useState(false);
     const [matchingRoomList, setMatchingRoomList] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -53,9 +54,13 @@ function DiaryList({departmentList, userEmail, userNickname, userDepartment, use
         headers: { Authorization: `Bearer ${token}` }
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         // console.log("diarylist-user information: ", userEmail, userNickname, userDepartment, userMajor, userImage, userLanguage);
-        axios.get('/api/roomList', config)
+        const instance = axios.create({
+            timeout: 30000,
+          });
+
+        await instance.get('/api/roomList', config)
            .then(res => {
                console.log(res);
                if(res.data.result){
@@ -69,6 +74,8 @@ function DiaryList({departmentList, userEmail, userNickname, userDepartment, use
            .catch(err =>{
                console.log(err);
            });
+        
+        await setIsLoading(false);
     },[]);
 
     let diaryList = [];
@@ -105,6 +112,11 @@ function DiaryList({departmentList, userEmail, userNickname, userDepartment, use
         <div className="diarylist">
             <SideBar departmentList={departmentList} clickedMenuId={"0"}/>
             {
+                isLoading?
+                <Box>
+                <Typography variant="h1">loading///</Typography>
+                </Box>
+                :
                 showAddFriend?
                 <Matching departmentList={departmentList} setShowAddFriend={setShowAddFriend} showAddFriend={showAddFriend}/>
                 :

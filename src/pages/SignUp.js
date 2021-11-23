@@ -34,7 +34,8 @@ function EmailUpdate({email, setEmail, isVerified, setIsVerified, topEmailError,
 
 
     const CustomEmailLoadingBtn = styled(LoadingButton)({
-        height: "90%",
+        marginLeft: "10px",
+        height: '40px',
         fontSize: "14px",
         background: isEmailLoading? "#E9E9E9": "#0148A0",
         color: "#FFFFFF",
@@ -47,7 +48,8 @@ function EmailUpdate({email, setEmail, isVerified, setIsVerified, topEmailError,
     });
     
     const CustomVerificationCodeLoadingBtn = styled(LoadingButton)({
-        height: "90%",
+        marginLeft: "10px",
+        height: '40px',
         fontSize: "14px",
         backgroundColor: isVerificationCodeLoading? "#E9E9E9": (isVerified? "transparent": "#0148A0"),
         color: "#FFFFFF",
@@ -134,9 +136,9 @@ function EmailUpdate({email, setEmail, isVerified, setIsVerified, topEmailError,
     }
 
     return(
-        <Box sx={{marginTop:"10px", marginBottom: "10px"}}>
+        <Box sx={{marginTop:"10px"}}>
             <Box
-                sx={{display:"flex", alignItems:"center", height: "60px", marginBottom: "10px"}}>
+                sx={{display:"flex", alignItems:"center", height: "60px"}}>
                 <TextField
                     label="Email"
                     type="email"
@@ -146,6 +148,7 @@ function EmailUpdate({email, setEmail, isVerified, setIsVerified, topEmailError,
                     helperText={isEmailError || (checkEmail(email) && !checkCauEmail(email))? "Write Chungang univ. email": null}
                     error={topEmailError || isEmailError || (checkEmail(email) && !checkCauEmail(email))}
                     disabled={isEmailLoading}
+                    sx={{minWidth: "300px"}}
                     />
                 <CustomEmailLoadingBtn 
                     loading={isEmailLoading}
@@ -165,6 +168,7 @@ function EmailUpdate({email, setEmail, isVerified, setIsVerified, topEmailError,
                     helperText={verificationCodeHelperText}
                     error={topVerifiedError || isVerificationCodeError}
                     disabled={isVerificationCodeLoading || isVerified}
+                    sx={{minWidth: "300px"}}
                     />
                 
                 <CustomVerificationCodeLoadingBtn
@@ -185,7 +189,7 @@ function NicknameUpdate({nickname, setNickname, topNicknameError}){
     const handleNicknameChange = ({target: {value}}) => setNickname(value);
 
     return(
-        <Box sx={{marginTop:"10px", marginBottom: "10px", height: "60px", display:"flex", alignItems:"center"}}>
+        <Box sx={{marginTop:"10px",  height: "60px", display:"flex", alignItems:"center"}}>
             <TextField
             label="Nickname"
             variant="standard"
@@ -193,6 +197,7 @@ function NicknameUpdate({nickname, setNickname, topNicknameError}){
             required
             helperText={nickname.indexOf(' ')>= 0 ? "should not contain blank" : nickname.length < 2? "more than 2 letters": null}
             error={nickname.indexOf(' ')>=0 || topNicknameError}
+            sx={{minWidth: "300px"}}
             />
         </Box>
     );
@@ -210,7 +215,7 @@ function PasswordUpdate({password, setPassword, passwordCheck, setPasswordCheck,
     };
 
     return(
-        <Box sx={{paddingTop: "10px", paddingBottom:"10px"}}>
+        <Box sx={{marginTop:'10px'}}>
             <Box sx={{ marginBottom: "10px", height: "60px", display:"flex", alignItems:"center"}}>
                 <TextField
                     id="standard-password-input"
@@ -220,8 +225,9 @@ function PasswordUpdate({password, setPassword, passwordCheck, setPasswordCheck,
                     variant="standard"
                     onChange={handlePasswordChange}
                     required
-                    helperText={"should contain at least one special character, number and 6 to 16 letters"}
+                    helperText={"contain at least one special character, number and 6 to 16 letters"}
                     error={(!isValid && password!=="") || topPasswordError}
+                    sx={{minWidth: "300px"}}
                     />
             </Box>
             <Box sx={{ height: "60px", display:"flex", alignItems:"center"}}>
@@ -233,6 +239,7 @@ function PasswordUpdate({password, setPassword, passwordCheck, setPasswordCheck,
                     onChange={handlePasswordCheckChange}
                     required
                     error={topPasswordCheckError || topPasswordError}
+                    sx={{minWidth: "300px"}}
                     />
                 {
                     password === passwordCheck && password !== ""? <CheckCircleIcon sx={{color:"#4E9F3D"}} /> : null
@@ -257,8 +264,8 @@ function MajorUpdate({departmentList, department, setDepartment, major, setMajor
     };
 
     return(
-        <Box sx={{ display:"flex", alignItems:"center", paddingTop:"10px", paddingBottom:"10px"}}>
-            <FormControl variant="standard" sx={{minWidth: 300, marginRight:1, marginBottom: 1, fontSize: 18, fontFamily:"Roboto Condensed"}}>
+        <Box sx={{marginTop:'10px', display:"flex", alignItems:"center"}}>
+            <FormControl variant="standard" sx={{minWidth: 300, marginRight:1,  fontSize: 18, fontFamily:"Roboto Condensed"}}>
                 <InputLabel id="select-college">College</InputLabel>
                 <Select
                     labelId="select-college"
@@ -275,7 +282,7 @@ function MajorUpdate({departmentList, department, setDepartment, major, setMajor
                 }
                 </Select>
             </FormControl>
-            <FormControl variant="standard" sx={{minWidth: 300, marginBottom: 1, fontSize: 18, fontFamily:"Roboto Condensed"}}>
+            <FormControl variant="standard" sx={{minWidth: 300, fontSize: 18, fontFamily:"Roboto Condensed"}}>
                 <InputLabel id="select-major">Major</InputLabel>
                 <Select
                     labelId="select-major"
@@ -305,7 +312,7 @@ function LanguageUpdate({language, setLanguage, topLanguageError}){
         setLanguage(event.target.value);
     };
     return(
-        <Box sx={{ display:"flex", alignItems:"center", paddingTop:"10px", paddingBottom:"10px"}}>
+        <Box sx={{ display:"flex", alignItems:"center",marginTop:'10px'}}>
         <FormControl variant="standard"sx={{minWidth: 300, marginBottom: 1,fontSize: 18, fontFamily:"Roboto Condensed"}} >
         <InputLabel id="select-language">Most comfortable language</InputLabel>
         <Select
@@ -417,8 +424,9 @@ function SignUp({departmentList}){
     const [isLanguageError, setIsLanguageError] = useState(false);
 
     const CustomOKLoadingBtn = styled(LoadingButton)({
+        marginTop: '10px',
         maxWidth: "300px",
-        height: "90%",
+        height: "40px",
         fontSize: "14px",
         backgroundColor: isLoading? "#E9E9E9": "#0148A0",
         color: "#FFFFFF",
@@ -511,14 +519,16 @@ function SignUp({departmentList}){
     }
 
     return(
-        <div 
-            className='SignUp'>
-                <BackBtn nextLoc={"/"}/>
-            <div className='Title'>
+        <Box sx={{width: "100%", display:"flex"}}>
+        <Box sx={{width: "50%"}}>
+
+        </Box>
+        <Box sx={{width: "50%"}}>
                 
-                <div>Sign Up</div>
-                
-            </div>
+            <Box sx={{width:"90%", borderBottom:"1px solid black"}}>
+                {/* <BackBtn nextLoc={"/"}/> */}
+                <div className="signup__title">Sign Up</div>
+            </Box>
             <EmailUpdate
                 email={email}
                 setEmail={setEmail}
@@ -560,7 +570,8 @@ function SignUp({departmentList}){
                 disabled={isLoading}
                 onClick={okBtnClick}
                 >OK</CustomOKLoadingBtn>
-        </div>
+        </Box>
+        </Box>
     )
 }
 

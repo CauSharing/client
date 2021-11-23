@@ -16,6 +16,7 @@ import EditPost from "./pages/EditPost";
 import MySetting from "./pages/MySetting";
 import EditProfile from "./pages/EditProfile";
 import NotFound from "./pages/NotFound";
+import GroupSetting from "./pages/GroupSetting/GroupSetting";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -30,7 +31,7 @@ const lightTheme = createTheme({
         },
         secondary:{
             main: '#646464',
-            light: '#E9E9E9'
+            light: '#E9E9E9',
         }
     }
 })
@@ -81,10 +82,13 @@ function App(){
                                                 departmentList={departmentList}
                                                 {...props}/> }
                         />
-
                     <AuthRoute
                         exact path="/home/diary/:groupIdx"
                         render={(props) => <Diary {...props}/>}
+                        />
+                    <AuthRoute
+                        exact path="/home/diary/:groupIdx/setting"
+                        render={(props) => <GroupSetting {...props}/>}
                         />
                     <AuthRoute
                         exact path="/home/diary/:groupIdx/:year-:month-:day"

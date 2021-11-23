@@ -7,7 +7,6 @@ import './Main.css';
 
 function Main(){
   useEffect(() => {
-    // localStorage.removeItem('userToken');
     localStorage.clear();
 }, [] );
 
