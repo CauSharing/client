@@ -1,19 +1,10 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { Link } from 'react-router-dom';
+import { Link , withRouter} from 'react-router-dom';
 import "./DiaryThumbnail.css";
 
 import GroupIcon from '@mui/icons-material/Group';
 import { Box, Card, CardActionArea, CardMedia, CardActions, CardContent, Button, Typography,Slide  } from '@mui/material';
 import SampleImg from "../icons/nature-gdbaa175c1_640.png"
-
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-  >
-    •
-  </Box>
-);
 
 
 function DiaryThumbnail({groupName, groupImg, groupUserList, groupIdx}){
@@ -34,6 +25,7 @@ function DiaryThumbnail({groupName, groupImg, groupUserList, groupIdx}){
 
     const cardRef=useRef(null);
 
+    console.log("diary thumbnail: ", typeof(groupName), groupImg, groupUserList, groupIdx);
     return(
         <Card sx={{ 
                 width: 200, 
@@ -56,7 +48,10 @@ function DiaryThumbnail({groupName, groupImg, groupUserList, groupIdx}){
                             to={{
                                 pathname: `home/diary/${groupIdx}`,
                                 state: {
-                                    groupIdx: groupIdx,
+                                    groupName:groupName, 
+                                    groupImg: groupImg, 
+                                    groupUserList: groupUserList, 
+                                    groupIdx:groupIdx
                                 }
                             }}
                             style={{ textDecoration: 'none', width: 200 }}>

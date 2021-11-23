@@ -60,7 +60,6 @@ function DiaryList({departmentList, userEmail, userNickname, userDepartment, use
            .then(res => {
                console.log(res);
                if(res.data.result){
-                   
                     setMatchingRoomList(res.data.value);
                }
                else{

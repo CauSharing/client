@@ -143,7 +143,7 @@ function SideBar(){
                     Setting
                 </ColorButton> */}
             </Link>
-            <Box sx={{position: "relative", top:"42vh"}}>
+            <Box sx={{position: "absolute", bottom:"10px"}}>
                 <Link to="/" style={{ textDecoration: 'none' }}>
                     <Typography variant="body1" sx={{color:"dimgrey"}}>
                         Logout
