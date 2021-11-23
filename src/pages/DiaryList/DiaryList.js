@@ -1,15 +1,13 @@
 import React, {useState, useEffect} from "react";
 import { Link } from 'react-router-dom';
 import axios from "axios";
-import SideBar from "../components/SideBar";
-import Matching from "../components/Matching";
-import DiaryThumbnail from "../components/DiaryThumbnail";
+import SideBar from "../../components/SideBar";
+import Matching from "../../components/Matching";
+import DiaryThumbnail from "../../components/DiaryThumbnail";
 import "./DiaryList.css";
 
-import { Button, Grid, Box , Typography} from '@mui/material';
+import { Button, Grid, Box , Typography, CircularProgress  } from '@mui/material';
 import { styled } from '@mui/material/styles';
-
-// import {diaries} from "./sampleDiary.json";
 
 const ColorButton = styled(Button)({
     width: '126px',
@@ -22,8 +20,6 @@ const ColorButton = styled(Button)({
     backgroundColor: '#3181C6',
     borderColor: '#0063cc',
     fontFamily: 'Roboto Condensed',
-    marginLeft: '20px',
-    marginBottom: '20px',
     '&:hover': {
       backgroundColor: '#4892d2',
       boxShadow: 'none',
@@ -89,55 +85,35 @@ function DiaryList({departmentList, userEmail, userNickname, userDepartment, use
 
     ));
 
-    // let rows = [];
-    // let cells= [];
-    //  diaryList.forEach((row, i) => {
-    //     if(i%4 !== 0){
-    //         cells.push(row);
-    //     }else{
-    //         rows.push(cells);
-    //         cells = [];
-    //         cells.push(row);
-    //     }
-    //     if(i === diaryList.length - 1){
-    //         rows.push(cells);
-    //     }
-    //  });
-
-    //  let table = rows.map((d, i) => {
-    //     return <tr>{d}</tr>;
-    //  });
-
     return(
-        <div className="diarylist">
+        <Box sx={{display:"flex"}}>
             <SideBar departmentList={departmentList} clickedMenuId={"0"}/>
+            <Box sx={{padding: "20px", width: "100%"}}>
             {
                 isLoading?
-                <Box>
-                <Typography variant="h1">loading///</Typography>
+                <Box sx={{display:"flex", alignItems: "center", justifyContent:"center", height: "90vh"}}>
+                    <CircularProgress  color="primary"/>
                 </Box>
                 :
                 showAddFriend?
                 <Matching departmentList={departmentList} setShowAddFriend={setShowAddFriend} showAddFriend={showAddFriend}/>
                 :
-                <div className="diarylist__main">
+                <Box>
                     <ColorButton variant="contained" className="diarylist__addBtn" onClick={handleClick}>+ Add Friend</ColorButton>
-                    {/* <table className="diarylist__list">
-                        {table}
-                    </table> */}
-                <Box sx={{ flexGrow: 1 }}>
-                <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                    {diaryList.map((elem, index) => (
-                    <Grid item xs={2} sm={4} md={4} key={index}>
-                        {elem}
-                    </Grid>
-                    ))}
-                </Grid>
+                    {/* <Box sx={{ flexGrow: 1 , marginTop:"20px"}}> */}
+                    <Box sx={{  marginTop:"20px"}}>
+                        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                            {diaryList.map((elem, index) => (
+                            <Grid item xs={2} sm={4} md={4} key={index}>
+                                {elem}
+                            </Grid>
+                            ))}
+                        </Grid>
+                    </Box>
                 </Box>
-                </div>
             }
-
-        </div>
+            </Box>
+        </Box>
     );
 }
 

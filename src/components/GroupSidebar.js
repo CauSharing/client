@@ -1,12 +1,53 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
-import "./SideBar.css";
 
+import {Drawer,Divider, Avatar, Typography,Button,Box  } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import Logo from '../icons/CxC_logo.png';
 
+const ColorButton = styled(Button)({
+    border: "none",
+    margin:"0px",
+    borderRadius:"0px",
+    width:"200px",
+    boxShadow: 'none',
+    textTransform: 'none',
+    fontSize: '18px',
+    padding: '10px',
+    fontFamily: 'Roboto Condensed',
+    '&:hover': {
+      backgroundColor: '#4892d2',
+      boxShadow: 'none',
+    },
+    '&:active': {
+      boxShadow: 'none',
+      backgroundColor: '#4892d2',
+    },
+    '&:focus': {
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+    },
+  });
 function GroupSidebar({diaryIdx}){
     const [user, setUser] = useState(null);
     const [curMenu, setCurMenu] = useState("0");
+
+    const ClickedBtn = styled(ColorButton)({
+        color: 'black',
+        backgroundColor: 'white'
+    });
+    const NotClickedBtn = styled(ColorButton)({
+        color: 'white',
+        backgroundColor:  'primary'
+    });
+
+    const handleClick = (e) => {
+        e.preventDefault();
+    }
+
+    // const handleMenuClick = (e) => {
+    //     e.preventDefault();
+    //     setOpen(!open);
+    // }
 
     useEffect(() => {
         setUser(JSON.parse(window.localStorage.getItem('user')));
@@ -21,37 +62,99 @@ function GroupSidebar({diaryIdx}){
             setCurMenu("3");
     }, []);
 
-
     return(
-        <>
-            <div className="sidebar">
-                {
-                    // user image가 있으면 user image가 뜨도록 고치기
-                    <img src={Logo} className="sidebar__profileImg" />
+        <Box>
+        <Drawer
+            PaperProps={{
+                sx: {
+                  backgroundColor: '#0148A0',
+                  color: "white",
+                  borderRadius:" 0px 70px 0px 0px",
+                  display:"flex",
+                  flexDirection: "column",
+                  alignItems:"center",
+                  padding: "20px 0px"
                 }
-                <div className="sidebar__name">{user ? user.nickname : "undefined" }</div>
-                <Link to={`/home/diary/${diaryIdx}`}>
-                    <button className={ curMenu === "0" ? "clicked" : "notClicked"} value={"0"} >
+              }}
+            sx={{
+            width: "200px",
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+                width: "200px",
+                boxSizing: 'border-box',
+              },
+            }}
+            variant="permanent"
+            anchor="left"
+        >
+
+            <Avatar
+                sx={{width: "120px", height:"120px", fontSize: "30px", marginBottom:"20px"}}
+                alt={user? user.nickname : "undefined"}
+                src={user? user.image : null}>
+            </Avatar>
+            <Typography variant="h5" sx={{marginBottom:"40px"}}>{user? user.nickname : "undefined"}</Typography>
+            <Divider />
+            <Link to={`/home/diary/${diaryIdx}`} style={{ textDecoration: 'none' }}>
+                {
+                    curMenu === "0"?
+                    <ClickedBtn onCLick={handleClick}>
                         Home
-                    </button>
+                    </ClickedBtn>
+                    :
+                    <NotClickedBtn onCLick={handleClick}>
+                        Home
+                    </NotClickedBtn>
+                }
+            </Link>
+            <Divider />
+            <Link to={`/home/diary/${diaryIdx}/chat`} style={{ textDecoration: 'none' }}>
+            {
+                curMenu === "1"?
+                <ClickedBtn onCLick={handleClick}>
+                    Chat
+                </ClickedBtn>
+                :
+                <NotClickedBtn onCLick={handleClick}>
+                    Chat
+                </NotClickedBtn>
+            }
+            </Link>
+            <Divider />
+            <Link to={`/home/diary/${diaryIdx}/notice`} style={{ textDecoration: 'none' }}>
+            {
+                curMenu === "2"?
+                <ClickedBtn onCLick={handleClick}>
+                    Notice
+                </ClickedBtn>
+                :
+                <NotClickedBtn onCLick={handleClick}>
+                    Notice
+                </NotClickedBtn>
+            }
+            </Link>
+            <Divider />
+            <Link to={`/home/diary/${diaryIdx}/setting`} style={{ textDecoration: 'none' }}>
+            {
+                curMenu === "3"?
+                <ClickedBtn onCLick={handleClick}>
+                    Setting
+                </ClickedBtn>
+                :
+                <NotClickedBtn onCLick={handleClick}>
+                    Setting
+                </NotClickedBtn>
+            }
+            </Link>
+            <Box sx={{position: "relative", top:"35vh"}}>
+                <Link to="/" style={{ textDecoration: 'none' }}>
+                    <Typography variant="body1" sx={{color:"dimgrey"}}>
+                        Logout
+                    </Typography>
                 </Link>
-                <Link to={`/home/diary/${diaryIdx}/chat`}>
-                    <button className={curMenu === "1" ? "clicked" : "notClicked"} value={"1"}>
-                        Chat
-                    </button>
-                </Link>
-                <Link to={`/home/diary/${diaryIdx}/notice`}>
-                    <button className={curMenu === "2" ? "clicked" : "notClicked"} value={"2"}>
-                        Notice
-                    </button>
-                </Link>
-                <Link to={`/home/diary/${diaryIdx}/setting`}>
-                    <button className={curMenu === "3" ? "clicked" : "notClicked"} value={"3"} >
-                        Setting
-                    </button>
-                </Link>
-            </div>
-        </>
+            </Box>
+        </Drawer>
+        </Box>
     );
 }
 

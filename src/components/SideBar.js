@@ -2,9 +2,9 @@ import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 
 import {Drawer,Divider, Avatar, Typography,Button,Box  } from '@mui/material'
-import Logo from '../icons/CxC_logo.png';
+// import Logo from '../icons/CxC_logo.png';
 import { styled } from '@mui/material/styles';
-import MenuIcon from '@mui/icons-material/Menu';
+// import MenuIcon from '@mui/icons-material/Menu';
 
 const ColorButton = styled(Button)({
     border: "none",
@@ -31,7 +31,7 @@ const ColorButton = styled(Button)({
 function SideBar(){
     const [user, setUser] = useState(null);
     const [clickedMenu, setClickedMenu] = useState(null);
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
 
     const ClickedBtn = styled(ColorButton)({
         color: 'black',
@@ -46,10 +46,10 @@ function SideBar(){
         e.preventDefault();
     }
 
-    const handleMenuClick = (e) => {
-        e.preventDefault();
-        setOpen(!open);
-    }
+    // const handleMenuClick = (e) => {
+    //     e.preventDefault();
+    //     setOpen(!open);
+    // }
 
     useEffect(() => {
         setUser(JSON.parse(window.localStorage.getItem('user')));
@@ -63,7 +63,7 @@ function SideBar(){
     }, []);
 
     return(
-        <>
+        <Box>
         <Drawer
             PaperProps={{
                 sx: {
@@ -73,7 +73,7 @@ function SideBar(){
                   display:"flex",
                   flexDirection: "column",
                   alignItems:"center",
-                  padding: "0px 0px 10px 0px"
+                  padding: "20px 0px"
                 }
               }}
             sx={{
@@ -82,17 +82,12 @@ function SideBar(){
             '& .MuiDrawer-paper': {
                 width: "200px",
                 boxSizing: 'border-box',
-            },
+              },
             }}
-            variant="persistent"
+            variant="permanent"
             anchor="left"
             open={open}
         >
-            <Box sx={{display:"flex", width: "200px", padding: "10px 0px", height:"20px",margin:"0px"}}>
-                <Button onClick={handleMenuClick} sx={{padding: "0px", maxWidth: "20px", margin: "0px"}}>
-                    <MenuIcon sx={{color:"white", width: "20px"}}/>
-                </Button>
-            </Box>
             <Avatar
                 sx={{width: "120px", height:"120px", fontSize: "30px", marginBottom:"20px"}}
                 alt={user? user.nickname : "undefined"}
@@ -148,7 +143,7 @@ function SideBar(){
                     Setting
                 </ColorButton> */}
             </Link>
-            <Box sx={{position: "relative", top:"39vh"}}>
+            <Box sx={{position: "relative", top:"42vh"}}>
                 <Link to="/" style={{ textDecoration: 'none' }}>
                     <Typography variant="body1" sx={{color:"dimgrey"}}>
                         Logout
@@ -179,7 +174,7 @@ function SideBar(){
                 </Link>
                 <Link to="/"><div className="sidebar__logout">Logout</div></Link>
             </div> */}
-        </>
+        </Box>
     );
 }
 

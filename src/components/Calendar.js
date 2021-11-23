@@ -5,21 +5,25 @@ import moment from 'moment';
 import PlusBtn from "./PlusBtn";
 import BackBtn from "./BackBtn";
 
+import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Button , IconButton, Box} from '@mui/material';
 
+import DatePicker from '@mui/lab/DatePicker';
 /*
  eventArr = [
     {id: 0, startDate: "2021-10-29", endDate:"2021-10-30", desc:"party", color: "#111111"},
     ...
  ]
 */
-import TextField from '@mui/material/TextField';
+
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import StaticDatePicker from '@mui/lab/StaticDatePicker';
+import DesktopDatePicker from '@mui/lab/DatePicker';
+// import StaticDatePicker from '@mui/lab/StaticDatePicker';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
-import { Button , IconButton} from '@mui/material';
 import { styled } from '@mui/material/styles';
+
+import { ColorPicker } from 'material-ui-color';
 
 import './Calendar.css';
 
@@ -51,48 +55,67 @@ const ColorButton = styled(Button)({
 
 
 
-function AddEvent({setShowAddEvent}){
+function AddEvent({open, setOpen}){
     const [eventName, setEventName] = useState("");
-    const [eventColor, setEventColor] = useState("");
+    const [eventColor, setEventColor] = useState("#000");
     const [eventStartDate, setEventStartDate] = useState("");
     const [eventEndDate, setEventEndDate] = useState("");
-
-    const handleNameChange = (e) => {
-        e.preventDefault();
-        setEventName(e.target.value);
-    }
-    const handleColorChange = (e) => {
-        e.preventDefault();
-        setEventColor(e.target.value);
-    }
-    const handleStartDateChange = (e) => {
-        e.preventDefault();
-        setEventStartDate(e.target.value);
-    }
-    const handleEndDateChange = (e) => {
-        e.preventDefault();
-        setEventEndDate(e.target.value);
+  
+    const handleCancel = () => {
+        setOpen(false);
     }
 
-    const handleClick = (e) => {
-//         e.preventDefault();
-        console.log(eventName, eventColor, eventStartDate, eventEndDate);
+    const handleSubmit = () => {
+        setOpen(false);
     }
 
     return(
-        <div className="addEvent">
-            <BackBtn setShowContents={setShowAddEvent}/>
-            <div className="addEvent__title">Add event</div>
-            <form className="addEventForm">
-                <div><label htmlFor="eventName">Event name</label><input id="eventName" onChange={handleNameChange}/></div>
-
-                <div><label htmlFor="eventStartDate">Start date</label><input type="date" id="eventStartDate" onChange={handleStartDateChange}/></div>
-                <div><label htmlFor="eventEndDate">End date</label><input type="date" id="eventEndDate" onChange={handleEndDateChange}/></div>
-                <div><label htmlFor="eventColor">Color</label><input type="color" id="eventColor" onChange={handleColorChange}/></div>
-                {/* <button onClick={handleClick} className="addEventForm__btn">Submit</button> */}
-                <ColorButton onClick={handleClick} className="addEventForm__btn">Submit</ColorButton>
-            </form>
-        </div>
+        <Dialog open={open} onClose={() => {setOpen(false)}}>
+        <DialogTitle>Add event</DialogTitle>
+        <DialogContent>
+            <TextField
+                autoFocus
+                id="name"
+                label="Event name"
+                type="text"
+                fullWidth
+                variant="standard"
+                sx={{marginBottom:"20px"}}
+                onChange={e => setEventName(e.target.value)}
+            />
+            <Box  sx={{marginBottom:"20px", display:"flex"}}>
+                <Box sx={{marginRight: "10px"}}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns} >
+                    <DatePicker
+                        label="Start date"
+                        value={eventStartDate}
+                        onChange={(newValue) => {
+                        setEventStartDate(newValue);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                    />
+                    </LocalizationProvider>
+                </Box>
+                <Box>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                        label="End date"
+                        value={eventEndDate}
+                        onChange={(newValue) => {
+                        setEventEndDate(newValue);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                    />
+                    </LocalizationProvider>
+                </Box>
+            </Box>
+            <ColorPicker defaultValue="#000" value={eventColor} onChange={(value) => setEventColor(value.css.backgroundColor)}/>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel}>Cancel</Button>
+          <Button onClick={handleSubmit}>Submit</Button>
+        </DialogActions>
+      </Dialog>
     )
 }
 
@@ -109,17 +132,18 @@ function Day({isBlank, day, event, year, month, location}){
             :
             <td key={day} className={`calendar-day`}>
                 <Link to={`${location.pathname}/${year}-${month}-${day}`}>
-                    <div>{day}</div>
+                    <Box sx={{width:"100%", height:"100%", '&:hover':{backgroundColor:"secondary.light"}}}>
+                        <div>{day}</div>
 
-                    {
-                        event?
-                            <div className={`calendar-day__event`}>
-                                {event}
-                            </div>
-                            :
-                            null
-                    }
-
+                        {
+                            event?
+                                <div className={`calendar-day__event`}>
+                                    {event}
+                                </div>
+                                :
+                                null
+                        }
+                    </Box>
                 </Link>
             </td>
     )
@@ -229,23 +253,21 @@ function Calendar({eventData}){
      });
 
     return(
-        showAddEvent ?
-            <AddEvent setShowAddEvent={setShowAddEvent}/>
-            :
+        // showAddEvent ?
+        //     <AddEvent setShowAddEvent={setShowAddEvent}/>
+        //     :
         <div className="entire-calendar">
+            <AddEvent open={showAddEvent} setOpen={setShowAddEvent} />
             <div className="tail-datetime-calendar">
-                <BackBtn nextLoc={"/home"}/>
+                
                 <div className="calendar-navi">
                     <div className="calendar-navi__monthIndicator">
                         <div className="calendar-navi__month">{seeingMonthStr}</div>
-                        <IconButton onClick={handleCalendarBtn} color="primary"><CalendarTodayIcon /></IconButton>
-                    {showDatePicker?
-                        <LocalizationProvider dateAdapter={AdapterDateFns} className="datePicker">
-                            <StaticDatePicker
-                                displayStaticWrapperAs="desktop"
-                                openTo="year"
-                                minDate={new Date('2000-01-01')}
-                                maxDate={new Date('2100-12-31')}
+                        <Box>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DesktopDatePicker
+                                sx={{color:"primary"}}
+                                label="Custom input"
                                 value={datePickerVal}
                                 onChange={(newValue) => {
                                     var date = new Date(newValue);
@@ -255,12 +277,15 @@ function Calendar({eventData}){
                                     setDaysInMonth(moment(date).daysInMonth());
                                     setSeeingMonthStr(moment().month(date.getMonth()).format("MMMM"));
                                 }}
-                                renderInput={(params) => <TextField {...params} />}
+                                renderInput={({ inputRef, inputProps, InputProps }) => (
+                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                        <Box ref={inputRef}></Box>
+                                        {InputProps?.endAdornment}
+                                    </Box>
+                                )}
                             />
                         </LocalizationProvider>
-                        : null
-                        }
-                    
+                        </Box>
                     </div>
                     
                     <PlusBtn setShowContents={setShowAddEvent} desc={"+ Add Event"}/>
