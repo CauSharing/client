@@ -6,7 +6,7 @@ import Main from './pages/Main/Main';
 import SignUp from "./pages/SignUp";
 import DiaryList from "./pages/DiaryList/DiaryList";
 import Diary from "./pages/Diary/Diary";
-import Day from "./pages/Day";
+import Day from "./pages/Day/Day";
 import Invitation from "./pages/Invitation";
 import EditPost from "./pages/EditPost";
 import MySetting from "./pages/MySetting";
@@ -27,6 +27,7 @@ const lightTheme = createTheme({
         type: 'light',
         primary: {
             main: '#0148A0',
+            light: '#2B95C3'
         },
         secondary:{
             main: '#646464',

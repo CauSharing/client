@@ -42,22 +42,23 @@ const MyEditor = ({initialValue, isViewer, setContent}) => {
       const getContent_md = editorInstance.getMarkdown();
       const getContent_html = editorInstance.getHTML();
   
-      console.log("markdown--");
-      console.log(getContent_md);
-      console.log("html--");
-      console.log(getContent_html);
+      // console.log("markdown--");
+      // console.log(getContent_md);
+      // console.log("html--");
+      // console.log(getContent_html);
   
       var _finalImageList = [...getContent_md.matchAll(re)];
       var finalImageList = [];
       _finalImageList.forEach((finalImage) => finalImageList.push(finalImage.groups.filename));
       
-      console.log("final image list: ", finalImageList);
+      // console.log("final image list: ", finalImageList);
     }
     
     return (
         isViewer?
         <div>
                <Viewer 
+                  
                     initialValue={initialValue}
                     height="600px"
                />
