@@ -1,24 +1,23 @@
 import React, {useState, useEffect} from "react";
 import './App.css';
-// import "./scss/main.scss";
 import { Route , BrowserRouter as Router, Switch, Redirect, withRouter} from 'react-router-dom';
 import AuthRoute from './util/AuthRoute';
 import Main from './pages/Main/Main';
-// import LogIn from './pages/Main/LogIn';
 import SignUp from "./pages/SignUp";
 import DiaryList from "./pages/DiaryList/DiaryList";
 import Diary from "./pages/Diary/Diary";
 import Day from "./pages/Day";
 import Invitation from "./pages/Invitation";
-import Chat from "./pages/Chat";
 import EditPost from "./pages/EditPost";
-// import GroupFriendList from "./pages/GroupFriendList";
 import MySetting from "./pages/MySetting";
 import EditProfile from "./pages/EditProfile";
 import NotFound from "./pages/NotFound";
 import GroupSetting from "./pages/GroupSetting/GroupSetting";
+import Chat from "./pages/Chat/Chat";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+import {Provider} from "./context/index";
 
 const lightTheme = createTheme({
     typography:{
@@ -59,6 +58,7 @@ function App(){
 
     return(
         <>
+            <Provider>
             <ThemeProvider theme={lightTheme}>
             <Router>
                 <Switch>
@@ -99,11 +99,11 @@ function App(){
                         render={(props) => <Invitation departmentList={departmentList}/>}
                         />
                     <AuthRoute
-                        exact path='/home/diary/:diaryIdx/chat'
-                        render={(props) => <Chat /> }
+                        exact path='/home/diary/:groupIdx/chat'
+                        render={(props) => <Chat {...props}/> }
                         />
                     <AuthRoute
-                        exact path="/home/diary/:diaryIdx/:year-:month-:day/:postIdx/edit"
+                        exact path="/home/diary/:groupIdx/:year-:month-:day/:postIdx/edit"
                         render={(props) => <EditPost />}
                         />
                     <AuthRoute
@@ -118,6 +118,7 @@ function App(){
                 </Switch>
             </Router>
             </ThemeProvider>
+            </Provider>
         </>
     );
 }

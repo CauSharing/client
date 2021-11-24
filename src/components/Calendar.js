@@ -119,7 +119,7 @@ function AddEvent({open, setOpen}){
     )
 }
 
-function Day({isBlank, day, event, year, month, location}){
+function Day({isBlank, day, event, year, month, location, groupName, groupImg, groupUserList}){
 
     return(
         isBlank?
@@ -131,7 +131,15 @@ function Day({isBlank, day, event, year, month, location}){
             </td>
             :
             <td key={day} className={`calendar-day`}>
-                <Link to={`${location.pathname}/${year}-${month}-${day}`}>
+                <Link 
+                    to={{
+                        pathname: `${location.pathname}/${year}-${month}-${day}`,
+                        state: {
+                            groupName:groupName, 
+                            groupImg: groupImg, 
+                            groupUserList: groupUserList, 
+                        }
+                    }}>
                     <Box sx={{width:"100%", height:"100%", '&:hover':{backgroundColor:"secondary.light"}}}>
                         <div>{day}</div>
 
@@ -149,7 +157,8 @@ function Day({isBlank, day, event, year, month, location}){
     )
 }
 
-function Calendar({eventData}){
+function Calendar({eventData, groupName, groupImg, groupUserList}){
+    // console.log( groupName, groupImg, groupUserList);
     const location = useLocation();
 
     const [firstDayOfMonth, setFirstDayOfMonth] = useState(moment().startOf("month").format("d"));
@@ -214,7 +223,11 @@ function Calendar({eventData}){
         blanks.push(
             <Day
                 isBlank={true}
-                location={location}/>
+                location={location}
+                groupName={groupName}
+                groupImg={groupImg}
+                groupUserList={groupUserList}
+                />
         );
      }
 
@@ -227,7 +240,10 @@ function Calendar({eventData}){
                 day={d}
                 month={seeingMonth}
                 year={seeingYear}
-                location={location}/>
+                location={location}
+                groupName={groupName}
+                groupImg={groupImg}
+                groupUserList={groupUserList}/>
         );
      }
 

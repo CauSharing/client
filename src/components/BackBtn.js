@@ -8,7 +8,8 @@ function BackBtn({nextLoc, setShowContents}){
     const handleClick = (e) => {
        
         if(nextLoc)
-            window.location.replace(nextLoc);
+            history.goBack();
+            // window.location.replace(nextLoc);
         else
         {
             setShowContents(false);
@@ -17,7 +18,6 @@ function BackBtn({nextLoc, setShowContents}){
 
     return(
         <button className="backBtn" onClick={handleClick}>
-            {/* {"<"} */}
             <ArrowBackIcon />
         </button>
     );

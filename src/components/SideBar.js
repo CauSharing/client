@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import {Drawer,Divider, Avatar, Typography,Button,Box  } from '@mui/material'
 // import Logo from '../icons/CxC_logo.png';
 import { styled } from '@mui/material/styles';
-// import MenuIcon from '@mui/icons-material/Menu';
 
 const ColorButton = styled(Button)({
     border: "none",
@@ -45,11 +44,6 @@ function SideBar(){
     const handleClick = (e) => {
         e.preventDefault();
     }
-
-    // const handleMenuClick = (e) => {
-    //     e.preventDefault();
-    //     setOpen(!open);
-    // }
 
     useEffect(() => {
         setUser(JSON.parse(window.localStorage.getItem('user')));
@@ -106,9 +100,6 @@ function SideBar(){
                         Home
                     </NotClickedBtn>
                 }
-                {/* // <ColorButton value={0} className={ clickedMenu === "0" ? "clicked" : "notClicked"} onClick={handleClick}>
-                //     Home
-                // </ColorButton> */}
             </Link>
             <Divider />
             <Link to={`/invitation`} style={{ textDecoration: 'none' }}>
@@ -123,10 +114,6 @@ function SideBar(){
                 </NotClickedBtn>
             }
             </Link>
-                {/* <ColorButton value={2}  className={clickedMenu === "2" ? "clicked" : "notClicked"} onClick={handleClick}>
-                    Invitation list
-                </ColorButton>
-             */}
             <Divider />
             <Link to="/setting" style={{ textDecoration: 'none' }}>
             {
@@ -139,9 +126,6 @@ function SideBar(){
                     Setting
                 </NotClickedBtn>
             }
-                {/* <ColorButton value={3} className={ clickedMenu === "3" ? "clicked" : "notClicked"} onClick={handleClick}>
-                    Setting
-                </ColorButton> */}
             </Link>
             <Box sx={{position: "absolute", bottom:"10px"}}>
                 <Link to="/" style={{ textDecoration: 'none' }}>
@@ -151,29 +135,6 @@ function SideBar(){
                 </Link>
             </Box>
         </Drawer>
-            {/* <div className="sidebar">
-                {
-                    // user image가 있으면 user image가 뜨도록 고치기
-                    <img src={Logo} className="sidebar__profileImg" />
-                }
-                <div className="sidebar__name">{user? user.nickname : "undefined"}</div>
-                <Link to="/home">
-                    <button value={0} className={ clickedMenu === "0" ? "clicked" : "notClicked"} onClick={handleClick}>
-                        Home
-                    </button>
-                </Link>
-                <Link to={`/invitation`}>
-                    <button value={2}  className={clickedMenu === "2" ? "clicked" : "notClicked"} onClick={handleClick}>
-                        Invitation list
-                    </button>
-                </Link>
-                <Link to="/setting">
-                    <button value={3} className={ clickedMenu === "3" ? "clicked" : "notClicked"} onClick={handleClick}>
-                        Setting
-                    </button>
-                </Link>
-                <Link to="/"><div className="sidebar__logout">Logout</div></Link>
-            </div> */}
         </Box>
     );
 }

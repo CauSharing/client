@@ -28,7 +28,7 @@ const ColorButton = styled(Button)({
     },
   });
 function GroupSidebar({groupIdx, groupName, groupImg, groupUserList}){
-    const [user, setUser] = useState(null);
+    // const [user, setUser] = useState(null);
     const [curMenu, setCurMenu] = useState("0");
 
     const ClickedBtn = styled(ColorButton)({
@@ -44,13 +44,7 @@ function GroupSidebar({groupIdx, groupName, groupImg, groupUserList}){
         e.preventDefault();
     }
 
-    // const handleMenuClick = (e) => {
-    //     e.preventDefault();
-    //     setOpen(!open);
-    // }
-
     useEffect(() => {
-        setUser(JSON.parse(window.localStorage.getItem('user')));
 
         if(window.location.pathname === `/home/diary/${groupIdx}`)
             setCurMenu("0");
@@ -110,57 +104,49 @@ function GroupSidebar({groupIdx, groupName, groupImg, groupUserList}){
       
             <Typography variant="h5" sx={{marginBottom:"40px"}}>{groupName? groupName : "undefined"}</Typography>
             <Divider />
-            <Link to={`/home/diary/${groupIdx}`} style={{ textDecoration: 'none' }}>
-                {
-                    curMenu === "0"?
-                    <ClickedBtn onClick={handleClick}>
-                        Home
-                    </ClickedBtn>
-                    :
-                    <NotClickedBtn onClick={handleClick}>
-                        Home
-                    </NotClickedBtn>
-                }
-            </Link>
+            {
+                curMenu === "0"?
+                <ClickedBtn component={Link} to={`/home/diary/${groupIdx}`} variant="contained" color="primary">
+                    Home
+                </ClickedBtn>
+                :
+                <NotClickedBtn component={Link} to={`/home/diary/${groupIdx}`} variant="contained" color="primary">
+                    Home
+                </NotClickedBtn>
+            }
             <Divider />
-            <Link to={`/home/diary/${groupIdx}/chat`} style={{ textDecoration: 'none' }}>
             {
                 curMenu === "1"?
-                <ClickedBtn onClick={handleClick}>
+                <ClickedBtn component={Link} to={`/home/diary/${groupIdx}/chat`} variant="contained" color="primary">
                     Chat
                 </ClickedBtn>
                 :
-                <NotClickedBtn onClick={handleClick}>
+                <NotClickedBtn component={Link} to={`/home/diary/${groupIdx}/chat`} variant="contained" color="primary">
                     Chat
                 </NotClickedBtn>
             }
-            </Link>
             <Divider />
-            <Link to={`/home/diary/${groupIdx}/notice`} style={{ textDecoration: 'none' }}>
             {
                 curMenu === "2"?
-                <ClickedBtn onClick={handleClick}>
+                <ClickedBtn component={Link} to={`/home/diary/${groupIdx}/notice`} variant="contained" color="primary">
                     Notice
                 </ClickedBtn>
                 :
-                <NotClickedBtn onClick={handleClick}>
+                <NotClickedBtn component={Link} to={`/home/diary/${groupIdx}/notice`} variant="contained" color="primary">
                     Notice
                 </NotClickedBtn>
             }
-            </Link>
             <Divider />
-            <Link to={`/home/diary/${groupIdx}/setting`} style={{ textDecoration: 'none' }}>
             {
                 curMenu === "3"?
-                <ClickedBtn onClick={handleClick}>
+                <ClickedBtn component={Link} to={`/home/diary/${groupIdx}/setting`} variant="contained" color="primary">
                     Setting
                 </ClickedBtn>
                 :
-                <NotClickedBtn onClick={handleClick}>
+                <NotClickedBtn component={Link} to={`/home/diary/${groupIdx}/setting`} variant="contained" color="primary">
                     Setting
                 </NotClickedBtn>
             }
-            </Link>
             <Box sx={{position: "absolute", bottom:"10px"}}>
                 <Link to="/" style={{ textDecoration: 'none' }}>
                     <Typography variant="body1" sx={{color:"dimgrey"}}>

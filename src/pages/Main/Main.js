@@ -5,6 +5,8 @@ import AboutUsTablePanel from "./AboutUsTablePanel";
 import SignInTabPanel from "./SignInTabPanel";
 import './Main.css';
 
+import { Box} from '@mui/material';
+
 function Main(){
   useEffect(() => {
     localStorage.clear();
@@ -16,12 +18,12 @@ function Main(){
       setValue(newValue);
   };
     return(
-      <>
+      <Box sx={{height: "100vh", background: "linear-gradient(rgba(107, 190, 226, 0.2) 90%, #FFFFFF 10%)"}}>
         <Menu value={value} handleChange={handleChange}/>
         <HomeTabPanel value={value} index={'1'}/>
         <AboutUsTablePanel value={value} index={'2'} />
         <SignInTabPanel value={value} index={'3'} />
-      </>
+      </Box>
     );
 }
 

@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect} from "react";
-import {useParams} from 'react-router-dom';
+import {useParams, useHistory } from 'react-router-dom';
 import moment from "moment";
 import GroupSidebar from "../components/GroupSidebar";
 import axios from "axios";
@@ -11,38 +11,10 @@ import "./Day.css";
 import MyEditor from "../components/Editor";
 import EditPost from "./EditPost";
 
-import { Button } from '@mui/material';
+import { Button, List, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
-// import AddIcon from '@mui/icons-material/Add';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-// import ListSubheader from '@mui/material/ListSubheader';
-import List from '@mui/material/List';
-// import ListItemButton from '@mui/material/ListItemButton';
-// import ListItemIcon from '@mui/material/ListItemIcon';
-// import ListItemText from '@mui/material/ListItemText';
-// import Collapse from '@mui/material/Collapse';
-// import InboxIcon from '@mui/icons-material/MoveToInbox';
-// import DraftsIcon from '@mui/icons-material/Drafts';
-// import SendIcon from '@mui/icons-material/Send';
-// import ExpandLess from '@mui/icons-material/ExpandLess';
-// import ExpandMore from '@mui/icons-material/ExpandMore';
-// import StarBorder from '@mui/icons-material/StarBorder';
-// import List from '@mui/material/List';
-// import ListItem from '@mui/material/ListItem';
-// import ListItemAvatar from '@mui/material/ListItemAvatar';
-// import ListItemIcon from '@mui/material/ListItemIcon';
-// import ListItemText from '@mui/material/ListItemText';
-// import Avatar from '@mui/material/Avatar';
-// import IconButton from '@mui/material/IconButton';
-// import FormGroup from '@mui/material/FormGroup';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import Checkbox from '@mui/material/Checkbox';
-// import Grid from '@mui/material/Grid';
-// import Typography from '@mui/material/Typography';
-// import FolderIcon from '@mui/icons-material/Folder';
-// import DeleteIcon from '@mui/icons-material/Delete';
-
-import TextField from '@mui/material/TextField';
 
 let sample_img = "https://w.namu.la/s/adb56b09aef6d27319fe0fed21df3cf9e282fe7964308413845ab53649de0ac7e4003aa7abb7b2fe51b934bfc22b68d7183381a532e6ffca6849ad42672b4fc580161f61963aefaa808acaa4c788504ec2212a4a827718b8451f23098f8f24d7fa2d12cb721787c3cd3e098b609a9555";
 const ColorButton = styled(Button)({
@@ -321,8 +293,13 @@ function CommentList({commentList}){
         </div>
     );
 }
-function Day({}){
-    
+function Day({location}){
+    // const {state} = useLocation();
+    const history = useHistory();
+
+    const [groupName, setGroupName] = useState(null);
+    const [groupImg, setGroupImg] = useState(null);
+    const [groupUserList, setGroupUserList] = useState([]);
     const {groupIdx, year, month, day} = useParams();
     const dayName = moment(`${year}-${month}-${day}`).format('ddd');
     console.log(year, month, day);
@@ -389,12 +366,17 @@ function Day({}){
             .catch(err => {
                 console.log(err);
             });
+
+            console.log(location);
+        setGroupName(location.state.groupName);
+        setGroupImg(location.state.groupImg);
+        setGroupUserList(location.state.groupUserList);
     },[]);
 
     return(
 
         <div className="entireDay">
-            <GroupSidebar diaryIdx={groupIdx}/>
+            <GroupSidebar groupIdx={groupIdx} groupName={groupName} groupImg={groupImg} groupUserList={groupUserList}/>
             {
             showAddPost ?
                 <AddPost 
@@ -407,7 +389,7 @@ function Day({}){
                 :
                 <div className="day">
                     <div className="day__btns">
-                        <BackBtn nextLoc={`/home/diary/${groupIdx}`}/>
+                        <BackBtn nextLoc={`/home/diary/${groupIdx}`} />
                     </div>
                     <div className="day__date">
                         {`${year}/${month}/${day}/${dayName}`}

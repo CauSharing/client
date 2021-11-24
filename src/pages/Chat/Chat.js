@@ -4,16 +4,21 @@ import axios from "axios";
 import styles from '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import {ArrowButton, MainContainer, ChatContainer, MessageList, Message, MessageInput, Avatar ,Conversation, Search, ConversationList, Sidebar} from '@chatscope/chat-ui-kit-react';
 
-import GroupSidebar from "../components/GroupSidebar";
+import GroupSidebar from "../../components/GroupSidebar";
 
 import "./Chat.css";
 
 const Chat = () => {
+  const [groupName, setGroupName] = useState("");
+  const [groupImg, setGroupImg] = useState("#");
+  const [groupUserList,setGroupUserList] = useState([]);
+
     const inputRef = useRef();
     const [msgInputValue, setMsgInputValue] = useState("");
     const [messages, setMessages] = useState([]);
 
-    const {diaryIdx} = useParams();
+    const {groupIdx} = useParams();
+    const location = useLocation();
   
     const handleSend = message => {
       setMessages([...messages, {
@@ -27,9 +32,15 @@ const Chat = () => {
       inputRef.current.focus();
     };
 
+    useEffect(() => {
+      setGroupName(location.state.groupName);
+      setGroupImg(location.state.groupImg);
+      setGroupUserList(location.state.groupUserList);
+    }, []);
+
     return(
       <>
-        <GroupSidebar diaryIdx={diaryIdx}/>
+        <GroupSidebar groupIdx={groupIdx} groupName={groupName} groupImg={groupImg} groupUserList={groupUserList}/>
         <div style={{height: "600px", position: "relative"}} className="chatBox">
   
         <ArrowButton direction="left" />

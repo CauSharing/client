@@ -1,13 +1,17 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useContext, useRef} from 'react';
 import { Link , withRouter} from 'react-router-dom';
 import "./DiaryThumbnail.css";
 
 import GroupIcon from '@mui/icons-material/Group';
 import { Box, Card, CardActionArea, CardMedia, CardActions, CardContent, Button, Typography,Slide  } from '@mui/material';
-import SampleImg from "../icons/nature-gdbaa175c1_640.png"
+import SampleImg from "../icons/nature-gdbaa175c1_640.png";
 
+import {GroupContext} from '../context/index';
 
 function DiaryThumbnail({groupName, groupImg, groupUserList, groupIdx}){
+    const groupContext = useContext(GroupContext);
+    const {dispatch} = groupContext;
+
     const [showFriends, setShowFriends] = useState(false);
     const [showGroupInfo, setShowGroupInfo] = useState(true);
 
@@ -24,10 +28,10 @@ function DiaryThumbnail({groupName, groupImg, groupUserList, groupIdx}){
     }
 
     const cardRef=useRef(null);
-
-    console.log("diary thumbnail: ", typeof(groupName), groupImg, groupUserList, groupIdx);
+    // console.log("diary thumbnail: ", typeof(groupName), groupImg, groupUserList, groupIdx);
     return(
-        <Card sx={{ 
+        <Card 
+            sx={{ 
                 width: 200, 
                 margin: 1,
                 // height:300, 
@@ -40,27 +44,37 @@ function DiaryThumbnail({groupName, groupImg, groupUserList, groupIdx}){
                 '&:hover':{
                     borderBottom: 1,
                     borderColor: "#3181C6"
-                } }
-            }
-                
-                ref={cardRef}>
-                            <Link
-                            to={{
-                                pathname: `home/diary/${groupIdx}`,
-                                state: {
-                                    groupName:groupName, 
-                                    groupImg: groupImg, 
-                                    groupUserList: groupUserList, 
-                                    groupIdx:groupIdx
-                                }
-                            }}
-                            style={{ textDecoration: 'none', width: 200 }}>
-                    {
-                        showGroupInfo &&
-                        <Slide 
-                        direction="left"
-                        in={showGroupInfo}>
- 
+                }}}
+            ref={cardRef}>
+            <Link
+                to={{
+                    pathname: `home/diary/${groupIdx}`,
+                    // state: {
+                    //     groupName:groupName, 
+                    //     groupImg: groupImg, 
+                    //     groupUserList: groupUserList, 
+                    //     groupIdx:groupIdx
+                    // }
+                }}
+                style={{ textDecoration: 'none', width: 200 }}
+                onClick={() => 
+                    dispatch({
+                        type: 'UPDATE_GROUP',
+                        payload: {
+                            groupName: groupName,
+                            groupImg: groupImg,
+                            groupUserList: groupUserList,
+                            groupIdx: groupIdx
+                        }
+                    })
+                }
+                    >
+                {
+                    showGroupInfo &&
+                    <Slide 
+                    direction="left"
+                    in={showGroupInfo}>
+
                         <CardActionArea sx={{
                             paddingLeft: 2,
                             paddingRight: 2, 
@@ -71,7 +85,7 @@ function DiaryThumbnail({groupName, groupImg, groupUserList, groupIdx}){
 
                             height:250,
                         }}>
-    
+        
                             <CardMedia
                                 component="img"
                                 sx={{borderRadius:"50%", width:160, height: 160}}
@@ -84,9 +98,9 @@ function DiaryThumbnail({groupName, groupImg, groupUserList, groupIdx}){
                                 </Typography>        
                             </CardContent>      
                         </CardActionArea>
-                        
-                      </Slide> 
-                    }
+                            
+                    </Slide> 
+                }
                 {
                     showFriends &&
                     <Slide direction="left" in={showFriends}>
@@ -123,7 +137,7 @@ function DiaryThumbnail({groupName, groupImg, groupUserList, groupIdx}){
                     
                 </Slide>
                 }
-</Link>
+            </Link>
             <CardActions>
                 <Button 
                     sx={{fontSize: 13, fontFamily: "Roboto Condensed", display:"flex", justifyContent:"center", alignItems:"center"}}

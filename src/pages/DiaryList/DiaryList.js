@@ -34,8 +34,9 @@ const ColorButton = styled(Button)({
   });
 
 
-function DiaryList({departmentList, userEmail, userNickname, userDepartment, userMajor, userImage, userLanguage}){
-    console.log("render diarylist");
+function DiaryList({departmentList}){
+    // console.log("render diarylist");
+    
     const [showAddFriend, setShowAddFriend] = useState(false);
     const [matchingRoomList, setMatchingRoomList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -80,11 +81,13 @@ function DiaryList({departmentList, userEmail, userNickname, userDepartment, use
                                     groupImg={diary.matchingRoomImage}
                                     groupUserList={diary.userList}
                                     groupIdx={diary.matchingRoomId}
+                                    
                                 /></td>)
 
     ));
 
     return(
+        
         <Box sx={{display:"flex"}}>
             <SideBar departmentList={departmentList} clickedMenuId={"0"}/>
             <Box sx={{padding: "20px", width: "100%"}}>
@@ -113,6 +116,7 @@ function DiaryList({departmentList, userEmail, userNickname, userDepartment, use
             }
             </Box>
         </Box>
+    
     );
 }
 
