@@ -115,7 +115,8 @@ function Matching({departmentList, setShowAddFriend, showAddFriend}){
                     console.log(res.data.description);
                 }
                 else
-                    setMatchingResult(res.data.description);
+                    setMatchingResult("Send message successfully!");
+                    // setMatchingResult(res.data.description);
                 })
             .catch(err =>{
                     console.log(err);

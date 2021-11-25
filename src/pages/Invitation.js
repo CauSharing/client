@@ -4,7 +4,7 @@ import axios from "axios";
 import SideBar from "../components/SideBar";
 import BackBtn from "../components/BackBtn";
 
-
+import {Box, Typography} from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -197,40 +197,16 @@ function Invitation({departmentList}){
             });
     },[]);
 
-    // 샘플 데이터
-    // const invitationData = [
-    //     {
-    //         invitePerson: "emma2007@cau.ac.kr",
-    //         invitePersonImage: "",
-    //         invitePersonMajor: "Software",
-    //         invitePersonNickname: "mj",
-    //         matchingRoodId: 0
-    //     },
-    //     {
-    //         invitePerson: "nk@cau.ac.kr",
-    //         invitePersonImage: "http://ph.spotvnews.co.kr/news/photo/202105/420427_531978_4632.jpg",
-    //         invitePersonMajor: "Engineering",
-    //         invitePersonNickname: "nakyoung",
-    //         matchingRoodId: 1
-    //     },
-    //     {
-    //         invitePerson: "jk@cau.ac.kr",
-    //         invitePersonImage: "https://newsimg.hankookilbo.com/cms/articlerelease/2021/05/17/9ee33d77-38c1-4699-ae43-893aa70db4ff.jpg",
-    //         invitePersonMajor: "Mathematics",
-    //         invitePersonNickname: "jikwang",
-    //         matchingRoodId: 2
-    //     }
-    // ];
 
     return(
-        <div className="invitation">
+        <Box sx={{width: "100%", display: "flex"}}>
             <SideBar departmentList={departmentList} clickedMenuId={"2"} />
-            <div className="invitation__list">
-                <div className="invitation__list__btn">
-                    <BackBtn nextLoc={`/home`}/>
-                </div>
+            <Box sx={{width:"90%", padding: "20px"}}>
+                <BackBtn nextLoc={`/home`}/>
                 
-                <div className="invitation__list__title">Invitation List</div>
+                <Box sx={{marginTop: "20px", paddingBottom: "10px", borderBottom: "1px solid #7c7c7c", width: "90%"}}>
+                <Typography variant="h4">Invitation List</Typography>
+                </Box>
                 {
                     invitationList.length === 0?
                     <div className="invitation__list__alert">There's no invitation from other users.</div>
@@ -254,8 +230,8 @@ function Invitation({departmentList}){
                 }
 
 
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 }
 

@@ -27,6 +27,8 @@ const ColorButton = styled(Button)({
       boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
     },
   });
+
+  
 function SideBar(){
     const [user, setUser] = useState(null);
     const [clickedMenu, setClickedMenu] = useState(null);

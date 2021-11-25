@@ -14,7 +14,7 @@ const ColorButton = styled(Button)({
     backgroundColor: '#3181C6',
     borderColor: '#0063cc',
     fontFamily: 'Roboto Condensed',
-    marginTop: '20px',
+    // marginTop: '20px',
     '&:hover': {
       backgroundColor: '#4892d2',
       boxShadow: 'none',

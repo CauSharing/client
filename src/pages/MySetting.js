@@ -3,6 +3,7 @@ import React , {useState} from "react";
 import SideBar from "../components/SideBar";
 import BackBtn from "../components/BackBtn";
 
+import {Box, Typography} from '@mui/material';
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -33,13 +34,13 @@ function MySetting({departmentList}){
     }
 
     return(
-        <>
+        <Box sx={{width: "100%", display:"flex"}}>
             <SideBar departmentList={departmentList} clickedMenuId={"3"}/>
-            <div className="entireMySetting">
-                <div className="mySetting__btn">
-                    <BackBtn nextLoc={"/home"}/>
-                </div>
-                <div className="mySetting__title">Setting</div>
+            <Box  sx={{width: "100%", padding: "20px"}}>
+                <BackBtn nextLoc={"/home"}/>
+                <Box sx={{marginTop: "20px", paddingBottom: "10px", borderBottom: "1px solid #7c7c7c", width: "90%"}}>
+                    <Typography variant="h4">Setting</Typography>
+                </Box>
                 <List
                     sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', fontFamily: 'Roboto Condensed'}}
                     component="nav"
@@ -55,32 +56,9 @@ function MySetting({departmentList}){
                         </ListItemIcon>
                         <ListItemText primary="Edit profile" />
                     </ListItemButton>
-                    {/* <ListItemButton>
-                        <ListItemIcon>
-                        <DraftsIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Drafts" />
-                    </ListItemButton>
-                    <ListItemButton onClick={handleClick}>
-                        <ListItemIcon>
-                        <InboxIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Inbox" />
-                        {open ? <ExpandLess /> : <ExpandMore />}
-                    </ListItemButton>
-                    <Collapse in={open} timeout="auto" unmountOnExit>
-                        <List component="div" disablePadding>
-                        <ListItemButton sx={{ pl: 4 }}>
-                            <ListItemIcon>
-                            <StarBorder />
-                            </ListItemIcon>
-                            <ListItemText primary="Starred" />
-                        </ListItemButton>
-                        </List>
-                    </Collapse> */}
                 </List>
-            </div>
-        </>
+            </Box>
+        </Box>
     );
 }
 

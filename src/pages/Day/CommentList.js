@@ -191,6 +191,7 @@ function Comment({childComment, commentDate, content, writer, imgSrc, isReply, c
                         <ListItemAvatar>
                             <Avatar src={imgSrc}></Avatar>
                         </ListItemAvatar>
+                        
                         <ListItemText primary={writer} secondary={`${cDate.getFullYear()}-${cDate.getMonth()}-${cDate.getDate()}`}/>
                     </Box>
                     <ListItemText primary={content} />
@@ -237,7 +238,7 @@ function CommentList({commentList, isReply, postId}){
                                     childComment={elem.childComment}
                                     commentDate={elem.commentDate}
                                     content={elem.content}
-                                    writer={elem.writer}
+                                    writer={elem.nickname}
                                     imgSrc={elem.imgSrc} 
                                     isReply={isReply}/>)
                         }

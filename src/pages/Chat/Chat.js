@@ -35,16 +35,23 @@ const Chat = () => {
           <Box sx={{width: "100%", display: "flex", justifyContent: "end", position: "sticky", zIndex: "100",top:"0"}}>
             <Setting srcLang = {srcLang} setSrcLang={setSrcLang} destLang={destLang} setDestLang={setDestLang}/>
           </Box>
-          <Box sx={{width: "100%", padding: "20px"}}>
+          <Box sx={{width: "90%", padding: "20px"}}>
+            <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={false}/>
+            <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={true}/>
+            <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={false}/>
+            <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={true}/>
+            <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={false}/>
+            <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={true}/>
+            <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={false}/>
+            <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={true}/>
+            {/* <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={false}/>
             <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={false}/>
             <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={false}/>
             <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={false}/>
             <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={false}/>
             <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={false}/>
             <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={false}/>
-            <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={false}/>
-            <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={false}/>
-            <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={false}/>
+            <Message user={{nickname: "mj", image: null}} content="hello world" isUserSent={false}/> */}
           </Box>
           <Box sx={{width: "100%", position: "sticky", bottom: "0", backgroundColor:"black",height: "100px", zIndex: "100"}}>
 sdfsdf

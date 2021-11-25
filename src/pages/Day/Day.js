@@ -12,11 +12,12 @@ import MyEditor from "../../components/Editor";
 import EditPost from "../EditPost";
 import CommentList from './CommentList';
 
-import { Button, List, TextField, Box, Typography ,ListItem, ListItemAvatar, ListItemText, Avatar} from '@mui/material';
+import { Button, List, TextField, Box, Typography ,CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import {GroupContext} from "../../context/index";
+
+import randomColor from 'randomcolor';
 
 
 let sample_img = "https://w.namu.la/s/adb56b09aef6d27319fe0fed21df3cf9e282fe7964308413845ab53649de0ac7e4003aa7abb7b2fe51b934bfc22b68d7183381a532e6ffca6849ad42672b4fc580161f61963aefaa808acaa4c788504ec2212a4a827718b8451f23098f8f24d7fa2d12cb721787c3cd3e098b609a9555";
@@ -84,31 +85,30 @@ function AddPost({matchingRoomId, setShowAddPost, year, month, day, dayName}){
     };
 
     return(
-        <div className="addPost">
+        <Box sx={{width: "100%", display: "flex", flexDirection: "column", padding: "20px"}}>
             <BackBtn setShowContents={setShowAddPost}/>
-            <div className="addPost__line">
-                <div className="addPost__date">{`${year}/${month}/${day}/${dayName}`}</div>
+            <Box sx={{width: "90%", display:"flex", justifyContent: "space-between", alignItems:"center",marginTop:"20px"}}>
+                <Typography variant="h5">{`${year}/${month}/${day}/${dayName}`}</Typography>
                 <ColorButton onClick={handleSaveBtn}>Save</ColorButton>
-            </div>
+            </Box>
             <TextField 
                 id="standard-basic" 
                 label="Title" 
                 variant="standard" 
                 style={{marginBottom: "15px"}}
-                onChange={(e) => setTitle(e.target.value)}/>
-            {/* <input className="addPost__title" placeholder="Title" onChange={(e) => setTitle(e.target.value)}/> */}
-           <MyEditor initialValue={""} isViewer={false} setContent={setContent}/>
-        </div>
+                onChange={(e) => setTitle(e.target.value)}
+                sx={{width: "90%"}}/>
+            <Box sx={{width:"90%"}}>
+                <MyEditor initialValue={""} isViewer={false} setContent={setContent}/>
+            </Box>
+        </Box>
     )
 }
-function Friend({name, color}){
-    const nameStyle = {
-        background: color
-    };
-
+function Friend({name}){
+    var color = randomColor('bright');
     return(
-        <Box sx={{backgroundColor:color, padding: "5px", display: "flex", justifyContent: "center", 
-        alignItems:"center", borderRadius: "5px", marginRight: "5px", minWidth: "20px", height: "100%"}}>
+        <Box sx={{backgroundColor:color, padding: "10px", display: "flex", justifyContent: "center", 
+        alignItems:"center", borderRadius: "5px", marginRight: "5px", minWidth: "20px", height: "100%", fontFamily: "Roboto Condensed"}}>
             {name}
         </Box>
     );
@@ -117,8 +117,8 @@ function Friend({name, color}){
 function FriendList({friendList}){
     const friendCompList = [];
 
-    for(const friend of friendList){
-        friendCompList.push(<Friend name={friend.name} color={friend.color}/>);
+    for(var friend of friendList){
+        friendCompList.push(<Friend name={friend.nickname} />);
     }
 
     return(
@@ -142,47 +142,14 @@ function Post({title, description, postIdx, writer, postDate}){
 
         await instance.get(`/api/commentList?postId=${postIdx}`,config)
             .then(res => {
+                // console.log(res);
                 setCommentList(res.data.value);
             })
             .catch(err => {
                 console.log(err);
             });
     },[]);
-    //     const commentList = [
-    //     {
-    //         childComment: [
-    //             {
-    //                 childComment: [],
-    //                 commentDate: "2021-11-10T20:33:02.724Z",
-    //                 commentId: 0,
-    //                 content: "string",
-    //                 writer: "string",
-    //                 imgSrc: sample_img
-    //             },
-    //         ],
-    //         commentDate: "2021-11-10T20:33:02.724Z",
-    //         commentId: 0,
-    //         content: "string",
-    //         writer: "mj",
-    //         imgSrc: sample_img
-    //     },
-    //     {
-    //         childComment: [],
-    //         commentDate: "2021-11-10T20:33:02.724Z",
-    //         commentId: 0,
-    //         content: "string",
-    //         writer: "nk",
-    //         imgSrc: sample_img
-    //     },
-    //     {
-    //         childComment: [],
-    //         commentDate: "2021-11-10T20:33:02.724Z",
-    //         commentId: 0,
-    //         content: "string",
-    //         writer: "jk",
-    //         imgSrc: sample_img
-    //     },
-    // ];
+
     const dateObj = new Date(postDate);
     const hour = dateObj.getHours();
     const minute = dateObj.getMinutes();
@@ -200,9 +167,8 @@ function Post({title, description, postIdx, writer, postDate}){
                         <Typography variant="body2" color="secondary.main" sx={{marginRight: "5px"}}>{writer}</Typography>
                         <Typography variant="body2" color="secondary.main">{hour}:{minute}</Typography>
                     </Box>                
-                    <ColorButton className="day__post__editBtn" onClick={handleClick}>Edit</ColorButton>
+                    <ColorButton  onClick={handleClick}>Edit</ColorButton>
                 </Box>
-
                 <MyEditor initialValue={description} isViewer={true}/>
             </Box>
             <Box sx={{width: "100%", borderBottom: "1px solid #7c7c7c", display: "flex", alignItems: "center", marginTop: "20px"}}>
@@ -211,44 +177,28 @@ function Post({title, description, postIdx, writer, postDate}){
             </Box>
             <CommentList commentList={commentList} isReply={false} postId={postIdx}/>
         </Box>
-        // <div className="day__post">
-        //     <div className="day__post__line">
-        //         <div className="day__post__title">{title}</div>
-        //         <ColorButton className="day__post__editBtn" onClick={handleClick}>Edit</ColorButton>
-        //     </div>
-        //     <MyEditor initialValue={description} isViewer={true}/>
-        // </div>
     );
 }
 
 
 function Day({}){
-    // const {state} = useLocation();
     const {state} = useContext(GroupContext);
     const [groupName, setGroupName] = useState(state.groupName);
     const [groupImg, setGroupImg] = useState(state.groupImg);
     const [groupUserList, setGroupUserList] = useState(state.groupUserList);
-    const history = useHistory();
 
     const {groupIdx, year, month, day} = useParams();
     const dayName = moment(`${year}-${month}-${day}`).format('ddd');
-    console.log(year, month, day);
 
     const [showAddPost, setShowAddPost] = useState(false);
-
     const [postList, setPostList] = useState([]);
 
-    // sample friends
-    const friendList = [
-        {id: 0, name: "Minju", color: "#FFA897"},
-        {id: 1, name: "Nakyoung", color: "#B6E8FD"},
-        {id: 2, name: "Jikyang", color: "#FEBBFF"}
-    ];
-
-    // sample comment list
+    const [postLoading, setPostLoading] = useState(false);
 
 
     useEffect(async () => {
+        await setPostLoading(true);
+
         const token = localStorage.getItem("userToken");
         const config = {
             headers: { Authorization: `Bearer ${token}` }
@@ -270,6 +220,8 @@ function Day({}){
         await setGroupName(state.groupName);
         await setGroupImg(state.groupImg);
         await setGroupUserList(state.groupUserList);
+
+        await setPostLoading(false);
     },[]);
 
     return(
@@ -277,6 +229,12 @@ function Day({}){
         <Box sx={{display: "flex", width: "100%", justifyContent:"center"}}>
             <GroupSidebar groupIdx={groupIdx} groupName={groupName} groupImg={groupImg} groupUserList={groupUserList}/>
             {
+                postLoading?
+                <Box sx={{width: "100%",height: "100vh" ,padding: "20px", display:"flex", alignItems:"center", justifyContent:"center", flexDirection:"column"}}>
+                    <CircularProgress />
+                    <Typography variant="h5" color="primary" sx={{marginTop:"20px"}}>Loading</Typography>
+                </Box>
+                :
             showAddPost ?
                 <AddPost 
                     setShowAddPost={setShowAddPost} 
@@ -293,12 +251,13 @@ function Day({}){
                     <Typography variant="h5">
                         {`${year}/${month}/${day}/${dayName}`}
                     </Typography>
-                    <Box sx={{marginBottom: "20px",width: "90%", display:"flex", alignItems: "center", justifyContent: "space-between"}}>
-                        <FriendList friendList={friendList}/>
+                    <Box sx={{marginBottom: "20px",width: "90%", display:"flex", alignItems: "center", justifyContent: "space-between", borderBottom:"1px solid #7c7c7c", margin: "20px 0px", paddingBottom: "10px"}}>
+                        <FriendList friendList={groupUserList}/>
                         <PlusBtn setShowContents={setShowAddPost} desc={"+ Add Post"}/>
                     </Box>
                     <Box sx={{marginBottom: "20px",width: "90%", display:"flex", flexDirection:"column", alignItems:"center"}}>
                     {
+                        postList.length > 0 ?
                         postList.map(post =>                 
                             <Post 
                                 title={post.title}
@@ -307,15 +266,12 @@ function Day({}){
                                 writer = {post.userNickname}
                                 postDate = {post.postDate}
                                 />)
+                        :
+                        <Box sx={{width: "100%"}}>
+                            <Typography variant="h5">No post</Typography>
+                        </Box>
                     }
                     </Box>
-                    {/* <Box sx={{width: "90%", display:"flex", flexDirection:"column", alignItems:"center"}}>
-                        <Box sx={{width: "100%", borderBottom: "1px solid #7c7c7c", display: "flex", alignItems: "center"}}>
-                            <Typography variant="h5" sx={{marginRight: "10px"}}>Comment</Typography>
-                            <Typography variant="body1" color="secondary">{commentList.length}</Typography>
-                        </Box>
-                        <CommentList commentList={commentList} isReply={false} />
-                    </Box> */}
                 </Box>
             }
 
