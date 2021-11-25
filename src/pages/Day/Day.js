@@ -175,7 +175,7 @@ function Post({title, description, postIdx, writer, postDate}){
                 <Typography variant="h5" sx={{marginRight: "10px"}}>Comment</Typography>
                 <Typography variant="body1" color="secondary">{commentList.length}</Typography>
             </Box>
-            <CommentList commentList={commentList} isReply={false} postId={postIdx}/>
+            <CommentList commentList={commentList} isReply={false} postId={postIdx} setCommentList={setCommentList}/>
         </Box>
     );
 }

@@ -1,4 +1,4 @@
-import React , {useState} from 'react';
+import React , {useState, useRef} from 'react';
 import { Button, List, TextField, Box, Typography ,ListItem, ListItemAvatar, ListItemText, Avatar} from '@mui/material';
 import { styled } from '@mui/material/styles';
 
@@ -57,8 +57,10 @@ const ReplyButton = styled(Button)({
   });
 
 
-function NewComment({imgSrc, isReply, parentCommentId, postId}){
+function NewComment({imgSrc, isReply, parentCommentId, postId, setCommentList}){
     const [newComment, setNewComment] = useState("");
+    let textInput = useRef(null);
+
     const handleClick = async (e) => {
         const token = localStorage.getItem("userToken");
         const config = {
@@ -68,11 +70,12 @@ function NewComment({imgSrc, isReply, parentCommentId, postId}){
             timeout: 30000,
           });
 
+        
         const data = {
             content: newComment,
             parentCommentId: isReply? parentCommentId: 0,
             postId: postId
-        }
+        };
 
         await instance.post('/api/createComment',data, config)
            .then(res => {
@@ -87,7 +90,15 @@ function NewComment({imgSrc, isReply, parentCommentId, postId}){
            .catch(err =>{
                alert("error");
            });
-    
+
+        await instance.get(`/api/commentList?postId=${postId}`,config)
+           .then(res => {
+               setCommentList(res.data.value);
+           })
+           .catch(err => {
+               console.log(err);
+           });
+        textInput.current.value = "";
     }
     return(
         <ListItem style={{width:"100%", marginBottom: "10px"}}>
@@ -102,6 +113,7 @@ function NewComment({imgSrc, isReply, parentCommentId, postId}){
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 multiline
+                inputRef={textInput}
                 />
             <Button onClick={handleClick} disabled={newComment===""} color="primary" variant="outlined">Reply</Button>
         </ListItem>
@@ -133,10 +145,10 @@ function Reply({ commentDate, content, writer, imgSrc}){
     );
 }
 
-function ReplyList({replyList, parentCommentId, postId}){
+function ReplyList({replyList, parentCommentId, postId, setCommentList}){
     return(
         <Box sx={{display: "flex", width: "100%", flexDirection: "column", marginLeft: "20px"}}>
-            <NewComment imgSrc={null} isReply={true} parentCommentId={parentCommentId} postId={postId}/>
+            <NewComment imgSrc={null} isReply={true} parentCommentId={parentCommentId} postId={postId} setCommentList={setCommentList}/>
             {
                 replyList ?
                 <Box sx={{display: "flex", width: "100%"}}>
@@ -152,7 +164,7 @@ function ReplyList({replyList, parentCommentId, postId}){
                                     childComment={elem.childComment}
                                     commentDate={elem.commentDate}
                                     content={elem.content}
-                                    writer={elem.writer}
+                                    writer={elem.nickname}
                                     imgSrc={elem.imgSrc} 
                                     />)
                         }
@@ -166,7 +178,7 @@ function ReplyList({replyList, parentCommentId, postId}){
     );
 }
 
-function Comment({childComment, commentDate, content, writer, imgSrc, isReply, commentId}){
+function Comment({childComment, commentDate, content, writer, imgSrc, isReply, commentId, postId, setCommentList}){
     // const nameStyle = {
     //     background: color
     // };
@@ -212,7 +224,7 @@ function Comment({childComment, commentDate, content, writer, imgSrc, isReply, c
         </ListItem>
         <Box sx={{width: "100%"}}>     
         {seeReply ? 
-                <ReplyList replyList={childComment} parentCommentId={commentId}/>
+                <ReplyList replyList={childComment} parentCommentId={commentId} postId={postId} setCommentList={setCommentList}/>
                 :       
                 null}
         </Box>
@@ -220,10 +232,10 @@ function Comment({childComment, commentDate, content, writer, imgSrc, isReply, c
     );
 }
 
-function CommentList({commentList, isReply, postId}){
+function CommentList({commentList, isReply, postId, setCommentList}){
     return(
         <Box sx={{display: "flex", width: "100%", flexDirection: "column"}}>
-            <NewComment imgSrc={null} postId={postId}/>
+            <NewComment imgSrc={null} postId={postId} setCommentList={setCommentList}/>
             <Box sx={{display: "flex", width: "100%"}}>
                 <List
                     sx={{ bgcolor: 'background.paper' }}
@@ -240,7 +252,9 @@ function CommentList({commentList, isReply, postId}){
                                     content={elem.content}
                                     writer={elem.nickname}
                                     imgSrc={elem.imgSrc} 
-                                    isReply={isReply}/>)
+                                    isReply={isReply}
+                                    postId={postId}
+                                    setCommentList={setCommentList}/>)
                         }
                 </List>
             </Box>
