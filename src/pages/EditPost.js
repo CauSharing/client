@@ -352,29 +352,135 @@ function OriginalContent({content}){
     );
 }
 
-function EditedContent({writer, content}){
+function EditedContent({writer, content, originalContent}){
+    const [coloredContent, setColoredContent]=useState([]);
+    useEffect(() => {
+        const dmp = new DiffMatchPatch();
+        const diff = dmp.diff_main(originalContent, content);
+            
+        var l = [];
+        for(var j=0; j<diff.length; j++){
+            if(diff[j][0] === -1){
+                l.push(<span style={{backgroundColor: "#FE8F8F", textDecoration: "line-through"}}>{diff[j][1]}</span>);
+            }
+            else if(diff[j][0] === 0){
+                l.push(<span>{diff[j][1]}</span>);
+            }
+            else {
+                l.push(<span style={{backgroundColor: "#B1E693"}}>{diff[j][1]}</span>);
+            }
+        }
+        setColoredContent(l);
+        
+    }, []);
     return(
-        <Box sx={{width: "50%", display:"flex"}}>
-            <Typography variant="body1">{writer}</Typography>
-            <Typography variant="body1">{content}</Typography>
+        <Box sx={{width: "50%", display:"flex", alignItems: "center", borderLeft: "1px solid #C0C0C0"}}>
+            <Typography variant="body1" sx={{minWidth: "40px", padding: "5px"}}>{writer}</Typography>
+            <Typography variant="body1">{coloredContent}</Typography>
         </Box>
     );
 }
 
-function Block({originalContent, editedDataList}){
+function Block({originalContent, editedDataList, line, userNickname, postId, setTitle, setOriginalList, setEditedList}){
     const [newEditedData, setNewEditedData] = useState(originalContent);
+    const handleClick = async (e) => {
+        const data = {
+            editedDataList: [
+                {
+                    content : newEditedData,
+                    editedDataId : 0,
+                    line : line,
+                    writer : userNickname
+                }
+            ],
+            postId: parseInt(postId)
+        };
+
+        // console.log(data);
+
+        const token = localStorage.getItem("userToken");
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+        const instance = axios.create({
+            timeout: 30000,
+            });
+
+        await instance.post(`/api/sharpening`,data, config)
+        .then(res => {
+            console.log(data, res);
+        })
+        .catch(err => {
+            console.log(err);
+            alert("error");
+        });   
+        await instance.get(`/api/post?postId=${postId}`,config)
+        .then(res => {
+            console.log(res);
+            if(res.data.result){
+                var list = [];
+
+                setTitle(res.data.value.title);
+
+                var el = document.createElement( 'html' );
+                el.innerHTML = res.data.value.content;
+                var ps = el.querySelectorAll("p");
+                
+                ps.forEach((elem, index) => {
+                    if(elem.innerText !== "")
+                        list.push(elem.innerText);
+                });
+                console.log(list);
+                setOriginalList(list);
+            }
+
+        })
+        .catch(err => {
+            console.log(err);
+        });   
+
+        await instance.get(`/api/sharpening/${postId}`,config)
+        .then(res => {
+            console.log(res);
+            if(res.data.result){
+                if(res.data.value !== null){
+                    setEditedList(res.data.value.editedDataList);
+                }
+            }
+            else{
+                new Error();
+            }
+            
+        })
+        .catch(err => {
+            console.log(err);
+            alert("error");
+        })
+    }
     return(
-        <Box sx={{width: "100%"}}>
-            <Box sx={{width:"100%", display: "flex"}}>
+        <Box sx={{width: "100%", borderBottom: "1px solid #C0C0C0"}}>
+            <Box sx={{width:"100%", display: "flex", alignItems:"center"}}>
                 <OriginalContent content={originalContent} />
-                <TextField variant="standard" onChange={(e) => setNewEditedData(e.target.value)} defaultValue={originalContent} style={{width:"50%", fontSize:"18px"}} inputStyle ={{width: '50%', fontSize:"18px"}}/>
+                <Box sx={{width: "50%", display:"flex", alignItems:"center"}}>
+                    <TextField 
+                        variant="standard" 
+                        onChange={(e) => setNewEditedData(e.target.value)} 
+                        defaultValue={originalContent} 
+                        multiline
+                        style={{width:"90%", fontSize:"18px", borderLeft: "1px solid #C0C0C0"}} 
+                        inputStyle ={{width: '90%', fontSize:"18px"}}/>
+                    <Button variant="outlined" onClick={handleClick}>Submit</Button>
+                </Box>
             </Box>
             {
+                editedDataList.length > 0 ?
                 editedDataList.map(elem => 
                     <Box sx={{width: "100%", display:"flex"}}>
                         <Box sx={{width: "50%"}}></Box>
-                        <EditedContent writer={elem.writer.name} content={elem.desc}/>
+                        <EditedContent writer={elem.writer} content={elem.content} originalContent={originalContent}/>
                     </Box>)
+                :
+                null
             }
         </Box>
     );
@@ -394,18 +500,9 @@ function EditPost({}){
     const [title, setTitle] = useState("");
     const [originalList, setOriginalList] = useState([]);
     const [editedList, setEditedList] = useState([]);
-    const [totalList, setTotalList] = useState([]);
+    // const [totalList, setTotalList] = useState([]);
 
-    const [loading, setLoading] = useState(false);
-
-    const originalData =[
-        "<p>Hello world!</p>"
-    ]
-    const editData = [
-        {postIdx: postIdx, lineIdx: 0,writer:{name: "minju", color: "#D3E4CD"}, desc: "Did you saw 'street woman fighter'? it's just so fun."},
-        {postIdx: postIdx, lineIdx: 0,writer:{name: "nakyoung", color: "#FFDEFA"}, desc: "Did you see 'street woman fighter'? it's just so fun."},
-        {postIdx: postIdx, lineIdx: 1,writer:{name: "jikwang", color: '#FCD2D1'}, desc: "you should really see this."},
-    ];
+    // const [loading, setLoading] = useState(false);
 
 
     useEffect( async () => {
@@ -442,19 +539,23 @@ function EditPost({}){
             console.log(err);
         });   
 
-        // var finalList = [];
-        // for(var i=0; i<list.length; i++){
-        //     finalList.push();
-        // }
-
-        // setTotalList(finalList);
-        // await originalList.forEach((elem, index) => {
-        //     setTotalList([
-        //         ...totalList,
-        //         <Block originalContent={elem.content} editedDataList={editData.filter(data =>index === data.lineIdx)}/>
-        //     ]);
-        //     console.log(elem);
-        // })
+        await instance.get(`/api/sharpening/${postIdx}`,config)
+        .then(res => {
+            console.log(res);
+            if(res.data.result){
+                if(res.data.value !== null){
+                    setEditedList(res.data.value.editedDataList);
+                }
+            }
+            else{
+                new Error();
+            }
+            
+        })
+        .catch(err => {
+            console.log(err);
+            alert("error");
+        })
 
     }, []);
 
@@ -475,22 +576,27 @@ function EditPost({}){
                     <ColorButton>Save</ColorButton>
                 </Box>
                 <Box  sx={{width:"100%"}}>
-                <>
-                            <Typography variant="h4" >{title}</Typography>
-                            <Box
-                                sx={{  display: "flex", alignItems:"center", width:"100%", margin:"20px 0px"}}>
-                                <Typography variant="subtitle1" sx={{width:"50%", color:"#3181c6", padding: "0px 5px"}}>Original</Typography>
-                                <Typography variant="subtitle1" sx={{width:"50%", color:"#3181c6", padding: "0px 5px"}}>Edit</Typography>
-                            </Box>
-                            <Box  sx={{  width: "100%"}}>
-                            {                    
-                                originalList.map((elem, index) => {
-                                    return <Block originalContent={elem} editedDataList={editData.filter(data =>index === data.lineIdx)} />;
-                                })
-                            }
-                            </Box>
-                        </>
-
+                    <Typography variant="h5" >{title}</Typography>
+                    <Box
+                        sx={{  display: "flex", alignItems:"center", width:"100%", margin:"20px 0px"}}>
+                        <Typography variant="subtitle1" sx={{width:"50%", color:"#3181c6", padding: "0px 5px"}}>Original</Typography>
+                        <Typography variant="subtitle1" sx={{width:"50%", color:"#3181c6", padding: "0px 5px"}}>Edit</Typography>
+                    </Box>
+                    <Box  sx={{  width: "100%"}}>
+                    {                    
+                        originalList.map((elem, index) => {
+                            return <Block 
+                                        originalContent={elem} 
+                                        editedDataList={editedList.filter(data =>index === data.line)} 
+                                        line={index} 
+                                        userNickname={userNickname} 
+                                        postId={postIdx}
+                                        setTitle={setTitle}
+                                        setOriginalList = {setOriginalList}
+                                        setEditedList={setEditedList}/>;
+                        })
+                    }
+                    </Box>
                  </Box>
             </Box>
         </Box>
