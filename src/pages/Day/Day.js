@@ -159,7 +159,7 @@ function Post({title, description, postIdx, writer, postDate}){
         window.location.replace(window.location.href + `/${postIdx}/edit`);
     }
     return(
-        <Box sx={{width: "100%"}}>
+        <Box sx={{width: "100%", padding: "20px 0px",borderTop:"1px solid #7c7c7c"}}>
             <Box sx={{width: "100%", display: "flex", flexDirection: "column"}}>
                 <Box sx={{width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                     <Box sx={{width: "100%", display: 'flex', alignItems: "end"}}>
@@ -251,7 +251,7 @@ function Day({}){
                     <Typography variant="h5">
                         {`${year}/${month}/${day}/${dayName}`}
                     </Typography>
-                    <Box sx={{marginBottom: "20px",width: "90%", display:"flex", alignItems: "center", justifyContent: "space-between", borderBottom:"1px solid #7c7c7c", margin: "20px 0px", paddingBottom: "10px"}}>
+                    <Box sx={{marginBottom: "20px",width: "90%", display:"flex", alignItems: "center", justifyContent: "space-between",  margin: "20px 0px"}}>
                         <FriendList friendList={groupUserList}/>
                         <PlusBtn setShowContents={setShowAddPost} desc={"+ Add Post"}/>
                     </Box>
