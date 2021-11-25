@@ -9,24 +9,13 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
-// import InboxIcon from '@mui/icons-material/MoveToInbox';
-// import DraftsIcon from '@mui/icons-material/Drafts';
-// import SendIcon from '@mui/icons-material/Send';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
-
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 
 import "./MySetting.css";
 
 function MySetting({departmentList}){
     const [open, setOpen] = useState(true);
-
-    const handleClick = () => {
-      setOpen(!open);
-    };
+    // const [user, setUser] = useState(null);
 
     const handleEditProfileBtn = (e) => {
         e.preventDefault();
@@ -34,7 +23,7 @@ function MySetting({departmentList}){
     }
 
     return(
-        <Box sx={{width: "100%", display:"flex"}}>
+        <Box sx={{ display:"flex"}}>
             <SideBar departmentList={departmentList} clickedMenuId={"3"}/>
             <Box  sx={{width: "100%", padding: "20px"}}>
                 <BackBtn nextLoc={"/home"}/>

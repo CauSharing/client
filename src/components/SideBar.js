@@ -54,7 +54,7 @@ function SideBar(){
             setClickedMenu("0");
         else if(window.location.pathname === `/invitation`)
             setClickedMenu("1");
-        else if(window.location.pathname === `/setting`)
+        else if(window.location.pathname === `/setting` || window.location.pathname === `/setting/edit-profile`)
             setClickedMenu("2");
     }, []);
 

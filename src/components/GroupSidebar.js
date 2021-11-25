@@ -30,6 +30,7 @@ const ColorButton = styled(Button)({
 function GroupSidebar({groupIdx, groupName, groupImg, groupUserList}){
     // const [user, setUser] = useState(null);
     const [curMenu, setCurMenu] = useState("0");
+    const imageRegex = /.*\.(gif|jpe?g|bmp|png)$/igm;
 
     const ClickedBtn = styled(ColorButton)({
         color: 'black',
@@ -94,7 +95,7 @@ function GroupSidebar({groupIdx, groupName, groupImg, groupUserList}){
                     groupUserList.map(user => 
                         <Avatar 
                             sx={{width:"60px", height:"60px"}}
-                            src={user.nickname}
+                            src={user.image? user.image : user.nickname}
                             alt={user.nickname}/>
                             )
                 }
