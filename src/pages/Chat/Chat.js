@@ -11,7 +11,6 @@ import {GroupContext} from "../../context/index";
 
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import moment from 'moment';
 
 import "./Chat.css";
 
@@ -90,6 +89,7 @@ const Chat = () => {
   }
 
   useEffect(async () => {
+    console.log("chat render");
     const instance = axios.create({
       timeout: 30000,
     });
@@ -106,15 +106,18 @@ const Chat = () => {
         }
         else{
           console.log("res.data.result === false");
-          alert("error while calling chatting history");
+          // alert("error while calling chatting history");
         }
     })
     .catch(err =>{
       console.log(`error: ${err}`);
-      alert("error while calling chatting history");
+      // alert("error while calling chatting history");
     });
 
+    // await localStorage.setItem('NumOfSeenChat', contents.length);
     await messagesEndRef.current.scrollIntoView();
+
+    // console.log("chat: ", contents.length);
   }, []);
 
   useEffect( async() => {

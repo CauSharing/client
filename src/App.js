@@ -88,7 +88,7 @@ function App(){
                         render={(props) => <Diary {...props}/>}
                         />
                     <AuthRoute
-                        exact path="/home/diary/:groupIdx/setting"
+                        exact path="/home/diary/:groupIdx/group-setting"
                         render={(props) => <GroupSetting {...props}/>}
                         />
                     <AuthRoute

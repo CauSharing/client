@@ -25,7 +25,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import "./invitation.css";
 
-function Alert({open, handleYes, handleNo, isAccept, nickname}){
+function Alert({open, handleYes, handleNo, isAccept, nickname, isFromMatchingRoom}){
     return(
         <Dialog
             open={open}
@@ -36,18 +36,35 @@ function Alert({open, handleYes, handleNo, isAccept, nickname}){
             <DialogTitle id="alert-dialog-title">
             {
                 isAccept?
-                `Accept ${nickname}?`
+                    isFromMatchingRoom?
+                    `Join ${nickname}'s group?`
+                    :
+                    `Accept ${nickname}?`
                 :
-                `Refuse ${nickname}?`
+                    isFromMatchingRoom?
+                    `Not join ${nickname}'s group`
+                    :
+                    `Refuse ${nickname}?`
+                
             }
             </DialogTitle>
             <DialogContent>
             <DialogContentText id="alert-dialog-description">
             {
                 isAccept?
-                `If you click yes, ${nickname} will be added to your friend list.`
+                
+                    isFromMatchingRoom?
+                    `If you click yes, you will join ${nickname}'s group`
+                    :
+                    `If you click yes, ${nickname} will be added to your friend list.`
+                
                 :
-                `If you click yes, ${nickname} will be deleted from your invitation list.`
+                
+                    isFromMatchingRoom?
+                    `If you click yes, you don't join ${nickname}'s group`
+                    :
+                    `If you click yes, ${nickname} will be deleted from your invitation list.`
+                
             }
             </DialogContentText>
             </DialogContent>
@@ -62,7 +79,7 @@ function Alert({open, handleYes, handleNo, isAccept, nickname}){
         </Dialog>
     );
 }
-function InvitationElem({email, img, major, nickname}){
+function InvitationElem({email, img, major, nickname, isFromMatchingRoom, matchingRoomId}){
     const [hideElem, setHideElem] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -70,7 +87,7 @@ function InvitationElem({email, img, major, nickname}){
     const [openRefuseAlert, setOpenRefuseAlert] = useState(false);
 
     const sendData = {
-        "matchingroomId": 0,
+        "matchingroomId": isFromMatchingRoom? matchingRoomId: 0,
         "sender": email
     };
 
@@ -82,6 +99,7 @@ function InvitationElem({email, img, major, nickname}){
     const handleAcceptClose = () => {
         setOpenAcceptAlert(false);
         setIsLoading(true);
+        console.log(sendData);
 
         axios.post('/api/accept',sendData, config)
             .then(res => {
@@ -106,7 +124,7 @@ function InvitationElem({email, img, major, nickname}){
         setOpenRefuseAlert(false);
         setIsLoading(true);
         axios.delete('/api/reject', {
-             data: { "matchingroomId": 0,
+             data: { "matchingroomId": isFromMatchingRoom? matchingRoomId: 0,
                     "sender": email}, 
             headers: { "Authorization":  `Bearer ${token}`} })
             .then(res => {
@@ -140,8 +158,8 @@ function InvitationElem({email, img, major, nickname}){
         null
         :
         <>
-        <Alert open={openAcceptAlert} handleYes={handleAcceptClose} handleNo={(e) => {e.preventDefault(); setOpenAcceptAlert(false);}} isAccept={true} nickname={nickname} />
-        <Alert open={openRefuseAlert} handleYes={handleRefuseClose} handleNo={(e) => {e.preventDefault(); setOpenRefuseAlert(false);}} isAccept={false} nickname={nickname} />
+        <Alert open={openAcceptAlert} handleYes={handleAcceptClose} handleNo={(e) => {e.preventDefault(); setOpenAcceptAlert(false);}} isAccept={true} nickname={nickname} isFromMatchingRoom={isFromMatchingRoom}/>
+        <Alert open={openRefuseAlert} handleYes={handleRefuseClose} handleNo={(e) => {e.preventDefault(); setOpenRefuseAlert(false);}} isAccept={false} nickname={nickname} isFromMatchingRoom={isFromMatchingRoom}/>
         <ListItem>
         {
             isLoading?
@@ -162,6 +180,13 @@ function InvitationElem({email, img, major, nickname}){
                     <Button onClick={handleAcceptBtn}>Accept</Button>
                     <Button onClick={handleRefuseBtn}>Refuse</Button>
                 </ButtonGroup>
+                {
+                    isFromMatchingRoom?
+                    <Typography variant="body2" color="primary" sx={{display:"flex", alignItems:"center", marginLeft:"10px"}}>From group</Typography>
+                    :
+                    null
+                }
+                
             </>
         }
         </ListItem>
@@ -190,6 +215,7 @@ function Invitation({departmentList}){
 
                 // setInvitationList(Array.from(set));
                 setInvitationList(list);
+                // console.log(list);
             })
 
             .catch(err =>{
@@ -223,7 +249,10 @@ function Invitation({departmentList}){
                                 email={elem.invitePerson} 
                                 img={elem.invitePersonImage} 
                                 major={elem.invitePersonMajor} 
-                                nickname={elem.invitePersonNickname}/>
+                                nickname={elem.invitePersonNickname}
+                                matchingRoomId={elem.matchingRoomId}
+                                isFromMatchingRoom={elem.matchingRoomId !== null || elem.matchingRoomId !== "" || elem.matchingRoomId !== 0}
+                                />
                         ))
                     }
                     </List>

@@ -101,15 +101,21 @@ function Message({nickname, image, content, isUserSent , srcLang, dstLang, hour,
                }
 
               </Box>
-              <Box sx={{display: "flex", justifyContent: isUserSent? "end" : "start"}}>
-                  {
-                    showOriginal?
-                      <TranslateButton onClick={handleTranslateButtonClick}>Translate</TranslateButton>
-                      :
-                      <TranslateButton onClick={handleOriginalButtonClick}>See Original Text</TranslateButton>
-                  }
-                    
+              {
+                isUserSent? 
+                null
+                :
+                <Box sx={{display: "flex"}}>
+                {
+                  showOriginal?
+                    <TranslateButton onClick={handleTranslateButtonClick}>Translate</TranslateButton>
+                    :
+                    <TranslateButton onClick={handleOriginalButtonClick}>See Original Text</TranslateButton>
+                }
+                  
               </Box> 
+              }
+
             </Box> 
         </Box>
     );

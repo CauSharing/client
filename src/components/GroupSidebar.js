@@ -5,6 +5,8 @@ import {Drawer,Divider, Avatar, Typography,Button,Box,AvatarGroup   } from '@mui
 import { styled } from '@mui/material/styles';
 import Logo from '../icons/CxC_logo.png';
 
+import axios from "axios";
+
 const ColorButton = styled(Button)({
     border: "none",
     margin:"0px",
@@ -31,6 +33,7 @@ function GroupSidebar({groupIdx, groupName, groupImg, groupUserList}){
     // const [user, setUser] = useState(null);
     const [curMenu, setCurMenu] = useState("0");
     const imageRegex = /.*\.(gif|jpe?g|bmp|png)$/igm;
+    // const [numOfUnseenChat, setNumOfUnseenChat] = useState(0);
 
     const ClickedBtn = styled(ColorButton)({
         color: 'black',
@@ -45,16 +48,16 @@ function GroupSidebar({groupIdx, groupName, groupImg, groupUserList}){
         e.preventDefault();
     }
 
-    useEffect(() => {
-
+    useEffect( async() => {
+        console.log("group sidebar render");
         if(window.location.pathname === `/home/diary/${groupIdx}`)
-            setCurMenu("0");
+            await setCurMenu("0");
         else if(window.location.pathname === `/home/diary/${groupIdx}/chat`)
-            setCurMenu("1");
+            await setCurMenu("1");
         else if(window.location.pathname === `/home/diary/${groupIdx}/notice`)
-            setCurMenu("2");
-        else if(window.location.pathname === `/home/diary/${groupIdx}/setting`)
-            setCurMenu("3");
+            await setCurMenu("2");
+        else if(window.location.pathname === `/home/diary/${groupIdx}/group-setting`)
+            await setCurMenu("3");
     }, []);
 
     return(
@@ -119,11 +122,11 @@ function GroupSidebar({groupIdx, groupName, groupImg, groupUserList}){
             {
                 curMenu === "1"?
                 <ClickedBtn component={Link} to={`/home/diary/${groupIdx}/chat`} variant="contained" color="primary">
-                    Chat
+                    Chat    
                 </ClickedBtn>
                 :
                 <NotClickedBtn component={Link} to={`/home/diary/${groupIdx}/chat`} variant="contained" color="primary">
-                    Chat
+                    Chat   
                 </NotClickedBtn>
             }
             <Divider />
@@ -140,11 +143,11 @@ function GroupSidebar({groupIdx, groupName, groupImg, groupUserList}){
             <Divider />
             {
                 curMenu === "3"?
-                <ClickedBtn component={Link} to={`/home/diary/${groupIdx}/setting`} variant="contained" color="primary">
+                <ClickedBtn component={Link} to={`/home/diary/${groupIdx}/group-setting`} variant="contained" color="primary">
                     Setting
                 </ClickedBtn>
                 :
-                <NotClickedBtn component={Link} to={`/home/diary/${groupIdx}/setting`} variant="contained" color="primary">
+                <NotClickedBtn component={Link} to={`/home/diary/${groupIdx}/group-setting`} variant="contained" color="primary">
                     Setting
                 </NotClickedBtn>
             }
