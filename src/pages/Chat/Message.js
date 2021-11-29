@@ -1,6 +1,8 @@
-import React from 'react';
-import {Box, Avatar, Typography, Button} from '@mui/material';
+import React , {useState} from 'react';
+import {Box, Avatar, Typography, Button, CircularProgress} from '@mui/material';
 import { styled } from '@mui/material/styles';
+
+import axios from 'axios';
 
 const TranslateButton= styled(Button)({
     color: "white",
@@ -23,21 +25,92 @@ const TranslateButton= styled(Button)({
     }
   });
 
-function Message({user, content, isUserSent }){
+function Message({nickname, image, content, isUserSent , srcLang, dstLang, hour, min, isGrouped}){
+  const [translatedContent, setTranslatedContent] = useState("");
+  const [showOriginal, setShowOriginal] = useState(true);
+  const [loading, setLoading]= useState(false);
+
+  const handleTranslateButtonClick= async (e) => {
+    // await e.preventDefault();
+    await setLoading(true);
+
+    const instance = axios.create({
+      timeout: 30000,
+    });
+    await instance.get(`/api/translate?src=${srcLang}&dst=${dstLang}&content=${content}`)
+      .then(res => {
+          console.log(res);
+          
+          if(res.data.result){
+            // console.log(JSON.parse(res.data.description));
+            setTranslatedContent(JSON.parse(res.data.description).message.result.translatedText);
+          }
+          else{
+              alert("error!");
+          }
+      })
+      .catch(err =>{
+          console.log(err);
+      });
+    
+    await setLoading(false);
+    await setShowOriginal(false);
+    
+  };
+
+  const handleOriginalButtonClick = (e) => {
+    e.preventDefault();
+    setShowOriginal(true);
+  }
     return (
-        <Box sx={{display: "flex", width: "100%", justifyContent: isUserSent? "end" : "start", marginBottom: "15px"}}>
-            <Box sx={{display:"flex", flexDirection: "column", alignItems: "center", marginRight:"5px"}}>
-                <Avatar alt={user? user.nickname: "undefined"} src={user? user.image: null} size="small"/>
-                <Typography variant="body1">{user.nickname}</Typography>
+        <Box sx={{width:"100%",display: "flex",  flexDirection: isUserSent? "row-reverse" : "row", marginBottom: "15px"}}>
+          {
+            <Box sx={{display:"flex", flexDirection: "column", alignItems: "center", margin:"0px 5px", visibility: isGrouped ? "hidden" : "visible"}}>
+                <Avatar alt={nickname? nickname: "undefined"} src={image? image: null} size="small"/>
+                <Typography variant="body1">{nickname}</Typography>
             </Box>
-            <Box sx={{height: "100%"}}>
-                <Typography variant="body1" sx={{backgroundColor: "secondary.light", display: "flex", alignItems: "center", padding: "10px", borderRadius: "5px", marginBottom: "5px"}}>
-                    {content}
+          }
+
+             <Box sx={{maxWidth:"50%"}}>
+               <Box sx={{display:"flex", flexDirection: isUserSent? "row-reverse" : "row"}}>
+               {
+                 loading ?
+                  <Box sx={{backgroundColor: "secondary.light", display: "flex",justifyContent:"center", alignItems: "center", padding: "10px", borderRadius: "5px", marginBottom: "5px"}}>
+                    <CircularProgress size="1.5rem" sx={{margin:"0px 5px"}}/>
+                    <Typography variant="body1" color="primary">
+                      Translating...
+                    </Typography>
+                  </Box>
+                :
+                <Typography variant="body1" sx={{backgroundColor: "secondary.light", display: "flex",justifyContent:"center", alignItems: "center", padding: "10px", borderRadius: "5px", marginBottom: "5px"}}>
+                {
+                  showOriginal?
+                  content
+                  :
+                  translatedContent
+                }   
+                </Typography>             
+               }
+               {
+                 isGrouped?
+                 null
+                 :
+                 <Typography variant="body2" sx={{display:"flex", alignItems:"end", color:"#C0C0C0", margin:"0px 5px"}}>
+                 {`${hour}:${min}`}
                 </Typography>
-                <Box sx={{display: "flex", justifyContent: isUserSent? "end" : "start"}}>
-                    <TranslateButton>Translate</TranslateButton>
-                </Box>
-            </Box>
+               }
+
+              </Box>
+              <Box sx={{display: "flex", justifyContent: isUserSent? "end" : "start"}}>
+                  {
+                    showOriginal?
+                      <TranslateButton onClick={handleTranslateButtonClick}>Translate</TranslateButton>
+                      :
+                      <TranslateButton onClick={handleOriginalButtonClick}>See Original Text</TranslateButton>
+                  }
+                    
+              </Box> 
+            </Box> 
         </Box>
     );
 }

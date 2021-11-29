@@ -1,11 +1,12 @@
-.chatBox {
-  position: absolute;
-  top: 0px;
-  left: 248px;
-
-  padding-top: 20px;
-  display: flex;
-  flex-direction: column;
-
-  width: 100vh;
+.container::-webkit-scrollbar {
+  width: 10px;
+}
+.container::-webkit-scrollbar-thumb {
+  background-color: #c0c0c0;
+  border-radius: 10px;
+}
+.container::-webkit-scrollbar-track {
+  background-color: #edecec;
+  border-radius: 10px;
+  box-shadow: inset 0px 0px 5px white;
 }
