@@ -5,7 +5,7 @@ import moment from 'moment';
 
 
 function DayInfoMessage({year, month, date}){
-    let dateObj = new Date(year, month, date) ;
+    let dateObj = new Date(year, month-1, date) ;
 
     return(
         <Box sx={{

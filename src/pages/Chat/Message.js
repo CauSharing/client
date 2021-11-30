@@ -65,6 +65,9 @@ function Message({nickname, image, content, isUserSent , srcLang, dstLang, hour,
     return (
         <Box sx={{width:"100%",display: "flex",  flexDirection: isUserSent? "row-reverse" : "row", marginBottom: "15px"}}>
           {
+            isUserSent?
+            null
+            :
             <Box sx={{display:"flex", flexDirection: "column", alignItems: "center", margin:"0px 5px", visibility: isGrouped ? "hidden" : "visible"}}>
                 <Avatar alt={nickname? nickname: "undefined"} src={image? image: null} size="small"/>
                 <Typography variant="body1">{nickname}</Typography>

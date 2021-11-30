@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useContext, useMemo,useCallback } from 'react';
+import React, { useRef, useEffect, useState, useContext, useMemo } from 'react';
 import { Link ,useParams, useLocation} from 'react-router-dom';
 import axios from "axios";
 
@@ -14,9 +14,110 @@ import Stomp from 'stompjs';
 
 import "./Chat.css";
 
-
 const sockJS = new SockJS("http://3.37.167.224:8080/api/ws-stomp");
 const stompClient  = Stomp.over(sockJS);
+
+
+function NewContents({messageEndRef, groupIdx, user, srcLang, destLang}){
+  const [newContents, setNewContents] = useState([]);
+
+  const onMessageReceived = async (payload) => {
+    var newChatList = JSON.parse(sessionStorage.getItem('newChats'));
+    var newData =JSON.parse(payload.body);
+    await sessionStorage.setItem('newChats',JSON.stringify([...newChatList, newData]));
+    await setNewContents([...newChatList, newData]);
+    await messageEndRef.current.scrollIntoView();
+  }
+
+  const onConnected = () => {
+    stompClient.subscribe(`/sub/chat/room/${groupIdx}`, onMessageReceived);
+  }
+
+  const onError = (error) => {
+    console.log("Can't connect to chat server. Please try agian");
+  }
+
+  useEffect(() => {
+    stompClient.connect({},onConnected, onError);
+  },[]);
+
+  
+  var year = null;
+  var month = null;
+  var date = null;
+  var hour = null;
+  var min = null;
+
+  return(
+    <Box>
+    {
+      newContents.map((elem, index) => {
+                      if(index === 0){
+                        var splitedDate = null;
+                        if(elem.chatDate)
+                          splitedDate = elem.chatDate.split('T');
+                        else
+                          splitedDate = elem.time.split('T');
+                        var curYMD = splitedDate[0].split('-');
+                        year = curYMD[0];
+                        month = curYMD[1];
+                        date = curYMD[2];
+                        var curHM = splitedDate[1].split(':');
+                        hour = parseInt(curHM[0]);
+                        min = parseInt(curHM[1]);
+
+                        return(
+                        <>
+                          <DayInfoMessage year={year} month={month} date={date}/>
+                          <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
+                            isGrouped={false} hour={curHM[0]} min={curHM[1]}/>
+                        </>
+                        );
+                      }else{
+                        var splitedDate = null;
+                        if(elem.chatDate)
+                          splitedDate = elem.chatDate.split('T');
+                        else
+                          splitedDate = elem.time.split('T');
+                        
+                        var curYMD = splitedDate[0].split('-');
+                        var curHM = splitedDate[1].split(':');
+
+                        if(year === curYMD[0] && month===curYMD[1] && date===curYMD[2]){
+                          if(parseInt(curHM[0]) === hour && parseInt(curHM[1]) === min){
+                            return(
+                              <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
+                                isGrouped={true}/>
+                            );
+                          }else{
+                            hour = parseInt(curHM[0]);
+                            min = parseInt(curHM[1]);
+
+                            return(
+                              <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
+                                isGrouped={false} hour={curHM[0]} min={curHM[1]}/>
+                            );
+                          }
+
+                        }else{
+                          year = curYMD[0];
+                          month= curYMD[1];
+                          date=curYMD[2];
+                          return(
+                            <>
+                              <DayInfoMessage year={year} month={month} date={date} />
+                              <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
+                                isGrouped={false} hour={curHM[0]} min={curHM[1]}/>
+                            </>
+                            );
+                        }
+                      }
+      }
+
+      )}
+    </Box>
+  );
+}
 
 const InputContainer = ({groupIdx, email, stompClient}) => {
   const [message, setMessage] = useState("");
@@ -68,25 +169,11 @@ const Chat = () => {
 
   stompClient.debug= () => {};
 
-  const [contents, setContents] = useState([]);
-  const messagesEndRef = useRef();
+  const [originalContents, setOriginalContents] = useState([]);
+  
 
-  const onMessageReceived = (payload) => {
-    
-    setContents([...contents, JSON.parse(payload.body)]);
-    console.log("received message successfully");
-    messagesEndRef.current.scrollIntoView();
-  }
+  const messageEndRef = useRef();
 
-  const onConnected = () => {
-    stompClient.subscribe(`/sub/chat/room/${groupIdx}`, onMessageReceived);
-    console.log("connected successfully", stompClient);
-    // messagesEndRef.current.scrollIntoView();
-  }
-
-  const onError = (error) => {
-    console.log("Can't connect to chat server. Please try agian");
-  }
 
   useEffect(async () => {
     console.log("chat render");
@@ -102,7 +189,7 @@ const Chat = () => {
     .then(res => {
       // console.log(res.data.value);
         if(res.data.result){
-          setContents(res.data.value);
+          setOriginalContents(res.data.value);
         }
         else{
           console.log("res.data.result === false");
@@ -115,21 +202,17 @@ const Chat = () => {
     });
 
     // await localStorage.setItem('NumOfSeenChat', contents.length);
-    await messagesEndRef.current.scrollIntoView();
-
+    await messageEndRef.current.scrollIntoView();
+    await sessionStorage.setItem('newChats', JSON.stringify([]));
     // console.log("chat: ", contents.length);
   }, []);
-
-  useEffect( async() => {
-    await stompClient.connect({},onConnected, onError);
-  }, [contents]);
-
-
+  
   var year = null;
   var month = null;
   var date = null;
   var hour = null;
   var min = null;
+
 
     return(
       <Box sx={{display:"flex", height:"100vh", overflow:"hidden"}}>
@@ -140,7 +223,7 @@ const Chat = () => {
           </Box>
           <Box sx={{width: "100%", padding: "20px", overflow: "auto"}} className="container">
             {
-              contents.map((elem,index) => {
+              originalContents.map((elem,index) => {
                 if(index === 0){
                   var splitedDate = elem.chatDate.split('T');
                   var curYMD = splitedDate[0].split('-');
@@ -199,7 +282,8 @@ const Chat = () => {
                 }
               })    
             }
-            <div ref={messagesEndRef}></div>
+            <NewContents messageEndRef={messageEndRef} groupIdx={groupIdx} user={user} srcLang={srcLang} destLang={destLang}/>
+            <div ref={messageEndRef}></div>
           </Box>
             <InputContainer groupIdx={groupIdx} email={user.email} stompClient={stompClient}/>
         </Box>
