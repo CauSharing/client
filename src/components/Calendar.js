@@ -221,6 +221,7 @@ function Calendar({eventData, groupName, groupImg, groupUserList}){
             headers: { "Authorization": `Bearer ${token}` }
         };
         
+        console.log(groupIdx);
         await instance.get(`/api/tag?MatchingRoomId=${groupIdx}&Month=${seeingYear}-${seeingMonth}`,config)
         .then(res => {
             console.log(res.data.value);
