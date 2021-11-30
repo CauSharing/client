@@ -1,11 +1,11 @@
-import React, {useState} from "react";
-import { Link, useLocation  } from 'react-router-dom';
+import React, {useEffect, useState} from "react";
+import { Link, useLocation ,useParams } from 'react-router-dom';
 import moment from 'moment';
 
 import PlusBtn from "./PlusBtn";
 import BackBtn from "./BackBtn";
 
-import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Button , IconButton, Box} from '@mui/material';
+import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Button , Typography, Box} from '@mui/material';
 
 import DatePicker from '@mui/lab/DatePicker';
 /*
@@ -24,6 +24,8 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { styled } from '@mui/material/styles';
 
 import { ColorPicker } from 'material-ui-color';
+
+import axios from "axios";
 
 import './Calendar.css';
 
@@ -55,7 +57,7 @@ const ColorButton = styled(Button)({
 
 
 
-function AddEvent({open, setOpen}){
+function AddEvent({open, setOpen, groupIdx}){
     const [eventName, setEventName] = useState("");
     const [eventColor, setEventColor] = useState("#000");
     const [eventStartDate, setEventStartDate] = useState("");
@@ -65,7 +67,32 @@ function AddEvent({open, setOpen}){
         setOpen(false);
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        const instance = axios.create({
+            timeout: 30000,
+          });
+        const token = localStorage.getItem("userToken");
+        const config = {
+            headers: { "Authorization": `Bearer ${token}` }
+        };
+
+        const data = {
+            endDate: `${eventEndDate.getFullYear()}-${eventEndDate.getMonth()+1 < 10? '0'+`${eventEndDate.getMonth()+1}` : eventEndDate.getMonth()+1}-${eventEndDate.getDate() < 10 ? '0'+`${eventEndDate.getDate()}`: eventEndDate.getDate()}`,
+            matchingRoomId: groupIdx,
+            rgb: eventColor,
+            startDate: `${eventStartDate.getFullYear()}-${eventStartDate.getMonth()+1 < 10? '0'+`${eventStartDate.getMonth()+1}` : eventStartDate.getMonth()+1}-${eventStartDate.getDate() < 10 ? '0'+`${eventStartDate.getDate()}`: eventStartDate.getDate()}`,
+            tagName: eventName
+        };
+
+        console.log(data);
+        
+        await instance.post(`/api/tag`,data, config)
+        .then(res => {
+            console.log(res);
+        })
+        .catch(err =>{
+            console.log(err);
+        });             
         setOpen(false);
     }
 
@@ -119,7 +146,7 @@ function AddEvent({open, setOpen}){
     )
 }
 
-function Day({isBlank, day, event, year, month, location, groupName, groupImg, groupUserList}){
+function Day({isBlank, day, event, year, month, location, groupName, groupImg, groupUserList, tags}){
 
     return(
         isBlank?
@@ -141,15 +168,24 @@ function Day({isBlank, day, event, year, month, location, groupName, groupImg, g
                         }
                     }}>
                     <Box sx={{width:"100%", height:"100%", '&:hover':{backgroundColor:"secondary.light"}}}>
-                        <div>{day}</div>
-
+                        <Typography variant="body1">{day}</Typography>
                         {
-                            event?
-                                <div className={`calendar-day__event`}>
-                                    {event}
-                                </div>
+                            tags?
+                            tags.length > 0?
+                                tags.map(tag => {
+                                    if(tag.isStart){
+                                        return(<Box sx={{ backgroundColor: tag.rgb, margin: "5px 0px", borderRadius:"10px 0px 0px 10px",paddingLeft:"1px", display:"flex", width:"100%"}}>{tag.name}</Box>);
+                                    }else if(tag.isEnd){
+                                        return(<Box sx={{ backgroundColor: tag.rgb, margin: "5px 0px", borderRadius:"0px 10px 10px 0px"}}>{tag.name}</Box>);
+                                    }else{
+                                        return(<Box sx={{ backgroundColor: tag.rgb, margin: "5px 0px"}}>{tag.name}</Box>);
+                                    }
+                                })
+                                    
                                 :
                                 null
+                            :
+                            null
                         }
                     </Box>
                 </Link>
@@ -159,6 +195,7 @@ function Day({isBlank, day, event, year, month, location, groupName, groupImg, g
 
 function Calendar({eventData, groupName, groupImg, groupUserList}){
     // console.log( groupName, groupImg, groupUserList);
+    const {groupIdx} = useParams();
     const location = useLocation();
 
     const [firstDayOfMonth, setFirstDayOfMonth] = useState(moment().startOf("month").format("d"));
@@ -173,7 +210,53 @@ function Calendar({eventData, groupName, groupImg, groupUserList}){
     const [showDatePicker, setShowDatePicker] = useState(false);
 
     const [datePickerVal, setDatePickerVal] = useState(new Date());
+    const [tags, setTags] = useState([]);
 
+    useEffect(async () => {
+        const instance = axios.create({
+            timeout: 30000,
+          });
+        const token = localStorage.getItem("userToken");
+        const config = {
+            headers: { "Authorization": `Bearer ${token}` }
+        };
+        
+        await instance.get(`/api/tag?MatchingRoomId=${groupIdx}&Month=${seeingYear}-${seeingMonth}`,config)
+        .then(res => {
+            console.log(res.data.value);
+            var arr = Array.from({length: 31}, () => []);
+            res.data.value.tagResponseList.forEach(elem => {
+                var startDate = elem.startDate.split("-");
+                var endDate = elem.endDate.split("-");
+
+                var newStartDay = null;
+                
+                if(seeingYear === parseInt(startDate[0]) && seeingMonth === parseInt(startDate[1])){
+                    newStartDay = parseInt(startDate[2]);
+                }else{
+                    newStartDay = 1;
+                }
+
+                var newEndDay = null;
+                if(seeingMonth === parseInt(endDate[1])){
+                    newEndDay = parseInt(endDate[2]);
+                }else{
+                    newEndDay = daysInMonth;
+                }
+
+                for(var i=newStartDay; i<=newEndDay; i++){
+                    arr[i].push({name: elem.tagName, writer: elem.writer, rgb: elem.rgb, isStart: i === newStartDay, isEnd: i===newEndDay});
+                }
+            });
+            setTags(arr);
+            // console.log(arr);
+        })
+        .catch(err =>{
+            console.log(err);
+            // setTags(err);
+        });     
+    }, [seeingYear, seeingMonth]);
+    
     const handleClick = (e) => {
         e.preventDefault();
         window.location.href = "/home";
@@ -182,11 +265,6 @@ function Calendar({eventData, groupName, groupImg, groupUserList}){
     const handleCalendarBtn = (e) => {
         e.preventDefault();
         setShowDatePicker(!showDatePicker);
-    }
-
-    const eventArr = [];
-    for(var i=1; i<=daysInMonth; i++){
-        eventArr.push({id: i, event: null});
     }
 
     // event 부르는 api 호출
@@ -231,6 +309,7 @@ function Calendar({eventData, groupName, groupImg, groupUserList}){
         );
      }
 
+
      let days=[];
      for(let d=1; d<=daysInMonth; d++)
      {
@@ -243,8 +322,11 @@ function Calendar({eventData, groupName, groupImg, groupUserList}){
                 location={location}
                 groupName={groupName}
                 groupImg={groupImg}
-                groupUserList={groupUserList}/>
+                groupUserList={groupUserList}
+                tags={tags[d-1]}
+                />
         );
+
      }
 
      var totalSlots = [...blanks, ...days];
@@ -268,12 +350,14 @@ function Calendar({eventData, groupName, groupImg, groupUserList}){
         return <tr>{d}</tr>;
      });
 
+
+
     return(
         // showAddEvent ?
         //     <AddEvent setShowAddEvent={setShowAddEvent}/>
         //     :
         <div className="entire-calendar">
-            <AddEvent open={showAddEvent} setOpen={setShowAddEvent} />
+            <AddEvent open={showAddEvent} setOpen={setShowAddEvent} groupIdx={groupIdx}/>
             <div className="tail-datetime-calendar">
                 
                 <div className="calendar-navi">
@@ -285,13 +369,13 @@ function Calendar({eventData, groupName, groupImg, groupUserList}){
                                 sx={{color:"primary"}}
                                 label="Custom input"
                                 value={datePickerVal}
-                                onChange={(newValue) => {
+                                onChange={async (newValue) => {
                                     var date = new Date(newValue);
-                                    setSeeingYear(date.getFullYear());
-                                    setSeeingMonth(date.getMonth()+1);
-                                    setFirstDayOfMonth(moment(date, "YYYY-MM").startOf("month").format("d"));
-                                    setDaysInMonth(moment(date).daysInMonth());
-                                    setSeeingMonthStr(moment().month(date.getMonth()).format("MMMM"));
+                                    await setSeeingYear(date.getFullYear());
+                                    await setSeeingMonth(date.getMonth()+1);
+                                    await setFirstDayOfMonth(moment(date, "YYYY-MM").startOf("month").format("d"));
+                                    await setDaysInMonth(moment(date).daysInMonth());
+                                    await setSeeingMonthStr(moment().month(date.getMonth()).format("MMMM"));
                                 }}
                                 renderInput={({ inputRef, inputProps, InputProps }) => (
                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>

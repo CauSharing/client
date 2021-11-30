@@ -24,8 +24,12 @@
   width: 10%;
   height: 15vh;
   /* height: 90px; */
-  padding: 5px;
+  /* padding: 5px; */
   /*border-right: 1px solid #838383;*/
+}
+
+.calendar td a {
+  text-decoration: none;
 }
 
 .calendar th,
@@ -71,9 +75,9 @@
   justify-content: center;
 }
 
-.calendar-day__event {
+/* .calendar-day__event {
   height: 15px;
-}
+} */
 
 .addEvent {
   width: 100%;
