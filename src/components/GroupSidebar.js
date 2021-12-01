@@ -121,11 +121,18 @@ function GroupSidebar({groupIdx, groupName, groupImg, groupUserList}){
             <Divider />
             {
                 curMenu === "1"?
-                <ClickedBtn component={Link} to={`/home/diary/${groupIdx}/chat`} variant="contained" color="primary">
+                // <ClickedBtn component={Link} to={`/home/diary/${groupIdx}/chat`} variant="contained" color="primary">
+                //     Chat    
+                // </ClickedBtn>
+                // :
+                // <NotClickedBtn component={Link} to={`/home/diary/${groupIdx}/chat`} variant="contained" color="primary">
+                //     Chat   
+                // </NotClickedBtn>
+                <ClickedBtn onClick={() => {window.location.replace(`/home/diary/${groupIdx}/chat`);}} variant="contained" color="primary">
                     Chat    
                 </ClickedBtn>
                 :
-                <NotClickedBtn component={Link} to={`/home/diary/${groupIdx}/chat`} variant="contained" color="primary">
+                <NotClickedBtn onClick={() => {window.location.replace(`/home/diary/${groupIdx}/chat`);}}  variant="contained" color="primary">
                     Chat   
                 </NotClickedBtn>
             }

@@ -17,13 +17,12 @@ import "./Chat.css";
 const sockJS = new SockJS("http://3.37.167.224:8080/api/ws-stomp");
 const stompClient  = Stomp.over(sockJS);
 
-
 function NewContents({messageEndRef, groupIdx, user, srcLang, destLang}){
   const [newContents, setNewContents] = useState([]);
 
   const onMessageReceived = async (payload) => {
-    var newChatList = JSON.parse(sessionStorage.getItem('newChats'));
-    var newData =JSON.parse(payload.body);
+     var newChatList = JSON.parse(sessionStorage.getItem('newChats'));
+     var newData =JSON.parse(payload.body);
     await sessionStorage.setItem('newChats',JSON.stringify([...newChatList, newData]));
     await setNewContents([...newChatList, newData]);
     await messageEndRef.current.scrollIntoView();
@@ -41,6 +40,10 @@ function NewContents({messageEndRef, groupIdx, user, srcLang, destLang}){
     stompClient.connect({},onConnected, onError);
   },[]);
 
+  useEffect(() => {
+
+  }, [newContents]);
+
   
   var year = null;
   var month = null;
@@ -52,74 +55,29 @@ function NewContents({messageEndRef, groupIdx, user, srcLang, destLang}){
     <Box>
     {
       newContents.map((elem, index) => {
-                      if(index === 0){
-                        var splitedDate = null;
-                        if(elem.chatDate)
-                          splitedDate = elem.chatDate.split('T');
-                        else
-                          splitedDate = elem.time.split('T');
-                        var curYMD = splitedDate[0].split('-');
-                        year = curYMD[0];
-                        month = curYMD[1];
-                        date = curYMD[2];
-                        var curHM = splitedDate[1].split(':');
-                        hour = parseInt(curHM[0]);
-                        min = parseInt(curHM[1]);
-
-                        return(
-                        <>
-                          <DayInfoMessage year={year} month={month} date={date}/>
-                          <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
+        var splitedDate = null;
+        if(elem.chatDate)
+          splitedDate = elem.chatDate.split('T');
+        else
+          splitedDate = elem.time.split('T');
+        var curYMD = splitedDate[0].split('-');
+        year = curYMD[0];
+        month = curYMD[1];
+        date = curYMD[2];
+        var curHM = splitedDate[1].split(':');
+        hour = parseInt(curHM[0]);
+        min = parseInt(curHM[1]);
+        return(
+<Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
                             isGrouped={false} hour={curHM[0]} min={curHM[1]}/>
-                        </>
-                        );
-                      }else{
-                        var splitedDate = null;
-                        if(elem.chatDate)
-                          splitedDate = elem.chatDate.split('T');
-                        else
-                          splitedDate = elem.time.split('T');
-                        
-                        var curYMD = splitedDate[0].split('-');
-                        var curHM = splitedDate[1].split(':');
-
-                        if(year === curYMD[0] && month===curYMD[1] && date===curYMD[2]){
-                          if(parseInt(curHM[0]) === hour && parseInt(curHM[1]) === min){
-                            return(
-                              <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
-                                isGrouped={true}/>
-                            );
-                          }else{
-                            hour = parseInt(curHM[0]);
-                            min = parseInt(curHM[1]);
-
-                            return(
-                              <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
-                                isGrouped={false} hour={curHM[0]} min={curHM[1]}/>
-                            );
-                          }
-
-                        }else{
-                          year = curYMD[0];
-                          month= curYMD[1];
-                          date=curYMD[2];
-                          return(
-                            <>
-                              <DayInfoMessage year={year} month={month} date={date} />
-                              <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
-                                isGrouped={false} hour={curHM[0]} min={curHM[1]}/>
-                            </>
-                            );
-                        }
-                      }
-      }
+        );}
 
       )}
     </Box>
   );
 }
 
-const InputContainer = ({groupIdx, email, stompClient}) => {
+const InputContainer = ({groupIdx, email}) => {
   const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
@@ -203,7 +161,7 @@ const Chat = () => {
 
     // await localStorage.setItem('NumOfSeenChat', contents.length);
     await messageEndRef.current.scrollIntoView();
-    await sessionStorage.setItem('newChats', JSON.stringify([]));
+    sessionStorage.setItem('newChats', JSON.stringify([]));
     // console.log("chat: ", contents.length);
   }, []);
   
@@ -285,7 +243,7 @@ const Chat = () => {
             <NewContents messageEndRef={messageEndRef} groupIdx={groupIdx} user={user} srcLang={srcLang} destLang={destLang}/>
             <div ref={messageEndRef}></div>
           </Box>
-            <InputContainer groupIdx={groupIdx} email={user.email} stompClient={stompClient}/>
+            <InputContainer groupIdx={groupIdx} email={user.email} />
         </Box>
       </Box>
     );
