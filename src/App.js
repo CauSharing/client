@@ -13,6 +13,8 @@ import MySetting from "./pages/MySetting";
 import EditProfile from "./pages/EditProfile";
 import NotFound from "./pages/NotFound";
 import GroupSetting from "./pages/GroupSetting/GroupSetting";
+import EditGroupProfile from "./pages/GroupSetting/EditGroupProfile";
+
 import Chat from "./pages/Chat/Chat";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -112,6 +114,10 @@ function App(){
                     <AuthRoute
                         exact path="/setting/edit-profile"
                         render={(props) => <EditProfile departmentList={departmentList} />}
+                        />
+                    <AuthRoute
+                        exact path="/home/diary/:groupIdx/group-setting/edit-group-profile"
+                        render={(props) => <EditGroupProfile {...props} />}
                         />
                     <Route component={NotFound}/>
                 </Switch>

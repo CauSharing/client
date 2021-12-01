@@ -78,7 +78,7 @@ function DiaryThumbnail({groupName, groupImg, groupUserList, groupIdx}){
                             <CardMedia
                                 component="img"
                                 sx={{borderRadius:"50%", width:160, height: 160}}
-                                image={SampleImg}
+                                image={groupImg? groupImg:SampleImg}
                                 alt="sample image"
                                 />
                             <CardContent>

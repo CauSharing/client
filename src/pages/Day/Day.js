@@ -154,6 +154,7 @@ function Post({title, description, postIdx, writer, postDate}){
         e.preventDefault();
         window.location.replace(window.location.href + `/${postIdx}/edit`);
     }
+    
     return(
         <Box sx={{width: "100%", padding: "20px 0px",borderTop:"1px solid #7c7c7c"}}>
             <Box sx={{width: "100%", display: "flex", flexDirection: "column"}}>

@@ -95,22 +95,8 @@ function EditProfile({departmentList}){
             alert("error");
         })
 
-        await axios.get(
-            `/api/profile/${user.email}`
-        )
-        await axios.get( `/api/profile/${user.email}`, config)
-        .then(res => {
-            console.log(res);
-            if(res.data.result){
-                window.localStorage.setItem("user", JSON.stringify(res.data.value));
-            }
-            else{
-                alert("error!");
-            }
-        })
-        .catch(err =>{
-            console.log(err);
-        });
+
+
         
     }
 
@@ -142,7 +128,21 @@ function EditProfile({departmentList}){
         }).catch(err => {
             console.log(err);
             alert("error");
-        })       
+        });
+        
+        axios.get( `/api/profile/${user.email}`, config)
+        .then(res => {
+            console.log(res);
+            if(res.data.result){
+                window.localStorage.setItem("user", JSON.stringify(res.data.value));
+            }
+            else{
+                alert("error!");
+            }
+        })
+        .catch(err =>{
+            console.log(err);
+        });
     }
     return(
         <Box sx={{display:"flex"}}>

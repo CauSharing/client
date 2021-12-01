@@ -5,6 +5,9 @@ import { ListSubheader, List, ListItemButton, ListItemIcon, ListItemText, Box,
     Typography ,DialogTitle, Dialog, DialogContent, DialogContentText, DialogActions, 
      Button, FormControl, TextField, CircularProgress} from "@mui/material";
 
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import EditIcon from '@mui/icons-material/Edit';
+
 import BackBtn from '../../components/BackBtn';
 
 import axios from "axios";
@@ -119,7 +122,10 @@ function GroupSetting(){
         e.preventDefault();
         setOpenDialog(true);
     };
-
+    const handleEditProfileBtn = (e) => {
+        e.preventDefault();
+        window.location.replace(window.location.href+"/edit-group-profile");
+    }
 
     return(
         <>
@@ -135,17 +141,21 @@ function GroupSetting(){
                     sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', fontFamily: 'Roboto Condensed'}}
                     component="nav"
                     aria-labelledby="nested-list-subheader"
-                    subheader={
-                        <ListSubheader component="div" id="nested-list-subheader">
-                            Manage Friends
-                        </ListSubheader>
-                    }>
+                    >
                     <ListItemButton onClick={handleAddGroupMemberBtn}>
                         <ListItemIcon>
+                            <GroupAddIcon />
                         </ListItemIcon>
                         <ListItemText primary="Add Group Member" />
                     </ListItemButton>
+                    <ListItemButton onClick={handleEditProfileBtn}>
+                        <ListItemIcon>
+                            <EditIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Edit group profile" />
+                    </ListItemButton>
                 </List>
+                
             </Box>
         </Box>
         </>

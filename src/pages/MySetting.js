@@ -9,7 +9,8 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+// import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import EditIcon from '@mui/icons-material/Edit';
 
 import "./MySetting.css";
 
@@ -34,14 +35,11 @@ function MySetting({departmentList}){
                     sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', fontFamily: 'Roboto Condensed'}}
                     component="nav"
                     aria-labelledby="nested-list-subheader"
-                    subheader={
-                        <ListSubheader component="div" id="nested-list-subheader">
-                        Profile
-                        </ListSubheader>
-                    }>
+                    >
                     <ListItemButton onClick={handleEditProfileBtn}>
                         <ListItemIcon>
-                        <PersonOutlineIcon />
+                            <EditIcon />
+                        {/* <PersonOutlineIcon /> */}
                         </ListItemIcon>
                         <ListItemText primary="Edit profile" />
                     </ListItemButton>
