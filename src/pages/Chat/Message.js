@@ -3,6 +3,7 @@ import {Box, Avatar, Typography, Button, CircularProgress} from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import axios from 'axios';
+import moment from 'moment';
 
 const TranslateButton= styled(Button)({
     color: "white",
@@ -25,7 +26,7 @@ const TranslateButton= styled(Button)({
     }
   });
 
-function Message({nickname, image, content, isUserSent , srcLang, dstLang, hour, min, isGrouped}){
+function Message({nickname, image, content, isUserSent , srcLang, dstLang, time, isGrouped}){
   const [translatedContent, setTranslatedContent] = useState("");
   const [showOriginal, setShowOriginal] = useState(true);
   const [loading, setLoading]= useState(false);
@@ -99,7 +100,7 @@ function Message({nickname, image, content, isUserSent , srcLang, dstLang, hour,
                  null
                  :
                  <Typography variant="body2" sx={{display:"flex", alignItems:"end", color:"#C0C0C0", margin:"0px 5px"}}>
-                 {`${hour}:${min}`}
+                 {time}
                 </Typography>
                }
 

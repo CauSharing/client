@@ -12,6 +12,8 @@ import {GroupContext} from "../../context/index";
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 
+import moment from 'moment';
+
 import "./Chat.css";
 
 const sockJS = new SockJS("http://3.37.167.224:8080/api/ws-stomp");
@@ -44,33 +46,63 @@ function NewContents({messageEndRef, groupIdx, user, srcLang, destLang}){
 
   }, [newContents]);
 
-  
-  var year = null;
-  var month = null;
-  var date = null;
-  var hour = null;
-  var min = null;
+  var beforeTime = null;
 
   return(
     <Box>
     {
       newContents.map((elem, index) => {
-        var splitedDate = null;
-        if(elem.chatDate)
-          splitedDate = elem.chatDate.split('T');
-        else
-          splitedDate = elem.time.split('T');
-        var curYMD = splitedDate[0].split('-');
-        year = curYMD[0];
-        month = curYMD[1];
-        date = curYMD[2];
-        var curHM = splitedDate[1].split(':');
-        hour = parseInt(curHM[0]);
-        min = parseInt(curHM[1]);
-        return(
-<Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
-                            isGrouped={false} hour={curHM[0]} min={curHM[1]}/>
-        );}
+        if(index === 0){
+          var splitedDate = null;
+          if(elem.chatDate)
+            splitedDate = moment(elem.chatDate).add(9, 'h');
+          else
+            splitedDate = moment(elem.time).add(9, 'h');
+
+          var timeString = moment(splitedDate).format("dddd, MMMM Do YYYY");
+          beforeTime = splitedDate;
+
+          return(
+          <>
+            <DayInfoMessage time={timeString}/>
+            <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
+              isGrouped={false} time={splitedDate.format("LT")}/>
+          </>
+          );
+        }else{
+          var splitedDate = null;
+          if(elem.chatDate)
+            splitedDate = moment(elem.chatDate).add(9, 'h');
+          else
+            splitedDate = moment(elem.time).add(9, 'h');
+          
+          if(splitedDate.isSame(beforeTime, 'day')){
+            if(splitedDate.isAfter(beforeTime, 'minute')){
+              beforeTime = splitedDate;
+              return(
+                <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
+                  isGrouped={false} time={splitedDate.format("LT")}/>
+              );
+            }else{
+              beforeTime = splitedDate;
+              return(
+                <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
+                  isGrouped={true} time={splitedDate.format("LT")}/>
+              );
+            }
+          }else{
+            var timeString = moment(splitedDate).format("dddd, MMMM Do YYYY");
+            beforeTime = splitedDate;
+            return(
+              <>
+                <DayInfoMessage time={timeString} />
+                <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
+                  isGrouped={false} time={splitedDate.format("LT")}/>
+              </>
+              );
+          }
+            
+        }}
 
       )}
     </Box>
@@ -165,11 +197,7 @@ const Chat = () => {
     // console.log("chat: ", contents.length);
   }, []);
   
-  var year = null;
-  var month = null;
-  var date = null;
-  var hour = null;
-  var min = null;
+  var beforeTime = null;
 
 
     return(
@@ -183,60 +211,50 @@ const Chat = () => {
             {
               originalContents.map((elem,index) => {
                 if(index === 0){
-                  var splitedDate = elem.chatDate.split('T');
-                  var curYMD = splitedDate[0].split('-');
-                  year = curYMD[0];
-                  month = curYMD[1];
-                  date = curYMD[2];
-                  var curHM = splitedDate[1].split(':');
-                  hour = parseInt(curHM[0]);
-                  min = parseInt(curHM[1]);
+                  var splitedDate = moment(elem.chatDate).add(9, 'h');
+                  var timeString = moment(splitedDate).format("dddd, MMMM Do YYYY");
+                  beforeTime = splitedDate;
 
                   return(
                   <>
-                    <DayInfoMessage year={year} month={month} date={date}/>
+                    <DayInfoMessage time={timeString}/>
                     <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
-                      isGrouped={false} hour={curHM[0]} min={curHM[1]}/>
+                      isGrouped={false} time={splitedDate.format("LT")}/>
                   </>
                   );
                 }else{
                   var splitedDate = null;
                   if(elem.chatDate)
-                    splitedDate = elem.chatDate.split('T');
+                    splitedDate = moment(elem.chatDate).add(9, 'h');
                   else
-                    splitedDate = elem.time.split('T');
+                    splitedDate = moment(elem.time).add(9, 'h');
                   
-                  var curYMD = splitedDate[0].split('-');
-                  var curHM = splitedDate[1].split(':');
-
-                  if(year === curYMD[0] && month===curYMD[1] && date===curYMD[2]){
-                    if(parseInt(curHM[0]) === hour && parseInt(curHM[1]) === min){
+                  if(splitedDate.isSame(beforeTime, 'day')){
+                    if(splitedDate.isAfter(beforeTime, 'minute')){
+                      beforeTime = splitedDate;
                       return(
                         <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
-                          isGrouped={true}/>
+                          isGrouped={false} time={splitedDate.format("LT")}/>
                       );
                     }else{
-                      hour = parseInt(curHM[0]);
-                      min = parseInt(curHM[1]);
-
+                      beforeTime = splitedDate;
                       return(
                         <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
-                          isGrouped={false} hour={curHM[0]} min={curHM[1]}/>
+                          isGrouped={true} time={splitedDate.format("LT")}/>
                       );
                     }
-
                   }else{
-                    year = curYMD[0];
-                    month= curYMD[1];
-                    date=curYMD[2];
+                    var timeString = moment(splitedDate).format("dddd, MMMM Do YYYY");
+                    beforeTime = splitedDate;
                     return(
                       <>
-                        <DayInfoMessage year={year} month={month} date={date} />
+                        <DayInfoMessage time={timeString}/>
                         <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
-                          isGrouped={false} hour={curHM[0]} min={curHM[1]}/>
+                          isGrouped={false} time={splitedDate.format("LT")}/>
                       </>
                       );
                   }
+                    
                 }
               })    
             }

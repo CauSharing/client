@@ -130,6 +130,7 @@ function FriendList({friendList}){
 
 function Post({title, description, postIdx, writer, postDate}){
     const [commentList, setCommentList] = useState([]);
+    const timeObj = moment(postDate);
 
     useEffect(async () => {
         const token = localStorage.getItem("userToken");
@@ -150,9 +151,6 @@ function Post({title, description, postIdx, writer, postDate}){
             });
     },[]);
 
-    const dateObj = new Date(postDate);
-    const hour = dateObj.getHours();
-    const minute = dateObj.getMinutes();
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -165,7 +163,6 @@ function Post({title, description, postIdx, writer, postDate}){
                     <Box sx={{width: "100%", display: 'flex', alignItems: "end"}}>
                         <Typography variant="h5" sx={{marginRight: "5px"}}>{title}</Typography>
                         <Typography variant="body2" color="secondary.main" sx={{marginRight: "5px"}}>{writer}</Typography>
-                        <Typography variant="body2" color="secondary.main">{hour}:{minute}</Typography>
                     </Box>                
                     <ColorButton  onClick={handleClick}>Edit</ColorButton>
                 </Box>
@@ -188,7 +185,8 @@ function Day({}){
     const [groupUserList, setGroupUserList] = useState(state.groupUserList);
 
     const {groupIdx, year, month, day} = useParams();
-    const dayName = moment(`${year}-${month}-${day}`).format('ddd');
+    const timeObj = moment(`${year}-${month}-${day}`).add(9, 'h');
+    const dayName = timeObj.format('ddd');
 
     const [showAddPost, setShowAddPost] = useState(false);
     const [postList, setPostList] = useState([]);
@@ -249,7 +247,8 @@ function Day({}){
                         <BackBtn nextLoc={`/home/diary/${groupIdx}`} />
                     </Box>
                     <Typography variant="h5">
-                        {`${year}/${month}/${day}/${dayName}`}
+                        {timeObj.format("dddd, MMMM Do YYYY")}
+                        {/* {`${year}/${month}/${day}/${dayName}`} */}
                     </Typography>
                     <Box sx={{marginBottom: "20px",width: "90%", display:"flex", alignItems: "center", justifyContent: "space-between",  margin: "20px 0px"}}>
                         <FriendList friendList={groupUserList}/>

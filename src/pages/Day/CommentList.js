@@ -3,6 +3,7 @@ import { Button, List, TextField, Box, Typography ,ListItem, ListItemAvatar, Lis
 import { styled } from '@mui/material/styles';
 
 import axios from "axios";
+import moment from 'moment';
 
 const ReplyButton = styled(Button)({
     fontSize: '13px',
@@ -126,7 +127,7 @@ function NewComment({imgSrc, isReply, parentCommentId, postId, setCommentList}){
 }
 
 function Reply({ commentDate, content, writer, imgSrc}){
-    const [cDate, setCDate] = useState(new Date(commentDate));
+    const timeObj = moment(commentDate).add(9, 'h');
 
     return(
         <ListItem style={{width: "100%",  marginBottom: "10px", display: "flex", flexDirection:"column"}}>
@@ -136,7 +137,7 @@ function Reply({ commentDate, content, writer, imgSrc}){
                         <ListItemAvatar>
                             <Avatar src={imgSrc} sx={{width: "30px", height: "30px"}}></Avatar>
                         </ListItemAvatar>
-                        <ListItemText primary={writer} secondary={`${cDate.getFullYear()}-${cDate.getMonth()}-${cDate.getDate()}`}/>
+                        <ListItemText primary={writer} secondary={timeObj.format("MMM Do YYYY, h:mm a")}/>
                     </Box>
                     <ListItemText primary={content} />
                 </Box>
@@ -188,7 +189,8 @@ function Comment({childComment, commentDate, content, writer, imgSrc, isReply, c
     // const handleOpenReply = () => {
     //   setOpen(!open);
     // };
-    const [cDate, setCDate] = useState(new Date(commentDate));
+    // const [cDate, setCDate] = useState(new Date(commentDate));
+    const timeObj = moment(commentDate).add(9, 'h');
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -204,7 +206,7 @@ function Comment({childComment, commentDate, content, writer, imgSrc, isReply, c
                             <Avatar src={imgSrc}></Avatar>
                         </ListItemAvatar>
                         
-                        <ListItemText primary={writer} secondary={`${cDate.getFullYear()}-${cDate.getMonth()}-${cDate.getDate()}`}/>
+                        <ListItemText primary={writer} secondary={timeObj.format("MMM Do YYYY, h:mm a")}/>
                     </Box>
                     <ListItemText primary={content} />
                 </Box>

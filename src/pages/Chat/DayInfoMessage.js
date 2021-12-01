@@ -4,9 +4,7 @@ import { styled } from '@mui/material/styles';
 import moment from 'moment';
 
 
-function DayInfoMessage({year, month, date}){
-    let dateObj = new Date(year, month-1, date) ;
-
+function DayInfoMessage({time}){
     return(
         <Box sx={{
             width: "100%", 
@@ -17,7 +15,7 @@ function DayInfoMessage({year, month, date}){
             fontSize:"14px", 
             color:"#7C7C7C",
             margin:"10px 0px"}}>
-            {moment(dateObj).format("dddd, MMMM Do YYYY")}
+            {time}
         </Box>
 
     )
