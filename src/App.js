@@ -8,7 +8,8 @@ import DiaryList from "./pages/DiaryList/DiaryList";
 import Diary from "./pages/Diary/Diary";
 import Day from "./pages/Day/Day";
 import Invitation from "./pages/Invitation";
-import EditPost from "./pages/EditPost";
+import SharpenPost from "./pages/SharpenPost";
+import EditPost from './pages/Day/EditPost';
 import MySetting from "./pages/MySetting";
 import EditProfile from "./pages/EditProfile";
 import NotFound from "./pages/NotFound";
@@ -104,7 +105,11 @@ function App(){
                         render={(props) => <Chat {...props}/> }
                         />
                     <AuthRoute
-                        exact path="/home/diary/:groupIdx/:year-:month-:day/:postIdx/edit"
+                        exact path="/home/diary/:groupIdx/:year-:month-:day/:postIdx/sharpening"
+                        render={(props) => <SharpenPost />}
+                        />
+                    <AuthRoute
+                        exact path="/home/diary/:groupIdx/:year-:month-:day/:postIdx/edit-post"
                         render={(props) => <EditPost />}
                         />
                     <AuthRoute

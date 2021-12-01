@@ -39,7 +39,6 @@ function MySetting({departmentList}){
                     <ListItemButton onClick={handleEditProfileBtn}>
                         <ListItemIcon>
                             <EditIcon />
-                        {/* <PersonOutlineIcon /> */}
                         </ListItemIcon>
                         <ListItemText primary="Edit profile" />
                     </ListItemButton>

@@ -9,10 +9,11 @@ import BackBtn from "../../components/BackBtn";
 import "./Day.css";
 
 import MyEditor from "../../components/Editor";
-import EditPost from "../EditPost";
+import EditPost from "../SharpenPost";
 import CommentList from './CommentList';
 
-import { Button, List, TextField, Box, Typography ,CircularProgress } from '@mui/material';
+import {ButtonGroup, Button, List, TextField, Box, Typography ,
+    CircularProgress ,Dialog, DialogTitle, DialogContent, DialogContentText,DialogActions} from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 // import randomColor from 'randomcolor';
@@ -126,7 +127,7 @@ function FriendList({friendList}){
     );
 }
 
-function Post({title, description, postIdx, writer, postDate}){
+function Post({title, description, postIdx, writer, postDate, isUser,setOpenDeleteDialog, setDeletePost}){
     const [commentList, setCommentList] = useState([]);
     const timeObj = moment(postDate);
 
@@ -152,18 +153,45 @@ function Post({title, description, postIdx, writer, postDate}){
 
     const handleClick = (e) => {
         e.preventDefault();
-        window.location.replace(window.location.href + `/${postIdx}/edit`);
+        window.location.replace(window.location.href + `/${postIdx}/sharpening`);
+    }
+
+    const handleEditClick = (e) => {
+        e.preventDefault();
+        window.location.replace(window.location.href + `/${postIdx}/edit-post`);
+    }
+    
+    const handleDeleteClick = (e) => {
+        // e.preventDefault();
+        setOpenDeleteDialog(true);
+        setDeletePost({
+            title: title,
+            postIdx:postIdx
+        });
     }
     
     return(
+        <>
+        
         <Box sx={{width: "100%", padding: "20px 0px",borderTop:"1px solid #7c7c7c"}}>
             <Box sx={{width: "100%", display: "flex", flexDirection: "column"}}>
                 <Box sx={{width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                     <Box sx={{width: "100%", display: 'flex', alignItems: "end"}}>
                         <Typography variant="h5" sx={{marginRight: "5px"}}>{title}</Typography>
                         <Typography variant="body2" color="secondary.main" sx={{marginRight: "5px"}}>{writer}</Typography>
-                    </Box>                
-                    <ColorButton  onClick={handleClick}>Edit</ColorButton>
+                    </Box>    
+                    <Box sx={{display:"flex"}}>           
+                        {
+                            isUser?
+                            <ButtonGroup variant="outlined" sx={{marginRight:"10px", display:"flex"}}>
+                                <Button color="success" onClick={handleEditClick}>Edit</Button>
+                                <Button color="error" onClick={handleDeleteClick}>Delete</Button>
+                            </ButtonGroup>
+                            :
+                            null
+                        }
+                        <ColorButton  onClick={handleClick}>Sharpening</ColorButton>
+                    </Box> 
                 </Box>
                 <MyEditor initialValue={description} isViewer={true}/>
             </Box>
@@ -173,11 +201,92 @@ function Post({title, description, postIdx, writer, postDate}){
             </Box>
             <CommentList commentList={commentList} isReply={false} postId={postIdx} setCommentList={setCommentList}/>
         </Box>
+        </>
     );
 }
 
+function DeletePostDialog({open, setOpen, deletePost, setDeletePost}){
+    const token = localStorage.getItem("userToken");
+    const [loading, setLoading] = useState(false);
+
+    const handleClose = () => {
+        setDeletePost(null);
+        setOpen(false);
+      };
+
+    const handleYes = async () => {
+        await setLoading(true);
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+        const instance = axios.create({
+            timeout: 30000,
+          });
+
+        instance.delete(`/api/postDelete?postId=${deletePost.postIdx}`,config)
+           .then(res => {
+               console.log(res);
+               if(res.data.result){
+                    setDeletePost(null);
+               }
+               else{
+                    console.log("Error");
+               }
+           })
+           .catch(err =>{
+               console.log(err);
+           });
+
+        
+        await setLoading(false);
+        await setOpen(false);
+    }
+
+    return(
+        
+        deletePost?
+        <Dialog
+            open={open}
+            onClose={handleClose}>
+            <DialogTitle color="error">
+            {`Delete ${deletePost.title}?`}
+            </DialogTitle>
+            {
+                loading?
+                <DialogContent sx={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+                    <CircularProgress />
+                    <DialogContentText sx={{marginLeft:"5px"}}>
+                        Loading...
+                    </DialogContentText>
+                </DialogContent>
+                :
+                <>
+                    <DialogContent>
+                        <DialogContentText>
+                            {
+                                "If you click 'yes', this post will be permanently deleted."
+                            }
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>
+                            No
+                        </Button>
+                        <Button onClick={handleYes}>
+                            Yes
+                        </Button>
+                    </DialogActions>
+                </>
+            }
+
+        </Dialog>
+        :
+        null
+    );
+}
 
 function Day({}){
+    const user = JSON.parse(localStorage.getItem("user"));
     const [groupName, setGroupName] = useState("");
     const [groupImg, setGroupImg] = useState("");
     const [groupUserList, setGroupUserList] = useState([]);
@@ -191,6 +300,8 @@ function Day({}){
 
     const [postLoading, setPostLoading] = useState(false);
 
+    const [openDeleteDialog,setOpenDeleteDialog] = useState(false);
+    const [deletePost, setDeletePost] = useState(null);
 
     useEffect(async () => {
         var groupInfo = JSON.parse(localStorage.getItem('curGroup'));
@@ -217,6 +328,7 @@ function Day({}){
                 console.log(err);
             });
 
+        
         await setPostLoading(false);
         
     },[]);
@@ -224,6 +336,7 @@ function Day({}){
     return(
 
         <Box sx={{display: "flex", width: "100%", justifyContent:"center"}}>
+            <DeletePostDialog open={openDeleteDialog} setOpen={setOpenDeleteDialog} deletePost={deletePost} setDeletePost={setDeletePost}/>
             <GroupSidebar groupIdx={groupIdx} groupName={groupName} groupImg={groupImg} groupUserList={groupUserList}/>
             {
                 postLoading?
@@ -263,6 +376,10 @@ function Day({}){
                                 postIdx={post.postId}
                                 writer = {post.userNickname}
                                 postDate = {post.postDate}
+                                isUser={post.userEmail === user.email}
+                                openDeleteDialog={openDeleteDialog}
+                                setOpenDeleteDialog={setOpenDeleteDialog}
+                                setDeletePost={setDeletePost}
                                 />)
                         :
                         <Box sx={{width: "100%"}}>

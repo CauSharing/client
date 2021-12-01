@@ -8,6 +8,11 @@ const MyEditor = ({initialValue, isViewer, setContent}) => {
     let imageList = [];
     var re = /(?<alt>!\[[^\]]*\])\((?<filename>.*?)(?=\"|\))\)/g;
   
+    // useEffect(() => {
+    //   console.log("render my editor");
+    //   editorRef.current.getInstance().setHTML(initialValue);
+    // }, []);
+
     useEffect(() => {
       if (editorRef.current) {
         editorRef.current.getInstance().removeHook("addImageBlobHook");
@@ -58,30 +63,26 @@ const MyEditor = ({initialValue, isViewer, setContent}) => {
         isViewer?
         <div>
                <Viewer 
-                  
                     initialValue={initialValue}
                     height="600px"
                />
                <script src="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.js"></script>
         </div>
         :
-        <>
-            <Editor
-                previewStyle="vertical"
-                height="600px"
-                initialEditType="wysiwyg"
-                useCommandShortcut={true}
-                ref={editorRef}
-                initialValue={initialValue}
-                onChange={() => {
-                  const editorInstance = editorRef.current.getInstance();
-                  const getContent_html = editorInstance.getHTML();
-                  console.log(getContent_html);
-                  setContent(getContent_html);
-                }}
-                />
-           
-        </>
+        <Editor
+          previewStyle="vertical"
+          height="600px"
+          initialEditType="wysiwyg"
+          useCommandShortcut={true}
+          ref={editorRef}
+          initialValue={initialValue}
+          onChange={() => {
+            const editorInstance = editorRef.current.getInstance();
+            const getContent_html = editorInstance.getHTML();
+            console.log(getContent_html);
+            setContent(getContent_html);
+          }}
+        />
       
     );
   
