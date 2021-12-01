@@ -56,14 +56,13 @@ function GroupSidebar({}){
         setGroupUserList(groupInfo.groupUserList);
 
         console.log("group sidebar render");
-        if(window.location.pathname === `/home/diary/${groupInfo.groupIdx}`)
-            setCurMenu("0");
+        if(window.location.pathname.includes(`/home/diary/${groupInfo.groupIdx}/group-setting`))
+            setCurMenu("3");
         else if(window.location.pathname === `/home/diary/${groupInfo.groupIdx}/chat`)
             setCurMenu("1");
-        else if(window.location.pathname === `/home/diary/${groupInfo.groupIdx}/notice`)
-            setCurMenu("2");
-        else if(window.location.pathname === `/home/diary/${groupInfo.groupIdx}/group-setting`)
-            setCurMenu("3");
+        else
+        // if(window.location.pathname === `/home/diary/${groupInfo.groupIdx}`)
+            setCurMenu("0");
     }, []);
 
     return(
