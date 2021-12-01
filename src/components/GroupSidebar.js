@@ -31,7 +31,7 @@ const ColorButton = styled(Button)({
   });
 function GroupSidebar({}){
     // const [user, setUser] = useState(null);
-    const [curMenu, setCurMenu] = useState("0");
+    const [curMenu, setCurMenu] = useState(null);
     const imageRegex = /.*\.(gif|jpe?g|bmp|png)$/igm;
     const [groupIdx, setGroupIdx] = useState(null);
     const [groupName, setGroupName] = useState("");
@@ -48,26 +48,22 @@ function GroupSidebar({}){
         backgroundColor:  'primary'
     });
 
-    const handleClick = (e) => {
-        // e.preventDefault();
-    }
-
-    useEffect( async() => {
-        console.log("group sidebar render");
-        if(window.location.pathname === `/home/diary/${groupIdx}`)
-            await setCurMenu("0");
-        else if(window.location.pathname === `/home/diary/${groupIdx}/chat`)
-            await setCurMenu("1");
-        else if(window.location.pathname === `/home/diary/${groupIdx}/notice`)
-            await setCurMenu("2");
-        else if(window.location.pathname === `/home/diary/${groupIdx}/group-setting`)
-            await setCurMenu("3");
-
+    useEffect( () => {
         var groupInfo = JSON.parse(localStorage.getItem('curGroup'));
         setGroupIdx(groupInfo.groupIdx);
         setGroupName(groupInfo.groupName);
         setGroupImg(groupInfo.groupImg);
         setGroupUserList(groupInfo.groupUserList);
+
+        console.log("group sidebar render");
+        if(window.location.pathname === `/home/diary/${groupInfo.groupIdx}`)
+            setCurMenu("0");
+        else if(window.location.pathname === `/home/diary/${groupInfo.groupIdx}/chat`)
+            setCurMenu("1");
+        else if(window.location.pathname === `/home/diary/${groupInfo.groupIdx}/notice`)
+            setCurMenu("2");
+        else if(window.location.pathname === `/home/diary/${groupInfo.groupIdx}/group-setting`)
+            setCurMenu("3");
     }, []);
 
     return(
@@ -122,99 +118,45 @@ function GroupSidebar({}){
                 <Link to={`/home/diary/${groupIdx}`} style={{ textDecoration: 'none' }}>
                 {
                     curMenu === "0"?
-                    <ClickedBtn onCLick={handleClick} variant="contained" color="primary">
+                    <ClickedBtn>
                         Home
                     </ClickedBtn>
                     :
-                    <NotClickedBtn onCLick={handleClick} variant="contained" color="primary">
+                    <NotClickedBtn>
                         Home
                     </NotClickedBtn>
                 }
                 </Link>
-                // curMenu === "0"?
-                // <ClickedBtn component={Link} to={`/home/diary/${groupIdx}`} variant="contained" color="primary">
-                //     Home
-                // </ClickedBtn>
-                // :
-                // <NotClickedBtn component={Link} to={`/home/diary/${groupIdx}`} variant="contained" color="primary">
-                //     Home
-                // </NotClickedBtn>
             }
             <Divider />
             {
                 <Link to={`/home/diary/${groupIdx}/chat`} style={{ textDecoration: 'none' }}>
                 {
                     curMenu === "1"?
-                    <ClickedBtn onCLick={handleClick} variant="contained" color="primary">
+                    <ClickedBtn>
                         Chat
                     </ClickedBtn>
                     :
-                    <NotClickedBtn onCLick={handleClick} variant="contained" color="primary">
+                    <NotClickedBtn>
                         Chat
                     </NotClickedBtn>
                 }
                 </Link>
-                // curMenu === "1"?
-                // // <ClickedBtn component={Link} to={`/home/diary/${groupIdx}/chat`} variant="contained" color="primary">
-                // //     Chat    
-                // // </ClickedBtn>
-                // // :
-                // // <NotClickedBtn component={Link} to={`/home/diary/${groupIdx}/chat`} variant="contained" color="primary">
-                // //     Chat   
-                // // </NotClickedBtn>
-                // <ClickedBtn onClick={() => {window.location.replace(`/home/diary/${groupIdx}/chat`);}} variant="contained" color="primary">
-                //     Chat    
-                // </ClickedBtn>
-                // :
-                // <NotClickedBtn onClick={() => {window.location.replace(`/home/diary/${groupIdx}/chat`);}}  variant="contained" color="primary">
-                //     Chat   
-                // </NotClickedBtn>
-            }
-            <Divider />
-            {
-                <Link to={`/home/diary/${groupIdx}/notice`} style={{ textDecoration: 'none' }}>
-                {
-                    curMenu === "2"?
-                    <ClickedBtn onCLick={handleClick} variant="contained" color="primary">
-                        Notice
-                    </ClickedBtn>
-                    :
-                    <NotClickedBtn onCLick={handleClick} variant="contained" color="primary">
-                        Notice
-                    </NotClickedBtn>
-                }
-                </Link>
-                // curMenu === "2"?
-                // <ClickedBtn component={Link} to={`/home/diary/${groupIdx}/notice`} variant="contained" color="primary">
-                //     Notice
-                // </ClickedBtn>
-                // :
-                // <NotClickedBtn component={Link} to={`/home/diary/${groupIdx}/notice`} variant="contained" color="primary">
-                //     Notice
-                // </NotClickedBtn>
             }
             <Divider />
             {
                 <Link to={`/home/diary/${groupIdx}/group-setting`} style={{ textDecoration: 'none' }}>
                 {
                     curMenu === "3"?
-                    <ClickedBtn onCLick={handleClick} variant="contained" color="primary">
-                        Setting
+                    <ClickedBtn>
+                        Group Setting
                     </ClickedBtn>
                     :
-                    <NotClickedBtn onCLick={handleClick} variant="contained" color="primary">
-                        Setting
+                    <NotClickedBtn>
+                        Group Setting
                     </NotClickedBtn>
                 }
                 </Link>
-                // curMenu === "3"?
-                // <ClickedBtn component={Link} to={`/home/diary/${groupIdx}/group-setting`} variant="contained" color="primary">
-                //     Setting
-                // </ClickedBtn>
-                // :
-                // <NotClickedBtn component={Link} to={`/home/diary/${groupIdx}/group-setting`} variant="contained" color="primary">
-                //     Setting
-                // </NotClickedBtn>
             }
             <Box sx={{position: "absolute", bottom:"10px"}}>
                 <Link to="/" style={{ textDecoration: 'none' }}>
