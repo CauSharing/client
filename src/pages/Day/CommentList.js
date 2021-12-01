@@ -1,5 +1,5 @@
 import React , {useState, useRef} from 'react';
-import { Button, List, TextField, Box, Typography ,ListItem, ListItemAvatar, ListItemText, Avatar} from '@mui/material';
+import { Button, List, TextField, Box, Typography ,ListItem, ListItemAvatar, ListItemText, Avatar, ButtonGroup} from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import axios from "axios";
@@ -118,16 +118,84 @@ function NewComment({imgSrc, isReply, parentCommentId, postId, setCommentList}){
                 />
             <Button onClick={handleClick} disabled={newComment===""} color="primary" variant="outlined">Reply</Button>
         </ListItem>
-        // <div className="day__commentBox__newComment">
-        //     <img src={imgSrc}/>
-        //     <input placeholder="Add Comment"/>
-        //     <AddReplyButton >+</AddReplyButton>
-        // </div>
     );
 }
 
-function Reply({ commentDate, content, writer, imgSrc}){
+function Reply({ commentDate, content, writer, imgSrc ,isUser, commentId, setCommentList, postId}){
+    const [editMode, setEditMode] = useState(false);
+    const [editedContent, setEditedContent] = useState(content);
     const timeObj = moment(commentDate).add(9, 'h');
+
+    const handleEditButton = (e) => {
+        e.preventDefault();
+        setEditMode(true);
+    }
+
+    const handleEditSaveButton = async (e) => {
+        // e.preventDefault();
+        const token = localStorage.getItem("userToken");
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+        const instance = axios.create({
+            timeout: 30000,
+          });
+        
+        const data = {
+            changeContent: editedContent,
+            commentId: commentId
+        };
+
+        await instance.put(`/api/updateComment`,data, config)
+            .then(res => {
+                alert("updated");
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        await setEditMode(false);
+
+        await instance.get(`/api/commentList?postId=${postId}`,config)
+        .then(res => {
+            setCommentList(res.data.value);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+
+    const handleDeleteButton = async (e) => {
+        const token = localStorage.getItem("userToken");
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+        const instance = axios.create({
+            timeout: 30000,
+          });
+
+
+        await instance.delete(`/api/deleteComment?commentId=${commentId}`, {
+            headers:{
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(res => {
+                console.log(res);
+                alert(res.data.value);
+            })
+            .catch(err => {
+                alert(err);
+            });
+
+        await instance.get(`/api/commentList?postId=${postId}`,config)
+            .then(res => {
+                setCommentList(res.data.value);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
 
     return(
         <ListItem style={{width: "100%",  marginBottom: "10px", display: "flex", flexDirection:"column"}}>
@@ -139,7 +207,36 @@ function Reply({ commentDate, content, writer, imgSrc}){
                         </ListItemAvatar>
                         <ListItemText primary={writer} secondary={timeObj.format("MMM Do YYYY, h:mm a")}/>
                     </Box>
-                    <ListItemText primary={content} />
+                    {
+                        isUser && editMode?
+                        <>
+                            <TextField
+                                label="Edit comment"
+                                variant="standard"
+                                value={editedContent}
+                                onChange={(e) => {e.preventDefault(); setEditedContent(e.target.value)}}
+                                multiline
+                                >
+                            </TextField>
+                            <ButtonGroup variant="outlined" sx={{marginRight:"10px", display:"flex", fontSize: '13px'}}>
+                                <Button color="success" sx={{fontSize: '13px'}} onClick={handleEditSaveButton}>Save</Button>
+                                <Button color="error" sx={{fontSize: '13px'}} onClick={(e) => {e.preventDefault(); setEditMode(false);}}>Cancel</Button>
+                            </ButtonGroup>
+                        </>
+                        :
+                        <ListItemText primary={content} />
+                    }
+                </Box>
+                <Box sx={{ display: "flex"}}>
+                    {
+                        isUser && !editMode?
+                        <ButtonGroup variant="outlined" sx={{marginRight:"10px", display:"flex", fontSize: '13px'}}>
+                            <Button color="success" sx={{fontSize: '13px'}} onClick={handleEditButton}>Edit</Button>
+                            <Button color="error" sx={{fontSize: '13px'}} onClick={handleDeleteButton}>Delete</Button>
+                        </ButtonGroup>
+                        :
+                        null
+                    }
                 </Box>
             </Box>
         </ListItem>
@@ -147,6 +244,7 @@ function Reply({ commentDate, content, writer, imgSrc}){
 }
 
 function ReplyList({replyList, parentCommentId, postId, setCommentList}){
+    const user = JSON.parse(localStorage.getItem('user'));
     return(
         <Box sx={{display: "flex", width: "100%", flexDirection: "column", marginLeft: "20px"}}>
             <NewComment imgSrc={null} isReply={true} parentCommentId={parentCommentId} postId={postId} setCommentList={setCommentList}/>
@@ -167,6 +265,10 @@ function ReplyList({replyList, parentCommentId, postId, setCommentList}){
                                     content={elem.content}
                                     writer={elem.nickname}
                                     imgSrc={elem.imgSrc} 
+                                    isUser={elem.email === user.email}
+                                    commentId={elem.commentId}
+                                    setCommentList={setCommentList}
+                                    postId={postId}
                                     />)
                         }
                 </List>
@@ -179,28 +281,94 @@ function ReplyList({replyList, parentCommentId, postId, setCommentList}){
     );
 }
 
-function Comment({childComment, commentDate, content, writer, imgSrc, isReply, commentId, postId, setCommentList}){
-    // const nameStyle = {
-    //     background: color
-    // };
+function Comment({childComment, commentDate, content, writer,isUser, imgSrc, isReply, commentId, postId, setCommentList}){
     const [seeReply, setSeeReply] = useState(false);
-    // const [open, setOpen] = useState(true);
-
-    // const handleOpenReply = () => {
-    //   setOpen(!open);
-    // };
-    // const [cDate, setCDate] = useState(new Date(commentDate));
     const timeObj = moment(commentDate).add(9, 'h');
+
+    const [editMode, setEditMode] = useState(false);
+    const [editedContent, setEditedContent] = useState(content);
 
     const handleClick = (e) => {
         e.preventDefault();
         setSeeReply(!seeReply);
     }
+
+    const handleEditButton = (e) => {
+        e.preventDefault();
+        setEditMode(true);
+    }
+
+    const handleEditSaveButton = async (e) => {
+        // e.preventDefault();
+        const token = localStorage.getItem("userToken");
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+        const instance = axios.create({
+            timeout: 30000,
+          });
+        
+        const data = {
+            changeContent: editedContent,
+            commentId: commentId
+        };
+
+        await instance.put(`/api/updateComment`,data, config)
+            .then(res => {
+                alert("updated");
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        await setEditMode(false);
+
+        await instance.get(`/api/commentList?postId=${postId}`,config)
+        .then(res => {
+            setCommentList(res.data.value);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+
+    const handleDeleteButton = async (e) => {
+        const token = localStorage.getItem("userToken");
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+        const instance = axios.create({
+            timeout: 30000,
+          });
+
+
+        await instance.delete(`/api/deleteComment?commentId=${commentId}`, {
+            headers:{
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(res => {
+                console.log(res);
+                alert(res.data.value);
+            })
+            .catch(err => {
+                alert(err);
+            });
+
+        await instance.get(`/api/commentList?postId=${postId}`,config)
+            .then(res => {
+                setCommentList(res.data.value);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
     return(
         <>
         <ListItem style={{width: "100%",  marginBottom: "10px", display: "flex", flexDirection:"column"}}>
             <Box sx={{display: "flex", width: "100%", flexDirection: "column"}}>
-                <Box sx={{display: "flex", alignItems: "center"}}>
+                <Box sx={{display: "flex", alignItems: "center", width:"100%"}}>
                     <Box sx={{display: "flex", alignItems: "center", marginRight: "10px"}}>
                         <ListItemAvatar>
                             <Avatar src={imgSrc}></Avatar>
@@ -208,16 +376,43 @@ function Comment({childComment, commentDate, content, writer, imgSrc, isReply, c
                         
                         <ListItemText primary={writer} secondary={timeObj.format("MMM Do YYYY, h:mm a")}/>
                     </Box>
-                    <ListItemText primary={content} />
+                    {
+                        editMode?
+                        <>
+                            <TextField
+                                label="Edit comment"
+                                variant="standard"
+                                value={editedContent}
+                                onChange={(e) => {e.preventDefault(); setEditedContent(e.target.value)}}
+                                multiline
+                                >
+                            </TextField>
+                            <ButtonGroup variant="outlined" sx={{marginRight:"10px", display:"flex", fontSize: '13px'}}>
+                                <Button color="success" sx={{fontSize: '13px'}} onClick={handleEditSaveButton}>Save</Button>
+                                <Button color="error" sx={{fontSize: '13px'}} onClick={(e) => {e.preventDefault(); setEditMode(false);}}>Cancel</Button>
+                            </ButtonGroup>
+                        </>
+                        :
+                        <ListItemText primary={content} />
+                    }
+                    
                 </Box>
-                <Box sx={{maxWidth: "150px", display: "flex"}}>
-                    <Box sx={{width: "20px"}}></Box>
+                <Box sx={{ display: "flex"}}>
+                    {
+                        isUser && !editMode?
+                        <ButtonGroup variant="outlined" sx={{marginRight:"10px", display:"flex", fontSize: '13px'}}>
+                            <Button color="success" sx={{fontSize: '13px'}} onClick={handleEditButton}>Edit</Button>
+                            <Button color="error" sx={{fontSize: '13px'}} onClick={handleDeleteButton}>Delete</Button>
+                        </ButtonGroup>
+                        :
+                        null
+                    }
+
                 {
-                    isReply?
+                    isReply || editMode?
                     null
                     :
                     <Button size="small" onClick={handleClick} color="primary">{seeReply? "Hide Reply":"Write / See Reply"}</Button>
-                    // <ReplyButton variant="outlined" size="small" onClick={handleClick}>{seeReply? "Hide Reply":"See Reply"}</ReplyButton>
                 }
                 </Box>
             </Box>
@@ -235,6 +430,8 @@ function Comment({childComment, commentDate, content, writer, imgSrc, isReply, c
 }
 
 function CommentList({commentList, isReply, postId, setCommentList}){
+    const user = JSON.parse(localStorage.getItem('user'));
+
     return(
         <Box sx={{display: "flex", width: "100%", flexDirection: "column"}}>
             <NewComment imgSrc={null} postId={postId} setCommentList={setCommentList}/>
@@ -253,6 +450,7 @@ function CommentList({commentList, isReply, postId, setCommentList}){
                                     commentDate={elem.commentDate}
                                     content={elem.content}
                                     writer={elem.nickname}
+                                    isUser = {elem.email === user.email}
                                     imgSrc={elem.imgSrc} 
                                     isReply={isReply}
                                     postId={postId}
