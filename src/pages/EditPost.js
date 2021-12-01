@@ -6,7 +6,6 @@ import BackBtn from "../components/BackBtn";
 import moment from "moment";
 
 import DiffMatchPatch from 'diff-match-patch';
-import {GroupContext} from "../context/index";
 
 import { Button, Box, TextField , Typography} from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -486,10 +485,9 @@ function Block({originalContent, editedDataList, line, userNickname, postId, set
     );
 }
 function EditPost({}){
-    const {state} = useContext(GroupContext);
-    const [groupName, setGroupName] = useState(state.groupName);
-    const [groupImg, setGroupImg] = useState(state.groupImg);
-    const [groupUserList, setGroupUserList] = useState(state.groupUserList);
+    const [groupName, setGroupName] = useState("");
+    const [groupImg, setGroupImg] = useState("");
+    const [groupUserList, setGroupUserList] = useState([]);
 
     const { groupIdx, year, month, day, postIdx} = useParams();
     const user = JSON.parse(window.localStorage.getItem('user'));
@@ -506,6 +504,11 @@ function EditPost({}){
 
 
     useEffect( async () => {
+        var groupInfo = JSON.parse(localStorage.getItem('curGroup'));
+        setGroupName(groupInfo.groupName);
+        setGroupImg(groupInfo.groupImg);
+        setGroupUserList(groupInfo.groupUserList);
+        
         const token = localStorage.getItem("userToken");
         const config = {
             headers: { Authorization: `Bearer ${token}` }

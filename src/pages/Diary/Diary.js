@@ -7,19 +7,22 @@ import BackBtn from "../../components/BackBtn";
 
 import {Box} from "@mui/material";
 
-import {GroupContext} from "../../context/index";
-
 function Diary({}){
-    const {state} = useContext(GroupContext);
-    const [groupName, setGroupName] = useState(state.groupName);
-    const [groupImg, setGroupImg] = useState(state.groupImg);
-    const [groupUserList, setGroupUserList] = useState(state.groupUserList);
     const {groupIdx} = useParams();
+    const [groupName, setGroupName] = useState("");
+    const [groupImg, setGroupImg] = useState("");
+    const [groupUserList, setGroupUserList] = useState([]);
 
+    useEffect(() => {
+        var groupInfo = JSON.parse(localStorage.getItem('curGroup'));
+        setGroupName(groupInfo.groupName);
+        setGroupImg(groupInfo.groupImg);
+        setGroupUserList(groupInfo.groupUserList);
+    },[]);
 
     return(
         <Box sx={{display:"flex"}}>
-            <GroupSidebar groupIdx={groupIdx} groupName={groupName} groupImg={groupImg} groupUserList={groupUserList}/>
+            <GroupSidebar groupIdx={groupIdx}/>
             <Box sx={{padding: "20px", width: "100%"}}>
                 <BackBtn nextLoc={"/home"}/>
                 <Calendar groupName={groupName} groupImg={groupImg} groupUserList={groupUserList}/>

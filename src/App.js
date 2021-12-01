@@ -17,7 +17,6 @@ import Chat from "./pages/Chat/Chat";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import {Provider} from "./context/index";
 
 const lightTheme = createTheme({
     typography:{
@@ -59,7 +58,6 @@ function App(){
 
     return(
         <>
-            <Provider>
             <ThemeProvider theme={lightTheme}>
             <Router>
                 <Switch>
@@ -119,7 +117,6 @@ function App(){
                 </Switch>
             </Router>
             </ThemeProvider>
-            </Provider>
         </>
     );
 }

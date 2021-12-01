@@ -15,8 +15,6 @@ import CommentList from './CommentList';
 import { Button, List, TextField, Box, Typography ,CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-import {GroupContext} from "../../context/index";
-
 // import randomColor from 'randomcolor';
 
 
@@ -179,10 +177,9 @@ function Post({title, description, postIdx, writer, postDate}){
 
 
 function Day({}){
-    const {state} = useContext(GroupContext);
-    const [groupName, setGroupName] = useState(state.groupName);
-    const [groupImg, setGroupImg] = useState(state.groupImg);
-    const [groupUserList, setGroupUserList] = useState(state.groupUserList);
+    const [groupName, setGroupName] = useState("");
+    const [groupImg, setGroupImg] = useState("");
+    const [groupUserList, setGroupUserList] = useState([]);
 
     const {groupIdx, year, month, day} = useParams();
     const timeObj = moment(`${year}-${month}-${day}`).add(9, 'h');
@@ -195,6 +192,11 @@ function Day({}){
 
 
     useEffect(async () => {
+        var groupInfo = JSON.parse(localStorage.getItem('curGroup'));
+        setGroupName(groupInfo.groupName);
+        setGroupImg(groupInfo.groupImg);
+        setGroupUserList(groupInfo.groupUserList);
+
         await setPostLoading(true);
 
         const token = localStorage.getItem("userToken");
@@ -214,12 +216,8 @@ function Day({}){
                 console.log(err);
             });
 
-            // console.log(location);
-        await setGroupName(state.groupName);
-        await setGroupImg(state.groupImg);
-        await setGroupUserList(state.groupUserList);
-
         await setPostLoading(false);
+        
     },[]);
 
     return(

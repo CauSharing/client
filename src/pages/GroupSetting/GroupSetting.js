@@ -1,7 +1,6 @@
-import React, {useState, useContext, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import { useParams } from "react-router-dom";
 import GroupSidebar from "../../components/GroupSidebar";
-import {GroupContext} from "../../context/index";
 import { ListSubheader, List, ListItemButton, ListItemIcon, ListItemText, Box, 
     Typography ,DialogTitle, Dialog, DialogContent, DialogContentText, DialogActions, 
      Button, FormControl, TextField, CircularProgress} from "@mui/material";
@@ -109,10 +108,10 @@ const AddGroupMemberDialog = ({open, setOpen}) => {
 }
 function GroupSetting(){
     const {groupIdx} = useParams();
-    const {state} = useContext(GroupContext);
-    const [groupName, setGroupName] = useState(state.groupName);
-    const [groupImg, setGroupImg] = useState(state.groupImg);
-    const [groupUserList, setGroupUserList] = useState(state.groupUserList);
+    const groupInfo = JSON.parse(localStorage.getItem('curGroup'));
+    const [groupName, setGroupName] = useState(groupInfo.groupName);
+    const [groupImg, setGroupImg] = useState(groupInfo.groupImg);
+    const [groupUserList, setGroupUserList] = useState(groupInfo.groupUserList);
 
     const [openDialog, setOpenDialog] = useState(false);
 
@@ -126,7 +125,7 @@ function GroupSetting(){
         <>
         <AddGroupMemberDialog open={openDialog} setOpen={setOpenDialog}/>
         <Box sx={{display:"flex"}}>
-            <GroupSidebar diaryIdx={groupIdx}  groupName={groupName} groupImg={groupImg} groupUserList={groupUserList}/>
+            <GroupSidebar diaryIdx={groupIdx}/>
             <Box sx={{width: "100%", padding: "20px"}}>
                 <BackBtn nextLoc={`/home/diary/${groupIdx}`}/>
                 <Box sx={{marginTop: "20px", paddingBottom: "10px", borderBottom: "1px solid #7c7c7c", width: "90%"}}>

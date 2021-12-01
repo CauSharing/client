@@ -7,7 +7,6 @@ import GroupSidebar from "../../components/GroupSidebar";
 import Setting from './Setting';
 import Message from './Message';
 import DayInfoMessage from './DayInfoMessage';
-import {GroupContext} from "../../context/index";
 
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
@@ -146,10 +145,10 @@ const InputContainer = ({groupIdx, email}) => {
 
 
 const Chat = () => {
-  const {state} = useContext(GroupContext);
-  const [groupName, setGroupName] = useState(state.groupName);
-  const [groupImg, setGroupImg] = useState(state.groupImg);
-  const [groupUserList, setGroupUserList] = useState(state.groupUserList);
+  const groupInfo = JSON.parse(localStorage.getItem('curGroup'));
+  const [groupName, setGroupName] = useState(groupInfo.groupName);
+  const [groupImg, setGroupImg] = useState(groupInfo.groupImg);
+  const [groupUserList, setGroupUserList] = useState(groupInfo.groupUserList);
   const user = JSON.parse(window.localStorage.getItem('user'));
 
   const {groupIdx} = useParams();
@@ -195,6 +194,7 @@ const Chat = () => {
     await messageEndRef.current.scrollIntoView();
     sessionStorage.setItem('newChats', JSON.stringify([]));
     // console.log("chat: ", contents.length);
+
   }, []);
   
   var beforeTime = null;

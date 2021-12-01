@@ -6,12 +6,8 @@ import GroupIcon from '@mui/icons-material/Group';
 import { Box, Card, CardActionArea, CardMedia, CardActions, CardContent, Button, Typography,Slide  } from '@mui/material';
 import SampleImg from "../icons/nature-gdbaa175c1_640.png";
 
-import {GroupContext} from '../context/index';
 
 function DiaryThumbnail({groupName, groupImg, groupUserList, groupIdx}){
-    const groupContext = useContext(GroupContext);
-    const {dispatch} = groupContext;
-
     const [showFriends, setShowFriends] = useState(false);
     const [showGroupInfo, setShowGroupInfo] = useState(true);
 
@@ -25,6 +21,16 @@ function DiaryThumbnail({groupName, groupImg, groupUserList, groupIdx}){
             setShowGroupInfo(false);
         }
         
+    }
+
+    const handleClick = (e) => {
+        // e.preventDefault();
+        localStorage.setItem('curGroup',JSON.stringify({
+                groupName:groupName, 
+                groupImg: groupImg, 
+                groupUserList: groupUserList, 
+                groupIdx:groupIdx
+            }));
     }
 
     const cardRef=useRef(null);
@@ -48,27 +54,10 @@ function DiaryThumbnail({groupName, groupImg, groupUserList, groupIdx}){
             ref={cardRef}>
             <Link
                 to={{
-                    pathname: `home/diary/${groupIdx}`,
-                    // state: {
-                    //     groupName:groupName, 
-                    //     groupImg: groupImg, 
-                    //     groupUserList: groupUserList, 
-                    //     groupIdx:groupIdx
-                    // }
+                    pathname: `home/diary/${groupIdx}`
                 }}
                 style={{ textDecoration: 'none', width: 200 }}
-                onClick={() => 
-                    dispatch({
-                        type: 'UPDATE_GROUP',
-                        payload: {
-                            groupName: groupName,
-                            groupImg: groupImg,
-                            groupUserList: groupUserList,
-                            groupIdx: groupIdx
-                        }
-                    })
-                }
-                    >
+                onClick={handleClick}>
                 {
                     showGroupInfo &&
                     <Slide 
