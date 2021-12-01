@@ -57,7 +57,7 @@ const ColorButton = styled(Button)({
 
 
 
-function AddEvent({open, setOpen, groupIdx}){
+function AddEvent({open, setOpen, groupIdx, seeingMonth, seeingYear , daysInMonth, setTags}){
     const [eventName, setEventName] = useState("");
     const [eventColor, setEventColor] = useState("#000");
     const [eventStartDate, setEventStartDate] = useState("");
@@ -93,7 +93,42 @@ function AddEvent({open, setOpen, groupIdx}){
         .catch(err =>{
             console.log(err);
         });             
-        setOpen(false);
+
+        await instance.get(`/api/tag?MatchingRoomId=${groupIdx}&Month=${seeingYear}-${seeingMonth}`,config)
+        .then(res => {
+            console.log(res.data.value);
+            var arr = Array.from({length: 31}, () => []);
+            res.data.value.tagResponseList.forEach(elem => {
+                var startDate = elem.startDate.split("-");
+                var endDate = elem.endDate.split("-");
+
+                var newStartDay = null;
+                
+                if(seeingYear === parseInt(startDate[0]) && seeingMonth === parseInt(startDate[1])){
+                    newStartDay = parseInt(startDate[2]);
+                }else{
+                    newStartDay = 1;
+                }
+
+                var newEndDay = null;
+                if(seeingMonth === parseInt(endDate[1])){
+                    newEndDay = parseInt(endDate[2]);
+                }else{
+                    newEndDay = daysInMonth;
+                }
+
+                for(var i=newStartDay; i<=newEndDay; i++){
+                    arr[i].push({name: elem.tagName, writer: elem.writer, rgb: elem.rgb, isStart: i === newStartDay, isEnd: i===newEndDay});
+                }
+            });
+            setTags(arr);
+            // console.log(arr);
+        })
+        .catch(err =>{
+            console.log(err);
+            // setTags(err);
+        });     
+        await setOpen(false);
     }
 
     return(
@@ -193,7 +228,7 @@ function Day({isBlank, day, event, year, month, location, groupName, groupImg, g
     )
 }
 
-function Calendar({eventData, groupName, groupImg, groupUserList}){
+function Calendar({ groupName, groupImg, groupUserList}){
     // console.log( groupName, groupImg, groupUserList);
     const {groupIdx} = useParams();
     const location = useLocation();
@@ -358,7 +393,8 @@ function Calendar({eventData, groupName, groupImg, groupUserList}){
         //     <AddEvent setShowAddEvent={setShowAddEvent}/>
         //     :
         <div className="entire-calendar">
-            <AddEvent open={showAddEvent} setOpen={setShowAddEvent} groupIdx={groupIdx}/>
+            <AddEvent open={showAddEvent} setOpen={setShowAddEvent} groupIdx={groupIdx} setTags={setTags}
+                seeingMonth={seeingMonth} seeingYear={seeingYear} daysInMonth={daysInMonth}/>
             <div className="tail-datetime-calendar">
                 
                 <div className="calendar-navi">

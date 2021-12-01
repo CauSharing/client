@@ -124,25 +124,43 @@ function EditProfile({departmentList}){
             `/api/profile/update`,data, {headers}
             
         ).then(res => {
-            console.log(res);
+            if(res.data.result){
+                alert("saved");
+                localStorage.setItem("user", JSON.stringify({
+                    "jwtToken": user.jwtToken,
+                    "email": user.email,
+                    "nickname": nickname,
+                    "department": college,
+                    "major": major,
+                    "image": image,
+                    "language": user.language
+                }
+                ));
+                console.log(res);
+            }else{
+                console.log(res);
+            }
+            
         }).catch(err => {
             console.log(err);
             alert("error");
         });
+
         
-        axios.get( `/api/profile/${user.email}`, config)
-        .then(res => {
-            console.log(res);
-            if(res.data.result){
-                window.localStorage.setItem("user", JSON.stringify(res.data.value));
-            }
-            else{
-                alert("error!");
-            }
-        })
-        .catch(err =>{
-            console.log(err);
-        });
+        
+        // axios.get( `/api/profile/${user.email}`, config)
+        // .then(res => {
+        //     console.log(res);
+        //     if(res.data.result){
+        //         window.localStorage.setItem("user", JSON.stringify(res.data.value));
+        //     }
+        //     else{
+        //         alert("error!");
+        //     }
+        // })
+        // .catch(err =>{
+        //     console.log(err);
+        // });
     }
     return(
         <Box sx={{display:"flex"}}>

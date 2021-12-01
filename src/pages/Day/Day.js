@@ -49,15 +49,18 @@ const ColorButton = styled(Button)({
 
 
 
-function AddPost({matchingRoomId, setShowAddPost, year, month, day, dayName}){
+function AddPost({matchingRoomId, setShowAddPost, year, month, day, dayName, setPostList}){
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
 
-    const handleSaveBtn = () => {
+    const handleSaveBtn = async () => {
         const token = localStorage.getItem("userToken");
         const config = {
             headers: { Authorization: `Bearer ${token}` }
         };
+        const instance = axios.create({
+            timeout: 30000,
+          });
 
         const sendData = {
             "content": content,
@@ -67,7 +70,7 @@ function AddPost({matchingRoomId, setShowAddPost, year, month, day, dayName}){
         };    
 
         console.log(sendData);
-        axios.post('/api/createPost',sendData, config)
+        await instance.post('/api/createPost',sendData, config)
         .then(res => {
             console.log(res);
             if(res.data.result){
@@ -81,6 +84,16 @@ function AddPost({matchingRoomId, setShowAddPost, year, month, day, dayName}){
         .catch(err =>{
             console.log(err);
         });
+
+        await instance.get(`/api/postList?matchingroomId=${matchingRoomId}&postDate=${`${year}-${month<10? `0${month}`: month}-${day<10? `0${day}`: day}`}`,config)
+            .then(res => {
+                setPostList(res.data.value);
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
     };
 
     return(
@@ -168,6 +181,8 @@ function Post({title, description, postIdx, writer, postDate, isUser,setOpenDele
             title: title,
             postIdx:postIdx
         });
+
+
     }
     
     return(
@@ -205,7 +220,7 @@ function Post({title, description, postIdx, writer, postDate, isUser,setOpenDele
     );
 }
 
-function DeletePostDialog({open, setOpen, deletePost, setDeletePost}){
+function DeletePostDialog({open, setOpen, deletePost, setDeletePost, groupIdx, year, month, day, setPostList}){
     const token = localStorage.getItem("userToken");
     const [loading, setLoading] = useState(false);
 
@@ -236,7 +251,15 @@ function DeletePostDialog({open, setOpen, deletePost, setDeletePost}){
            .catch(err =>{
                console.log(err);
            });
-
+   
+       await instance.get(`/api/postList?matchingroomId=${groupIdx}&postDate=${`${year}-${month<10? `0${month}`: month}-${day<10? `0${day}`: day}`}`,config)
+           .then(res => {
+               setPostList(res.data.value);
+               console.log(res);
+           })
+           .catch(err => {
+               console.log(err);
+           });
         
         await setLoading(false);
         await setOpen(false);
@@ -336,7 +359,16 @@ function Day({}){
     return(
 
         <Box sx={{display: "flex", width: "100%", justifyContent:"center"}}>
-            <DeletePostDialog open={openDeleteDialog} setOpen={setOpenDeleteDialog} deletePost={deletePost} setDeletePost={setDeletePost}/>
+            <DeletePostDialog 
+                open={openDeleteDialog} 
+                setOpen={setOpenDeleteDialog} 
+                deletePost={deletePost} 
+                setDeletePost={setDeletePost}
+                groupIdx={groupIdx}
+                year={year}
+                month={month}
+                day={day}
+                setPostList={setPostList}/>
             <GroupSidebar groupIdx={groupIdx} groupName={groupName} groupImg={groupImg} groupUserList={groupUserList}/>
             {
                 postLoading?
@@ -352,7 +384,8 @@ function Day({}){
                     month={month} 
                     day={day} 
                     dayName={dayName}
-                    matchingRoomId={groupIdx}/>
+                    matchingRoomId={groupIdx}
+                    setPostList={setPostList}/>
                 :
                 <Box sx={{width: "100%", padding: "20px"}}>
                     <Box sx={{marginBottom: "20px"}}>

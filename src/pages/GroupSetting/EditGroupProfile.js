@@ -36,6 +36,8 @@ function EditGroupProfile(){
 
     const [groupName, setGroupName] = useState(groupInfo.groupName);
     const [groupImg, setGroupImg] = useState(groupInfo.groupImg);
+    const [groupUserList, setGroupUserList] = useState(groupInfo.groupUserList);
+    
     // const [year, setYear] = useState(null);
     const token = localStorage.getItem("userToken");
     const config = {
@@ -69,7 +71,22 @@ function EditGroupProfile(){
             `/api/updateRoom`,data, {headers}
             
         ).then(res => {
-            console.log(res);
+            if(res.data.result){
+                console.log(res);
+                alert("saved");
+
+                localStorage.setItem('curGroup',JSON.stringify({
+                    groupName:groupName, 
+                    groupImg: groupImg, 
+                    groupUserList: groupUserList, 
+                    groupIdx:groupIdx
+                }));
+
+            }else{
+                console.log(res);
+                alert("error");
+            }
+            
         }).catch(err => {
             console.log(err);
             alert("error");
