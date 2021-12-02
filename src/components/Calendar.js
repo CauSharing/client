@@ -256,7 +256,7 @@ function Calendar({ groupName, groupImg, groupUserList}){
     const [datePickerVal, setDatePickerVal] = useState(new Date());
     const [tags, setTags] = useState([]);
 
-    const [postInfo, setPostInfo] = useState([]);
+    // const [postInfo, setPostInfo] = useState([]);
 
     useEffect(async () => {
         const instance = axios.create({
@@ -328,6 +328,7 @@ function Calendar({ groupName, groupImg, groupUserList}){
             setSeeingMonthStr(moment(`${year}-${month<10? `0${month}`: month}`, "YYYY-MM").format("MMMM"));
             setFirstDayOfMonth(moment(`${year}-${month<10? `0${month}`: month}`, "YYYY-MM").startOf("month").format("d"));
             setDaysInMonth(moment(`${year}-${month<10? `0${month}`: month}`, "YYYY-MM").daysInMonth());
+            setDatePickerVal(moment(`${year}-${month<10? `0${month}`: month}-01`, "YYYY-MM-DD"));
         }    
     },[]);
     
