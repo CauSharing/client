@@ -5,7 +5,9 @@ import moment from 'moment';
 import PlusBtn from "./PlusBtn";
 import BackBtn from "./BackBtn";
 
-import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Button , Typography, Box} from '@mui/material';
+import {Dialog, DialogActions, DialogContent, DialogContentText, 
+    DialogTitle, TextField, Button , Typography, Box, Badge } from '@mui/material';
+    import FeedIcon from '@mui/icons-material/Feed';
 
 import DatePicker from '@mui/lab/DatePicker';
 /*
@@ -182,6 +184,7 @@ function AddEvent({open, setOpen, groupIdx, seeingMonth, seeingYear , daysInMont
 }
 
 function Day({isBlank, day, event, year, month, location, groupName, groupImg, groupUserList, tags}){
+    
 
     return(
         isBlank?
@@ -204,6 +207,12 @@ function Day({isBlank, day, event, year, month, location, groupName, groupImg, g
                     }}>
                     <Box sx={{width:"100%", height:"100%", '&:hover':{backgroundColor:"secondary.light"}}}>
                         <Typography variant="body1">{day}</Typography>
+                        {
+                            // <Badge badgeContent={postNum} color="primary">
+                            //     <FeedIcon color="action" />
+                            // </Badge>
+                        }
+
                         {
                             tags?
                             tags.length > 0?
@@ -246,6 +255,8 @@ function Calendar({ groupName, groupImg, groupUserList}){
 
     const [datePickerVal, setDatePickerVal] = useState(new Date());
     const [tags, setTags] = useState([]);
+
+    const [postInfo, setPostInfo] = useState([]);
 
     useEffect(async () => {
         const instance = axios.create({
@@ -291,7 +302,34 @@ function Calendar({ groupName, groupImg, groupUserList}){
             console.log(err);
             // setTags(err);
         });     
+
+        // console.log(`/api/postDate?MatchingRoomId=${groupIdx}&postDate=${`${year}-${month<10? `0${month}`:month}-${day<10? `0${day}`: day}`}`);
+        // await instance.get(`/api/postDate?MatchingRoomId=${groupIdx}&postDate=${`${year}-${month<10? `0${month}`:month}-01`}`,config)
+        // .then(res => {
+        //     setPostNum(res.data.value.length);
+        //     // console.log(res);
+        // })
+        // .catch(err => {
+        //     console.log(err);
+        // });
+
+        sessionStorage.setItem('seeingYear', JSON.stringify(seeingYear));
+        sessionStorage.setItem('seeingMonth', JSON.stringify(seeingMonth));
+
     }, [seeingYear, seeingMonth]);
+
+    useEffect(() => {
+        if(sessionStorage.getItem('seeingYear') && sessionStorage.getItem('seeingMonth'))
+        { 
+            var year = JSON.parse(sessionStorage.getItem('seeingYear'));
+            var month = JSON.parse(sessionStorage.getItem('seeingMonth'));
+            setSeeingYear(year);
+            setSeeingMonth(month);
+            setSeeingMonthStr(moment(`${year}-${month<10? `0${month}`: month}`, "YYYY-MM").format("MMMM"));
+            setFirstDayOfMonth(moment(`${year}-${month<10? `0${month}`: month}`, "YYYY-MM").startOf("month").format("d"));
+            setDaysInMonth(moment(`${year}-${month<10? `0${month}`: month}`, "YYYY-MM").daysInMonth());
+        }    
+    },[]);
     
     const handleClick = (e) => {
         e.preventDefault();
@@ -359,6 +397,7 @@ function Calendar({ groupName, groupImg, groupUserList}){
                 groupName={groupName}
                 groupImg={groupImg}
                 groupUserList={groupUserList}
+                groupIdx={groupIdx}
                 tags={tags[d-1]}
                 />
         );
