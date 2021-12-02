@@ -75,7 +75,6 @@ function AddPost({matchingRoomId, setShowAddPost, year, month, day, dayName, set
             console.log(res);
             if(res.data.result){
                 alert("saved");
-
             }
             else{
                 alert(res.data.description);

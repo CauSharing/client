@@ -268,7 +268,7 @@ function Calendar({ groupName, groupImg, groupUserList}){
         };
         
         console.log(groupIdx);
-        await instance.get(`/api/tag?MatchingRoomId=${groupIdx}&Month=${seeingYear}-${seeingMonth}`,config)
+        await instance.get(`/api/tag?MatchingRoomId=${groupIdx}&Month=${seeingYear}-${seeingMonth < 10 ? `0${seeingMonth}`: seeingMonth}`,config)
         .then(res => {
             console.log(res.data.value);
             var arr = Array.from({length: 31}, () => []);
@@ -291,8 +291,8 @@ function Calendar({ groupName, groupImg, groupUserList}){
                     newEndDay = daysInMonth;
                 }
 
-                for(var i=newStartDay; i<=newEndDay; i++){
-                    arr[i].push({name: elem.tagName, writer: elem.writer, rgb: elem.rgb, isStart: i === newStartDay, isEnd: i===newEndDay});
+                for(var i=newStartDay-1; i<=newEndDay-1; i++){
+                    arr[i].push({name: elem.tagName, writer: elem.writer, rgb: elem.rgb, isStart: i === newStartDay-1, isEnd: i===newEndDay-1});
                 }
             });
             setTags(arr);
