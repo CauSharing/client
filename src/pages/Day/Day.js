@@ -16,7 +16,7 @@ import {ButtonGroup, Button, List, TextField, Box, Typography ,
     CircularProgress ,Dialog, DialogTitle, DialogContent, DialogContentText,DialogActions} from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-// import randomColor from 'randomcolor';
+import randomColor from 'randomcolor';
 
 
 let sample_img = "https://w.namu.la/s/adb56b09aef6d27319fe0fed21df3cf9e282fe7964308413845ab53649de0ac7e4003aa7abb7b2fe51b934bfc22b68d7183381a532e6ffca6849ad42672b4fc580161f61963aefaa808acaa4c788504ec2212a4a827718b8451f23098f8f24d7fa2d12cb721787c3cd3e098b609a9555";
@@ -116,10 +116,9 @@ function AddPost({matchingRoomId, setShowAddPost, year, month, day, dayName, set
         </Box>
     )
 }
-function Friend({name}){
-    // var color = randomColor('bright');
+function Friend({name, color}){
     return(
-        <Box sx={{backgroundColor:"transparent", padding: "10px", display: "flex", justifyContent: "center", 
+        <Box sx={{backgroundColor:color, padding: "10px", display: "flex", justifyContent: "center", 
         alignItems:"center", borderRadius: "5px", marginRight: "5px", minWidth: "20px", height: "100%", fontFamily: "Roboto Condensed"}}>
             {name}
         </Box>
@@ -127,11 +126,26 @@ function Friend({name}){
 }
 
 function FriendList({friendList}){
-    const friendCompList = [];
+    const [friendCompList, setFriendCompList] = useState([]);
 
-    for(var friend of friendList){
-        friendCompList.push(<Friend name={friend.nickname} />);
-    }
+    useEffect( () => {
+
+        var colors = randomColor({count: friendList.length, luminosity: 'bright',format: 'rgba', alpha: 0.5});
+        var fl = [];
+        friendList.map( (friend, index) => 
+            fl.push(<Friend name={friend.nickname} color={colors[index]}/>));
+
+        setFriendCompList(fl);
+
+        var list = [];
+        for(var i=0; i<friendList.length; i++){
+            list.push({nickname: friendList[i].nickname, color: colors[i]});
+        }
+       
+        localStorage.setItem('colorInfo', JSON.stringify(
+            list
+        ));
+    },[]);
 
     return(
         <Box sx={{display:"flex", alignItems:"center", height: "100%"}}>

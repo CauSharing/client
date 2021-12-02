@@ -48,6 +48,8 @@ function OriginalContent({content}){
 
 function EditedContent({writer, content, originalContent}){
     const [coloredContent, setColoredContent]=useState([]);
+    const [userColor, setUserColor] = useState("transparent");
+    
     useEffect(() => {
         const dmp = new DiffMatchPatch();
         const diff = dmp.diff_main(originalContent, content);
@@ -65,6 +67,15 @@ function EditedContent({writer, content, originalContent}){
             }
         }
         setColoredContent(l);
+
+        if(localStorage.getItem('colorInfo')){
+            var colorInfo = JSON.parse(localStorage.getItem('colorInfo'));
+            var user = colorInfo.find(elem => elem.nickname === writer);
+            console.log(colorInfo, user, writer);
+            if(user)
+                setUserColor(user.color);
+        }
+        
         
     }, []);
     return(
@@ -90,7 +101,7 @@ function Block({originalContent, editedDataList, line, userNickname, postId, set
             postId: parseInt(postId)
         };
 
-        // console.log(data);
+        console.log(data);
 
         const token = localStorage.getItem("userToken");
         const config = {
@@ -185,18 +196,13 @@ function SharpenPost({}){
     const [groupUserList, setGroupUserList] = useState([]);
 
     const { groupIdx, year, month, day, postIdx} = useParams();
-    const user = JSON.parse(window.localStorage.getItem('user'));
-    const userNickname = user.nickname;
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
 
     const dayName = moment(`${year}-${month}-${day}`).format('ddd');
 
     const [title, setTitle] = useState("");
     const [originalList, setOriginalList] = useState([]);
     const [editedList, setEditedList] = useState([]);
-    // const [totalList, setTotalList] = useState([]);
-
-    // const [loading, setLoading] = useState(false);
-
 
     useEffect( async () => {
         var groupInfo = JSON.parse(localStorage.getItem('curGroup'));
@@ -287,7 +293,7 @@ function SharpenPost({}){
                                         originalContent={elem} 
                                         editedDataList={editedList.filter(data =>index === data.line)} 
                                         line={index} 
-                                        userNickname={userNickname} 
+                                        userNickname={user.nickname} 
                                         postId={postIdx}
                                         setTitle={setTitle}
                                         setOriginalList = {setOriginalList}
