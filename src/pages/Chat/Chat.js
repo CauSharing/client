@@ -18,16 +18,12 @@ import "./Chat.css";
 const sockJS = new SockJS("http://3.37.167.224:8080/api/ws-stomp");
 const stompClient  = Stomp.over(sockJS);
 
-function NewContents({messageEndRef, groupIdx, user, srcLang, destLang, groupUserList}){
+function NewContents({messageEndRef, groupIdx, user, srcLang, destLang, groupUserList, lastMessage}){
   const [newContents, setNewContents] = useState([]);
 
   const onMessageReceived = async (payload) => {
      var newChatList = JSON.parse(sessionStorage.getItem('newChats'));
      var newData =JSON.parse(payload.body);
-    // //  var userImg = await groupUserList.filter(elem => elem.email === newData.email).image;
-    // console.log( groupUserList.filter(elem => elem.email === newData.email));
-    // console.log( groupUserList.find(elem => elem.email === newData.email).image);
-    console.log(groupUserList.find(elem => elem.email === newData.email));
     newData["image"] = groupUserList.find(elem => elem.email === newData.email).image;
     await sessionStorage.setItem('newChats',JSON.stringify([...newChatList, newData]));
     await setNewContents([...newChatList, newData]);
@@ -50,53 +46,24 @@ function NewContents({messageEndRef, groupIdx, user, srcLang, destLang, groupUse
 
   }, [newContents]);
 
-  var beforeTime = null;
+  var beforeTime = lastMessage ? lastMessage.time : null;
+  var beforeUser = lastMessage ? lastMessage.email : null;
 
   return(
     <Box>
     {
       newContents.map((elem, index) => {
-        if(index === 0){
-          var splitedDate = null;
-          if(elem.chatDate)
-            splitedDate = moment(elem.chatDate).add(9, 'h');
-          else
-            splitedDate = moment(elem.time).add(9, 'h');
+        var splitedDate = null;
+        if(elem.chatDate)
+          splitedDate = moment(elem.chatDate).add(9, 'h');
+        else
+          splitedDate = moment(elem.time).add(9, 'h');
 
-          var timeString = moment(splitedDate).format("dddd, MMMM Do YYYY");
-          beforeTime = splitedDate;
-
-          return(
-          <>
-            <DayInfoMessage time={timeString}/>
-            <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
-              isGrouped={false} time={splitedDate.format("LT")}/>
-          </>
-          );
-        }else{
-          var splitedDate = null;
-          if(elem.chatDate)
-            splitedDate = moment(elem.chatDate).add(9, 'h');
-          else
-            splitedDate = moment(elem.time).add(9, 'h');
-          
-          if(splitedDate.isSame(beforeTime, 'day')){
-            if(splitedDate.isAfter(beforeTime, 'minute')){
-              beforeTime = splitedDate;
-              return(
-                <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
-                  isGrouped={false} time={splitedDate.format("LT")}/>
-              );
-            }else{
-              beforeTime = splitedDate;
-              return(
-                <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
-                  isGrouped={true} time={splitedDate.format("LT")}/>
-              );
-            }
-          }else{
+        if(beforeTime){
+          if(!splitedDate.isSame(beforeTime, 'day')){
             var timeString = moment(splitedDate).format("dddd, MMMM Do YYYY");
             beforeTime = splitedDate;
+            beforeUser = elem.email;
             return(
               <>
                 <DayInfoMessage time={timeString} />
@@ -104,9 +71,37 @@ function NewContents({messageEndRef, groupIdx, user, srcLang, destLang, groupUse
                   isGrouped={false} time={splitedDate.format("LT")}/>
               </>
               );
+          }else{
+            if(!splitedDate.isAfter(beforeTime, 'minute') && beforeUser === elem.email){ //1분 이내에 보냄 & 이전 메시지를 보낸 사람이 나 자신일 때
+                // 두가지 조건을 만족해야 프로필 정보가 안뜸
+                beforeTime = splitedDate;
+                return(
+                  <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
+                    isGrouped={true} time={splitedDate.format("LT")}/>
+                );
+            }else{
+              beforeTime = splitedDate;
+              beforeUser = elem.email;
+              return(
+                <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
+                  isGrouped={false} time={splitedDate.format("LT")}/>
+              );
+            }
           }
-            
-        }}
+        }else{
+          var timeString = moment(splitedDate).format("dddd, MMMM Do YYYY");
+          beforeTime = splitedDate;
+          beforeUser = elem.email;
+          return(
+            <>
+              <DayInfoMessage time={timeString} />
+              <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
+                isGrouped={false} time={splitedDate.format("LT")}/>
+            </>
+            );          
+        }
+        
+      }
 
       )}
     </Box>
@@ -154,6 +149,7 @@ const Chat = () => {
   const [groupName, setGroupName] = useState(groupInfo.groupName);
   const [groupImg, setGroupImg] = useState(groupInfo.groupImg);
   const [groupUserList, setGroupUserList] = useState(groupInfo.groupUserList);
+  const [lastMessage, setLastMessage] = useState(null);
  
   const user = JSON.parse(window.localStorage.getItem('user'));
 
@@ -182,28 +178,28 @@ const Chat = () => {
 
     await instance.get(`/api/chatList?matchingRoomId=${groupIdx}`,config)
     .then(res => {
-      // console.log(res.data.value);
         if(res.data.result){
           setOriginalContents(res.data.value);
+          if(res.data.value.length > 0){
+            setLastMessage({
+              time: moment(res.data.value[res.data.value.length-1].chatDate).add(9, 'h'),
+              email: res.data.value[res.data.value.length-1].email});
+          }
         }
         else{
           console.log("res.data.result === false");
-          // alert("error while calling chatting history");
         }
     })
     .catch(err =>{
       console.log(`error: ${err}`);
-      // alert("error while calling chatting history");
     });
 
-    // await localStorage.setItem('NumOfSeenChat', contents.length);
     await messageEndRef.current.scrollIntoView();
     sessionStorage.setItem('newChats', JSON.stringify([]));
-    // console.log("chat: ", contents.length);
-
   }, []);
   
-  var beforeTime = null;
+  var beforeTime = lastMessage ? lastMessage.time : null;
+  var beforeUser = lastMessage ? lastMessage.email : null;
 
 
     return(
@@ -216,55 +212,63 @@ const Chat = () => {
           <Box sx={{width: "100%", padding: "20px", overflow: "auto"}} className="container">
             {
               originalContents.map((elem,index) => {
-                if(index === 0){
-                  var splitedDate = moment(elem.chatDate).add(9, 'h');
-                  var timeString = moment(splitedDate).format("dddd, MMMM Do YYYY");
-                  beforeTime = splitedDate;
-
-                  return(
-                  <>
-                    <DayInfoMessage time={timeString}/>
-                    <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
-                      isGrouped={false} time={splitedDate.format("LT")}/>
-                  </>
-                  );
-                }else{
-                  var splitedDate = null;
-                  if(elem.chatDate)
-                    splitedDate = moment(elem.chatDate).add(9, 'h');
-                  else
-                    splitedDate = moment(elem.time).add(9, 'h');
-                  
-                  if(splitedDate.isSame(beforeTime, 'day')){
-                    if(splitedDate.isAfter(beforeTime, 'minute')){
-                      beforeTime = splitedDate;
-                      return(
-                        <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
-                          isGrouped={false} time={splitedDate.format("LT")}/>
-                      );
-                    }else{
-                      beforeTime = splitedDate;
-                      return(
-                        <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
-                          isGrouped={true} time={splitedDate.format("LT")}/>
-                      );
-                    }
-                  }else{
+                var splitedDate = null;
+                if(elem.chatDate)
+                  splitedDate = moment(elem.chatDate).add(9, 'h');
+                else
+                  splitedDate = moment(elem.time).add(9, 'h');
+        
+                if(beforeTime){
+                  if(!splitedDate.isSame(beforeTime, 'day')){
                     var timeString = moment(splitedDate).format("dddd, MMMM Do YYYY");
                     beforeTime = splitedDate;
+                    beforeUser = elem.email;
                     return(
                       <>
-                        <DayInfoMessage time={timeString}/>
+                        <DayInfoMessage time={timeString} />
                         <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
                           isGrouped={false} time={splitedDate.format("LT")}/>
                       </>
                       );
+                  }else{
+                    if(!splitedDate.isAfter(beforeTime, 'minute') && beforeUser === elem.email){ //1분 이내에 보냄 & 이전 메시지를 보낸 사람이 나 자신일 때
+                        // 두가지 조건을 만족해야 프로필 정보가 안뜸
+                        beforeTime = splitedDate;
+                        return(
+                          <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
+                            isGrouped={true} time={splitedDate.format("LT")}/>
+                        );
+                    }else{
+                      beforeTime = splitedDate;
+                      beforeUser = elem.email;
+                      return(
+                        <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
+                          isGrouped={false} time={splitedDate.format("LT")}/>
+                      );
+                    }
                   }
-                    
+                }else{
+                  var timeString = moment(splitedDate).format("dddd, MMMM Do YYYY");
+                  beforeTime = splitedDate;
+                  beforeUser = elem.email;
+                  return(
+                    <>
+                      <DayInfoMessage time={timeString} />
+                      <Message nickname={elem.nickname} image={elem.image} content={elem.message} isUserSent={user.email === elem.email} srcLang={srcLang} dstLang={destLang} 
+                        isGrouped={false} time={splitedDate.format("LT")}/>
+                    </>
+                    );          
                 }
               })    
             }
-            <NewContents messageEndRef={messageEndRef} groupIdx={groupIdx} user={user} srcLang={srcLang} destLang={destLang} groupUserList={groupUserList}/>
+            <NewContents 
+              messageEndRef={messageEndRef} 
+              groupIdx={groupIdx} 
+              user={user} 
+              srcLang={srcLang} 
+              destLang={destLang} 
+              groupUserList={groupUserList}
+              lastMessage={lastMessage}/>
             <div ref={messageEndRef}></div>
           </Box>
             <InputContainer groupIdx={groupIdx} email={user.email} />
