@@ -245,13 +245,14 @@ function Invitation({departmentList}){
                         }}>
                     {
                         invitationList.map((elem, index) => (
+                            // console.log(elem)
                             <InvitationElem 
                                 email={elem.invitePerson} 
                                 img={elem.invitePersonImage} 
                                 major={elem.invitePersonMajor} 
                                 nickname={elem.invitePersonNickname}
                                 matchingRoomId={elem.matchingRoomId}
-                                isFromMatchingRoom={elem.matchingRoomId !== null || elem.matchingRoomId !== "" || elem.matchingRoomId !== 0}
+                                isFromMatchingRoom={elem.matchingRoomId !== null}
                                 />
                         ))
                     }

@@ -61,7 +61,6 @@ function GroupSidebar({}){
         else if(window.location.pathname === `/home/diary/${groupInfo.groupIdx}/chat`)
             setCurMenu("1");
         else
-        // if(window.location.pathname === `/home/diary/${groupInfo.groupIdx}`)
             setCurMenu("0");
     }, []);
 
@@ -101,10 +100,11 @@ function GroupSidebar({}){
                 <AvatarGroup max={2} sx={{marginBottom:"20px"}}>
                 {
                     groupUserList.map(user => 
-                        <Avatar 
-                            sx={{width:"60px", height:"60px"}}
-                            src={user.image? user.image : user.nickname}
-                            alt={user.nickname}/>
+                        console.log(user)
+                        // <Avatar 
+                        //     sx={{width:"60px", height:"60px"}}
+                        //     src={user.image? user.image : user.nickname}
+                        //     alt={user.nickname}/>
                             )
                 }
                 </AvatarGroup>
@@ -129,18 +129,14 @@ function GroupSidebar({}){
             }
             <Divider />
             {
-                <Link to={`/home/diary/${groupIdx}/chat`} style={{ textDecoration: 'none' }}>
-                {
-                    curMenu === "1"?
-                    <ClickedBtn>
-                        Chat
-                    </ClickedBtn>
-                    :
-                    <NotClickedBtn>
-                        Chat
-                    </NotClickedBtn>
-                }
-                </Link>
+                curMenu === "1"?
+                <ClickedBtn onClick={() => {window.location.replace(`/home/diary/${groupIdx}/chat`);}} variant="contained" color="primary">
+                    Chat    
+                </ClickedBtn>
+                :
+                <NotClickedBtn onClick={() => {window.location.replace(`/home/diary/${groupIdx}/chat`);}}  variant="contained" color="primary">
+                    Chat   
+                </NotClickedBtn>
             }
             <Divider />
             {
