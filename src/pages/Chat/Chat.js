@@ -129,16 +129,16 @@ const InputContainer = ({groupIdx, email}) => {
 
 
   return(
-    <Box sx={{width: "100%", position: "sticky", bottom: "0", backgroundColor:"white",height: "100px", zIndex: "100"}}>
+    <Box sx={{width: "100%", position: "sticky", bottom: "0", backgroundColor:"white",height: "100px", zIndex: "100", display:"flex"}}>
     <TextField
       multiline
       rows={4}
       variant="standard"
       onChange={handleChange}
       value={message}
-      sx={{ height: "100%", minWidth:"90%"}}
+      sx={{ height: "100%", width: "90%"}}
     />
-    <Button variant="contained" onClick={handleClick} sx={{ height: "100%", minWidth:"10%"}} disabled={message===""}>Send</Button>
+    <Button variant="contained" onClick={handleClick} sx={{ height: "100%", width:"10%"}} disabled={message===""}>Send</Button>
   </Box>
   );
 }
@@ -262,6 +262,7 @@ const Chat = () => {
             <div ref={messageEndRef}></div>
           </Box>
             <InputContainer groupIdx={groupIdx} email={user.email} />
+            
         </Box>
       </Box>
     );
