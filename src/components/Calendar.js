@@ -96,7 +96,7 @@ function AddEvent({open, setOpen, groupIdx, seeingMonth, seeingYear , daysInMont
             console.log(err);
         });             
 
-        await instance.get(`/api/tag?MatchingRoomId=${groupIdx}&Month=${seeingYear}-${seeingMonth}`,config)
+        await instance.get(`/api/tag?MatchingRoomId=${groupIdx}&Month=${seeingYear}-${seeingMonth < 10 ? `0${seeingMonth}`: seeingMonth}`,config)
         .then(res => {
             console.log(res.data.value);
             var arr = Array.from({length: 31}, () => []);
@@ -119,8 +119,8 @@ function AddEvent({open, setOpen, groupIdx, seeingMonth, seeingYear , daysInMont
                     newEndDay = daysInMonth;
                 }
 
-                for(var i=newStartDay; i<=newEndDay; i++){
-                    arr[i].push({name: elem.tagName, writer: elem.writer, rgb: elem.rgb, isStart: i === newStartDay, isEnd: i===newEndDay});
+                for(var i=newStartDay-1; i<=newEndDay-1; i++){
+                    arr[i].push({name: elem.tagName, writer: elem.writer, rgb: elem.rgb, isStart: i === newStartDay-1, isEnd: i===newEndDay-1});
                 }
             });
             setTags(arr);
@@ -130,6 +130,7 @@ function AddEvent({open, setOpen, groupIdx, seeingMonth, seeingYear , daysInMont
             console.log(err);
             // setTags(err);
         });     
+
         await setOpen(false);
     }
 
@@ -183,9 +184,7 @@ function AddEvent({open, setOpen, groupIdx, seeingMonth, seeingYear , daysInMont
     )
 }
 
-function Day({isBlank, day, event, year, month, location, groupName, groupImg, groupUserList, tags}){
-    
-
+function Day({isBlank, day,  year, month, location, groupName, groupImg, groupUserList, tags}){
     return(
         isBlank?
             <td className="calendar-day empty">
@@ -208,12 +207,6 @@ function Day({isBlank, day, event, year, month, location, groupName, groupImg, g
                     <Box sx={{width:"100%", height:"100%", '&:hover':{backgroundColor:"secondary.light"}}}>
                         <Typography variant="body1">{day}</Typography>
                         {
-                            // <Badge badgeContent={postNum} color="primary">
-                            //     <FeedIcon color="action" />
-                            // </Badge>
-                        }
-
-                        {
                             tags?
                             tags.length > 0?
                                 tags.map(tag => {
@@ -225,7 +218,6 @@ function Day({isBlank, day, event, year, month, location, groupName, groupImg, g
                                         return(<Box sx={{ backgroundColor: tag.rgb, margin: "5px 0px"}}>{tag.name}</Box>);
                                     }
                                 })
-                                    
                                 :
                                 null
                             :
