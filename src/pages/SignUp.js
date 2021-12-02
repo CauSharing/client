@@ -144,6 +144,7 @@ function EmailUpdate({email, setEmail, isVerified, setIsVerified, topEmailError,
                     variant="standard"
                     onChange={handleEmailChange}
                     required
+                    value={email}
                     helperText={isEmailError || (checkEmail(email) && !checkCauEmail(email))? "Write Chungang univ. email": null}
                     error={topEmailError || isEmailError || (checkEmail(email) && !checkCauEmail(email))}
                     disabled={isEmailLoading}
@@ -437,32 +438,21 @@ function SignUp({departmentList}){
         
     });
 
-    const checkVar = () => {
-        if(email === "" || !checkCauEmail(email))
-            setIsEmailError(true);
-            // return false;
-        if(!isVerified)
-            setIsVerifiedError(true);
-            // return false;
-        if(!checkPassword(password) || password==="")
-            setIsPasswordError(true);
-        
-        if(password !== passwordCheck)
-            setIsPasswordCheckError(true);
-            // return false;
-        if(nickname === "" || nickname.indexOf(' ')>=0 || nickname.length < 2)
-            setIsNicknameError(true);
-            // return false;
-        if(department==="" )
-            setIsDepartmentError(true);
-        
-        if(major === "")
-            setIsMajorError(true);
-            // return false;
-        if(language==="")
-            setIsLanguageError(true);
-            // return false;
-        // return true;
+    const checkVar = async () => {
+        await setIsEmailError(email === "" || !checkCauEmail(email));
+        await setIsVerifiedError(!isVerified);
+        await setIsPasswordError(!checkPassword(password) || password==="");
+        await setIsPasswordCheckError(password !== passwordCheck);
+        await setIsNicknameError(nickname === "" || nickname.indexOf(' ')>=0 || nickname.length < 2);
+        await setIsDepartmentError(department==="");
+        await setIsMajorError(major === "");
+        await setIsLanguageError(language==="");
+
+        if(isEmailError || isVerifiedError || isPassowrdError || isPasswordCheckError || isNicknameError || isDepartmentError || isMajorError || isLanguageError){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     const checkPassword = (password) => {

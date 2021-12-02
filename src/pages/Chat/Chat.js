@@ -209,7 +209,7 @@ const Chat = () => {
           <Box sx={{width: "100%", display: "flex", position: "sticky", zIndex: "100",top:"0", backgroundColor:"white"}}>
             <Setting srcLang = {srcLang} setSrcLang={setSrcLang} destLang={destLang} setDestLang={setDestLang}/>
           </Box>
-          <Box sx={{width: "100%", padding: "20px", overflow: "auto"}} className="container">
+          <Box sx={{width: "100%", padding: "20px", overflow: "auto", minHeight: "80vh"}} className="container">
             {
               originalContents.map((elem,index) => {
                 var splitedDate = null;
