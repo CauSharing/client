@@ -80,7 +80,7 @@ function EditedContent({writer, content, originalContent}){
     }, []);
     return(
         <Box sx={{width: "50%", display:"flex", alignItems: "center", borderLeft: "1px solid #C0C0C0"}}>
-            <Typography variant="body1" sx={{minWidth: "40px", padding: "5px"}}>{writer}</Typography>
+            <Typography variant="body1" sx={{borderRadius: "5px", marginRight:"5px",minWidth: "40px", padding: "5px", backgroundColor: userColor}}>{writer}</Typography>
             <Typography variant="body1">{coloredContent}</Typography>
         </Box>
     );

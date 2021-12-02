@@ -8,10 +8,12 @@ function AboutUsTablePanel({value, index}){
         <div
             role="tabpanel"
             hidden={value !== index}
+
+            style={{height:"80%"}}
         >
         {value === index && (
-          <Box sx={{display: "flex",  alignItems: "end"}}>
-          <Box sx={{display: "flex", width:"60%", height: "100%", padding: "20px", flexDirection:"column"}}>
+          <Box sx={{display: "flex", width:"100%", height: "100%", alignItems: "end"}}>
+            <Box sx={{width:"60%", height: "100%",display: "flex", padding: "20px", flexDirection:"column"}}>
             <Typography variant="h4" sx={{marginBottom:"40px"}}>About us</Typography>
             <Typography variant="h5" sx={{marginBottom:"10px"}}>Our goal</Typography>
             <Typography variant="body1" color="#646464" sx={{marginBottom:"40px"}}>
@@ -51,8 +53,8 @@ function AboutUsTablePanel({value, index}){
               </Box>
             </Box>
           </Box>
-          <Box sx={{width: "40%",  display:"flex", justifyContent: "center", alignItems:"end"}}>
-          <img src={Puang} style={{  width: "60%", height:" 60%"}}/>
+          <Box sx={{width:"40%", height: "100%", display:"flex", justifyContent: "center", alignItems:"end"}}>
+            <img src={Puang} style={{  width: "60%", height:"60%"}}/>
           </Box>
           </Box>
         )}
