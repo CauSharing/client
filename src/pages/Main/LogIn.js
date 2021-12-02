@@ -11,7 +11,7 @@ import './LogIn.css'
 
 
 const LoginBtn = styled(Button)({
-    width: "49%",
+    width: "100%",
     fontSize: "20px",
     border: "none",
     borderRadius: "5px",
@@ -74,7 +74,7 @@ function LogIn(){
 
                     window.localStorage.setItem("user", JSON.stringify(res.data.value));
 
-                    console.log(window.localStorage.getItem('user'));
+                    // console.log(window.localStorage.getItem('user'));
                     // setUser({
                     //     email: res.data.value.email,
                     //     nickname: res.data.value.nickname,
@@ -124,7 +124,7 @@ function LogIn(){
                     />
                 <Box sx={{maxWidth:"450px", display:"flex", justifyContent:"space-between", marginTop:"20px"}}>
                     <LoginBtn onClick={handleClick}>Sign in</LoginBtn>
-                    <ForgetPWBtn>Forgot password?</ForgetPWBtn>
+                    {/* <ForgetPWBtn>Forgot password?</ForgetPWBtn> */}
                 </Box>
             </Box>
             <Box sx={{display:"flex", justifyContent:"center", maxWidth: "450px",marginTop:"20px"}}>

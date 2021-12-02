@@ -277,7 +277,7 @@ function SharpenPost({}){
                     <Typography variant="h5">
                         {`${year}/${month}/${day}/${dayName}`}
                     </Typography>
-                    <ColorButton>Save</ColorButton>
+                    {/* <ColorButton>Save</ColorButton> */}
                 </Box>
                 <Box  sx={{width:"100%"}}>
                     <Typography variant="h5" >{title}</Typography>

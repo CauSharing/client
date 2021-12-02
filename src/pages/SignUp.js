@@ -4,26 +4,25 @@ import './SignUp.css';
 import {checkCauEmail, checkEmail} from "../util/checkEmail";
 import axios from "axios";
 
-import { InputLabel,MenuItem,FormControl ,Select, TextField, Box } from '@mui/material';
+import { InputLabel,MenuItem,FormControl ,Select, TextField, Box, Button } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { styled } from '@mui/material/styles';
 
 import BackBtn from "../components/BackBtn";
 
+import Puang from "../icons/푸앙_윙크.png"
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-const ColorBtn = styled(LoadingButton)({
-    height: "90%",
-    fontSize: "14px",
-    background: "#0148A0",
-    color: "#FFFFFF",
-    fontFamily:"Roboto Condensed",
-    '&:hover': {
-        backgroundColor: '#3181C6',
-        boxShadow: 'none',
-      },
-    
-});
+
+// const BackBtn = styled(Button)({
+//     boxShadow: "none",
+//     border: "none",
+//     borderRadius: "0px",
+//     color: "#3181C6",
+//     padding: "0px",
+//     margin: "0px"
+//   });
 
 function EmailUpdate({email, setEmail, isVerified, setIsVerified, topEmailError, topVerifiedError}){
     const [userVerificationCode, setUserVerificationCode] = useState("");
@@ -519,14 +518,14 @@ function SignUp({departmentList}){
     }
 
     return(
-        <Box sx={{width: "100%", display:"flex"}}>
-        <Box sx={{width: "50%"}}>
+        <Box sx={{width: "100%",  height: "100vh",display:"flex" , background: "linear-gradient(rgba(107, 190, 226, 0.2) 90%, #FFFFFF 10%)"}}>
 
-        </Box>
-        <Box sx={{width: "50%"}}>
+        <Box sx={{width: "50%", padding: "40px 40px 40px 80px", display:"flex", flexDirection:"column"}}>
                 
-            <Box sx={{width:"90%", borderBottom:"1px solid black"}}>
-                {/* <BackBtn nextLoc={"/"}/> */}
+            <Box sx={{width:"90%", borderBottom:"1px solid black", display:"flex", flexDirection:"column", alignItems:"flex-start"}}>
+                <BackBtn nextLoc={true} >
+                    <ArrowBackIcon sx={{margin:"0px", padding:"0px"}}/>
+                </BackBtn>
                 <div className="signup__title">Sign Up</div>
             </Box>
             <EmailUpdate
@@ -570,6 +569,9 @@ function SignUp({departmentList}){
                 disabled={isLoading}
                 onClick={okBtnClick}
                 >OK</CustomOKLoadingBtn>
+        </Box>
+        <Box sx={{width: "50%", display:"flex", alignItems:"end", justifyContent:"end", padding: "40px"}}>
+            <img src={Puang} alt="puang wink" style={{width:"50%"}}/>
         </Box>
         </Box>
     )
