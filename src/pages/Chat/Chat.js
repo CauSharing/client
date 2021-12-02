@@ -18,12 +18,17 @@ import "./Chat.css";
 const sockJS = new SockJS("http://3.37.167.224:8080/api/ws-stomp");
 const stompClient  = Stomp.over(sockJS);
 
-function NewContents({messageEndRef, groupIdx, user, srcLang, destLang}){
+function NewContents({messageEndRef, groupIdx, user, srcLang, destLang, groupUserList}){
   const [newContents, setNewContents] = useState([]);
 
   const onMessageReceived = async (payload) => {
      var newChatList = JSON.parse(sessionStorage.getItem('newChats'));
      var newData =JSON.parse(payload.body);
+    // //  var userImg = await groupUserList.filter(elem => elem.email === newData.email).image;
+    // console.log( groupUserList.filter(elem => elem.email === newData.email));
+    // console.log( groupUserList.find(elem => elem.email === newData.email).image);
+    console.log(groupUserList.find(elem => elem.email === newData.email));
+    newData["image"] = groupUserList.find(elem => elem.email === newData.email).image;
     await sessionStorage.setItem('newChats',JSON.stringify([...newChatList, newData]));
     await setNewContents([...newChatList, newData]);
     await messageEndRef.current.scrollIntoView();
@@ -149,6 +154,7 @@ const Chat = () => {
   const [groupName, setGroupName] = useState(groupInfo.groupName);
   const [groupImg, setGroupImg] = useState(groupInfo.groupImg);
   const [groupUserList, setGroupUserList] = useState(groupInfo.groupUserList);
+ 
   const user = JSON.parse(window.localStorage.getItem('user'));
 
   const {groupIdx} = useParams();
@@ -258,7 +264,7 @@ const Chat = () => {
                 }
               })    
             }
-            <NewContents messageEndRef={messageEndRef} groupIdx={groupIdx} user={user} srcLang={srcLang} destLang={destLang}/>
+            <NewContents messageEndRef={messageEndRef} groupIdx={groupIdx} user={user} srcLang={srcLang} destLang={destLang} groupUserList={groupUserList}/>
             <div ref={messageEndRef}></div>
           </Box>
             <InputContainer groupIdx={groupIdx} email={user.email} />
