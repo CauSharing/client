@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import {Box, FormControl, Select ,MenuItem , InputLabel} from '@mui/material';
 
-function Setting({srcLang, setSrcLang, destLang, setDestLang}){
+import BackBtn from '../../components/BackBtn';
+
+function Setting({srcLang, setSrcLang, destLang, setDestLang, groupIdx}){
 
     const languageDict = {
         'English' : ['Japanese', 'French', 'Simplified Chinese', 'Traditional Chinese', 'Korean'],
@@ -49,7 +51,9 @@ function Setting({srcLang, setSrcLang, destLang, setDestLang}){
     };
 
     return(
-        <Box sx={{width: "100%", display: "flex", justifyContent: "end", paddingRight: "20px"}}>
+        <Box sx={{width: "100%", display: "flex", justifyContent: "space-between",alignItems:"center", paddingLeft: "20px", height:"10vh"}}>
+            <BackBtn nextLoc={`/home/diary/${groupIdx}`} />
+            <Box>
             <FormControl variant="standard" sx={{ m: 1, minWidth: '180px' }}>
                 <InputLabel id="source-language-select-label">Source language</InputLabel>
                 <Select
@@ -92,6 +96,7 @@ function Setting({srcLang, setSrcLang, destLang, setDestLang}){
                 }
                 </Select>
             </FormControl>
+            </Box>
         </Box>
     );
 }

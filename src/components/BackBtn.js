@@ -6,10 +6,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 function BackBtn({nextLoc, setShowContents}){
     const history = useHistory();
     const handleClick = (e) => {
-       
+       e.preventDefault();
         if(nextLoc)
-            history.goBack();
-            // window.location.replace(nextLoc);
+            window.location.href = nextLoc;
         else
         {
             setShowContents(false);

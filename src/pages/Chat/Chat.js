@@ -129,7 +129,7 @@ const InputContainer = ({groupIdx, email}) => {
 
 
   return(
-    <Box sx={{width: "100%", position: "sticky", bottom: "0", backgroundColor:"white",height: "100px", zIndex: "100", display:"flex"}}>
+    <Box sx={{width: "100%", position: "sticky", bottom: "0", backgroundColor:"white",height: "20vh", zIndex: "100", display:"flex", paddingLeft: '20px'}}>
     <TextField
       multiline
       rows={4}
@@ -207,9 +207,9 @@ const Chat = () => {
         <GroupSidebar groupIdx={groupIdx} groupName={groupName} groupImg={groupImg} groupUserList={groupUserList}/>
         <Box sx={{width: "50%", paddingTop:"20px", display: "flex", flexDirection: "column", height: "100vh"}}>
           <Box sx={{width: "100%", display: "flex", position: "sticky", zIndex: "100",top:"0", backgroundColor:"white"}}>
-            <Setting srcLang = {srcLang} setSrcLang={setSrcLang} destLang={destLang} setDestLang={setDestLang}/>
+            <Setting srcLang = {srcLang} setSrcLang={setSrcLang} destLang={destLang} setDestLang={setDestLang} groupIdx={groupIdx}/>
           </Box>
-          <Box sx={{width: "100%", padding: "20px", overflow: "auto", minHeight: "80vh"}} className="container">
+          <Box sx={{width: "100%", padding: "20px", overflowY: "scroll", minHeight: "70vh"}} className="container">
             {
               originalContents.map((elem,index) => {
                 var splitedDate = null;
@@ -271,7 +271,7 @@ const Chat = () => {
               lastMessage={lastMessage}/>
             <div ref={messageEndRef}></div>
           </Box>
-            <InputContainer groupIdx={groupIdx} email={user.email} />
+          <InputContainer groupIdx={groupIdx} email={user.email} />
             
         </Box>
       </Box>

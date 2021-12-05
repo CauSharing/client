@@ -48,9 +48,6 @@ function MatchingResult({showMatchingResult, description, setShowMatchingResult}
 function MatchingLoading(){
     return(
         <div className="matching__loading">
-        {/* <Box sx={{width: 300}}>
-            <LinearProgress />
-        </Box> */}
             <div className="matching__loading__desc">
                 <span>We are looking for a friend you would like</span>
                 <span className="dot1">.</span>
@@ -116,7 +113,6 @@ function Matching({departmentList, setShowAddFriend, showAddFriend}){
                 }
                 else
                     setMatchingResult(res.data.value);
-                    // setMatchingResult(res.data.description);
                 })
             .catch(err =>{
                     console.log(err);
@@ -134,8 +130,6 @@ function Matching({departmentList, setShowAddFriend, showAddFriend}){
                     e.preventDefault(); 
                     setShowAddFriend(false);
                 }}}>
-        {/* <div className="matchingBox"> */}
-            {/* <BackBtn setShowContents={setShowAddFriend}/> */}
             <DialogTitle sx={{display:"flex", justifyContent:"center", fontSize: 25, fontFamily:"Roboto Condensed"}}>Add Friend</DialogTitle>
             <DialogContent>
                 <DialogContentText sx={{display:"flex", flexDirection:"column", alignItems:"center"}}>
@@ -277,11 +271,6 @@ function Matching({departmentList, setShowAddFriend, showAddFriend}){
                 
                 </DialogActions>
             </DialogContent>
-            {/* <div className="matching__title">Find your friend</div> */}
-            
-
-
-         {/* </div> */}
         </Dialog>
     );
 }

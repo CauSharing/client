@@ -131,7 +131,7 @@ function SideBar(){
             </Link>
             <Box sx={{position: "absolute", bottom:"10px"}}>
                 <Link to="/" style={{ textDecoration: 'none' }}>
-                    <Typography variant="body1" sx={{color:"dimgrey"}}>
+                    <Typography variant="body1" sx={{color:"#B1B1B1"}}>
                         Logout
                     </Typography>
                 </Link>
