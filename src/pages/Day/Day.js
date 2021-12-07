@@ -23,13 +23,13 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
     notebook : {
         flexDirection: "row",
-        [theme.breakpoints.down('xs')]:{
+        [theme.breakpoints.down('sm')]:{
             flexDirection: "column",
         }
     },
     phone : {
         flexDirection: "column",
-        [theme.breakpoints.down('xs')]:{
+        [theme.breakpoints.down('sm')]:{
             flexDirection: "row",
         }
     }

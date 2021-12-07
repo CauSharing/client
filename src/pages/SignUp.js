@@ -14,16 +14,40 @@ import BackBtn from "../components/BackBtn";
 import Puang from "../icons/푸앙_윙크.png"
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
+import { makeStyles } from '@material-ui/core/styles';
 
-// const BackBtn = styled(Button)({
-//     boxShadow: "none",
-//     border: "none",
-//     borderRadius: "0px",
-//     color: "#3181C6",
-//     padding: "0px",
-//     margin: "0px"
-//   });
+const useImgStyles = makeStyles((theme) => ({
+    notebook : {
+        width: "50%", display:"flex", alignItems:"end", justifyContent:"end", padding: "40px",
+        [theme.breakpoints.down('sm')]:{
+            display:"none"
+        }
+    }
+}));
 
+const useFormStyles = makeStyles((theme) => ({
+    notebook : {
+        marginTop:'10px', display:"flex", alignItems:"center",flexDirection:"row",width:"100%",
+        [theme.breakpoints.down('sm')]:{
+            marginTop:'10px', display:"flex",flexDirection:"column",width:"100%",alignItems:"start"
+        }
+    }
+}));
+
+const useButtonStyles = makeStyles((theme) => ({
+    notebook: {
+        display:"block",
+        [theme.breakpoints.down('sm')]:{
+            display:"none"
+        }
+    },
+    phone: {
+        display: "none",
+        [theme.breakpoints.down('sm')]:{
+            display:"block"
+        }
+    }
+}))
 function EmailUpdate({email, setEmail, isVerified, setIsVerified, topEmailError, topVerifiedError}){
     const [userVerificationCode, setUserVerificationCode] = useState("");
     const [isEmailError, setIsEmailError] = useState(false);
@@ -31,11 +55,32 @@ function EmailUpdate({email, setEmail, isVerified, setIsVerified, topEmailError,
     const [isVerificationCodeError, setIsVerficationCodeError] = useState(false);
     const [isVerificationCodeLoading, setIsVerificationCodeLoading] = useState(false);
 
+    const buttonClasses = useButtonStyles();
 
     const CustomEmailLoadingBtn = styled(LoadingButton)({
+        display:"flex",
+        alignItems:"center",
+        justifyContent:"center",
         marginLeft: "10px",
         height: '40px',
         fontSize: "14px",
+        background: isEmailLoading? "#E9E9E9": "#0148A0",
+        color: "#FFFFFF",
+        fontFamily:"Roboto Condensed",
+        '&:hover': {
+            backgroundColor: '#4892d2',
+            boxShadow: 'none',
+        },
+        
+    });
+
+    const PhoneCustomEmailLoadingBtn = styled(LoadingButton)({
+        display:"flex",
+        alignItems:"center",
+        justifyContent:"center",
+        marginLeft: "10px",
+        height: '40px',
+        fontSize: "10px",
         background: isEmailLoading? "#E9E9E9": "#0148A0",
         color: "#FFFFFF",
         fontFamily:"Roboto Condensed",
@@ -151,11 +196,19 @@ function EmailUpdate({email, setEmail, isVerified, setIsVerified, topEmailError,
                     sx={{minWidth: "300px"}}
                     />
                 <CustomEmailLoadingBtn 
+                    className={buttonClasses.notebook}
                     loading={isEmailLoading}
                     disabled={isEmailLoading}
                     onClick={handleEmailOnClick}>
                         Send verification code
                 </CustomEmailLoadingBtn>
+                <PhoneCustomEmailLoadingBtn 
+                    className={buttonClasses.phone}
+                    loading={isEmailLoading}
+                    disabled={isEmailLoading}
+                    onClick={handleEmailOnClick}>
+                        Send code
+                </PhoneCustomEmailLoadingBtn>
             </Box>
             <Box
                 sx={{display:"flex", alignItems:"center", height: "60px"}}>
@@ -252,6 +305,8 @@ function PasswordUpdate({password, setPassword, passwordCheck, setPasswordCheck,
 function MajorUpdate({departmentList, department, setDepartment, major, setMajor, topDepartmentError, topMajorError}){
     const [departmentId, setDepartmentId] = useState(null);
 
+    const formClasses = useFormStyles();
+
     const handleDepartmentOnChange = async (event) => {
         event.preventDefault();
         setDepartment(event.target.value);
@@ -264,7 +319,7 @@ function MajorUpdate({departmentList, department, setDepartment, major, setMajor
     };
 
     return(
-        <Box sx={{marginTop:'10px', display:"flex", alignItems:"center"}}>
+        <Box className={formClasses.notebook}>
             <FormControl variant="standard" sx={{minWidth: 300, marginRight:1,  fontSize: 18, fontFamily:"Roboto Condensed"}}>
                 <InputLabel id="select-college">College</InputLabel>
                 <Select
@@ -313,7 +368,7 @@ function LanguageUpdate({language, setLanguage, topLanguageError}){
     };
     return(
         <Box sx={{ display:"flex", alignItems:"center",marginTop:'10px'}}>
-        <FormControl variant="standard"sx={{minWidth: 300, marginBottom: 1,fontSize: 18, fontFamily:"Roboto Condensed"}} >
+        <FormControl variant="standard"sx={{minWidth: "200px", marginBottom: 1,fontSize: 18, fontFamily:"Roboto Condensed"}} >
         <InputLabel id="select-language">Most comfortable language</InputLabel>
         <Select
             labelId="select-language"
@@ -422,6 +477,8 @@ function SignUp({departmentList}){
     const [isDepartmentError, setIsDepartmentError] = useState(false);
     const [isMajorError, setIsMajorError] = useState(false);
     const [isLanguageError, setIsLanguageError] = useState(false);
+
+    const imgClasses = useImgStyles();
 
     const CustomOKLoadingBtn = styled(LoadingButton)({
         marginTop: '10px',
@@ -560,7 +617,7 @@ function SignUp({departmentList}){
                 onClick={okBtnClick}
                 >OK</CustomOKLoadingBtn>
         </Box>
-        <Box sx={{width: "50%", display:"flex", alignItems:"end", justifyContent:"end", padding: "40px"}}>
+        <Box className={imgClasses.notebook}>
             <img src={Puang} alt="puang wink" style={{width:"50%"}}/>
         </Box>
         </Box>

@@ -9,13 +9,13 @@ import {IconButton, Dialog, DialogTitle, DialogContent} from '@mui/material';
 const useButtonStyles = makeStyles((theme) => ({
     notebook : {
         display: "block",
-        [theme.breakpoints.down('xs')]:{
+        [theme.breakpoints.down('sm')]:{
             display: "none",
         }
     },
     phone : {
         display: "none",
-        [theme.breakpoints.down('xs')]:{
+        [theme.breakpoints.down('sm')]:{
             display: "block",
         }
     }

@@ -20,13 +20,13 @@ import "./Chat.css";
 const useStyles = makeStyles((theme) => ({
   notebook : {
       flexDirection: "row",
-      [theme.breakpoints.down('xs')]:{
+      [theme.breakpoints.down('sm')]:{
           flexDirection: "column",
       }
   },
   phone : {
       flexDirection: "column",
-      [theme.breakpoints.down('xs')]:{
+      [theme.breakpoints.down('sm')]:{
           flexDirection: "row",
       }
   }
@@ -35,13 +35,13 @@ const useStyles = makeStyles((theme) => ({
 const useButtonStyles = makeStyles((theme) => ({
   notebook : {
       display: "block",
-      [theme.breakpoints.down('xs')]:{
+      [theme.breakpoints.down('sm')]:{
           display: "none",
       }
   },
   phone : {
       display: "none",
-      [theme.breakpoints.down('xs')]:{
+      [theme.breakpoints.down('sm')]:{
           display: "block",
       }
   }
@@ -50,7 +50,7 @@ const useButtonStyles = makeStyles((theme) => ({
 const useChatStyles = makeStyles((theme) => ({
   notebook:{
     width:"50%",
-    [theme.breakpoints.down('xs')]:{
+    [theme.breakpoints.down('sm')]:{
       width:"100%",
     }
   }

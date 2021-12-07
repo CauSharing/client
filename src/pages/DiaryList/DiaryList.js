@@ -41,13 +41,13 @@ const ColorButton = styled(Button)({
 const useStyles = makeStyles((theme) => ({
     notebook : {
         flexDirection: "row",
-        [theme.breakpoints.down('xs')]:{
+        [theme.breakpoints.down('sm')]:{
             flexDirection: "column",
         }
     },
     phone : {
         flexDirection: "column",
-        [theme.breakpoints.down('xs')]:{
+        [theme.breakpoints.down('sm')]:{
             flexDirection: "row",
         }
     }
@@ -56,13 +56,13 @@ const useStyles = makeStyles((theme) => ({
 const useButtonStyles = makeStyles((theme) => ({
     notebook : {
         display: "block",
-        [theme.breakpoints.down('xs')]:{
+        [theme.breakpoints.down('sm')]:{
             display: "none",
         }
     },
     phone : {
         display: "none",
-        [theme.breakpoints.down('xs')]:{
+        [theme.breakpoints.down('sm')]:{
             display: "block",
         }
     }
@@ -147,9 +147,9 @@ function DiaryList({departmentList}){
                         </ColorButton>
                     </Box>
                     <Box sx={{  marginTop:"20px"}}>
-                        <Grid container spacing={2} columns={{ xs: 2, sm: 4, md: 8 ,lg:10, xl:12 }}>
+                        <Grid container spacing={2} columns={{ xs: 2, sm: 6, md: 6 ,lg:8, xl:10 }}>
                             {diaryList.map((elem, index) => (
-                            <Grid item xs={1} sm={2} md={4} lg={3} xl={3} key={index}>
+                            <Grid item xs={1} sm={2} md={2} lg={2} xl={2} key={index}>
                                 {elem}
                             </Grid>
                             ))}
