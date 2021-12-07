@@ -513,7 +513,7 @@ function SignUp({departmentList}){
         <Box sx={{width: "50%", padding: "40px 40px 40px 80px", display:"flex", flexDirection:"column"}}>
                 
             <Box sx={{width:"90%", borderBottom:"1px solid black", display:"flex", flexDirection:"column", alignItems:"flex-start"}}>
-                <BackBtn nextLoc={true} >
+                <BackBtn nextLoc={"/"} >
                     <ArrowBackIcon sx={{margin:"0px", padding:"0px"}}/>
                 </BackBtn>
                 <div className="signup__title">Sign Up</div>

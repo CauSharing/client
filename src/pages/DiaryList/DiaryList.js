@@ -8,6 +8,7 @@ import "./DiaryList.css";
 
 import { Button, Grid, Box , Typography, CircularProgress  } from '@mui/material';
 import { styled } from '@mui/material/styles';
+// import useMediaQuery from '@mui/material/useMediaQuery';
 
 const ColorButton = styled(Button)({
     width: '126px',
@@ -34,6 +35,8 @@ const ColorButton = styled(Button)({
   });
 
 
+
+
 function DiaryList({departmentList}){
     // console.log("render diarylist");
     
@@ -50,6 +53,8 @@ function DiaryList({departmentList}){
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     };
+
+    
 
     useEffect(async () => {
         // console.log("diarylist-user information: ", userEmail, userNickname, userDepartment, userMajor, userImage, userLanguage);

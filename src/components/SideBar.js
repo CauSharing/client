@@ -1,9 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { Link } from 'react-router-dom';
 
-import {Drawer,Divider, Avatar, Typography,Button,Box  } from '@mui/material'
+import {Drawer,Divider, Avatar, Typography,Button,Box ,IconButton,AppBar ,Menu ,MenuItem  } from '@mui/material'
 // import Logo from '../icons/CxC_logo.png';
 import { styled } from '@mui/material/styles';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
+import useMediaQuery from '@mui/material/useMediaQuery';
+
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 const ColorButton = styled(Button)({
     border: "none",
@@ -28,11 +35,26 @@ const ColorButton = styled(Button)({
     },
   });
 
+const useStyles = makeStyles((theme) => ({
+    notebook : {
+        display: "block",
+        [theme.breakpoints.down('xs')]:{
+            display: "none",
+        }
+    },
+    phone : {
+        display: "none",
+        [theme.breakpoints.down('xs')]:{
+            display:"block",
+        }
+    }
+}));
+
   
 function SideBar(){
     const [user, setUser] = useState(null);
     const [clickedMenu, setClickedMenu] = useState(null);
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
 
     const ClickedBtn = styled(ColorButton)({
         color: 'black',
@@ -47,6 +69,13 @@ function SideBar(){
         e.preventDefault();
     }
 
+    const handleAppBarClick = () => {
+        setOpen(!open);
+    };
+
+    const classes = useStyles();
+    const anchorRef = useRef(null);
+
     useEffect(() => {
         setUser(JSON.parse(window.localStorage.getItem('user')));
 
@@ -59,7 +88,55 @@ function SideBar(){
     }, []);
 
     return(
-        <Box>
+        <>
+        <Box className={classes.phone}>
+        {
+            <AppBar>
+                <Box sx={{display:"flex", justifyContent:"space-between"}}>
+                <IconButton
+                    color="inherit"
+                    id="menuIcon"
+                    edge="start"
+                    ref={anchorRef}
+                    onClick={handleAppBarClick}
+                    sx={{display:"flex", width:"70px"}}
+                    >
+                    <MenuIcon sx={{margin:"0px", padding:"0px"}}/>
+                </IconButton>
+                <Box sx={{display:"flex", alignItems:"center"}}>
+                    <Typography variant="body1">{user? user.nickname : "undefined"}</Typography>
+                    <Avatar 
+                        sx={{margin:"5px"}}
+                        alt={user? user.nickname : "undefined"}
+                        src={user? user.image : null}>
+                    </Avatar>
+                </Box>
+                {        
+                    open?
+                    <Menu 
+                        open={open} 
+                        onClose={handleAppBarClick}
+                        anchorEl={anchorRef.current}
+                        placement="bottom-start">
+
+                        <Link to="/home" style={{ textDecoration: 'none' }}>
+                            <MenuItem>Home</MenuItem>
+                        </Link>
+                        <Link to="/invitation" style={{ textDecoration: 'none' }}>
+                            <MenuItem>Invitation list</MenuItem>
+                        </Link>
+                        <Link to="/setting" style={{ textDecoration: 'none' }}>
+                            <MenuItem>Setting</MenuItem>
+                        </Link>
+                    </Menu>
+                    :
+                    null
+                }
+                </Box>
+            </AppBar>
+        }
+        </Box>
+        <Box className={classes.notebook}>
         <Drawer
             PaperProps={{
                 sx: {
@@ -82,7 +159,6 @@ function SideBar(){
             }}
             variant="permanent"
             anchor="left"
-            open={open}
         >
             <Avatar
                 sx={{width: "120px", height:"120px", fontSize: "30px", marginBottom:"20px"}}
@@ -138,6 +214,7 @@ function SideBar(){
             </Box>
         </Drawer>
         </Box>
+        </>
     );
 }
 
