@@ -12,6 +12,24 @@ import { styled } from '@mui/material/styles';
 
 import axios from 'axios';
 
+import { makeStyles } from '@material-ui/core/styles';
+
+
+const useStyles = makeStyles((theme) => ({
+    notebook : {
+        flexDirection: "row",
+        [theme.breakpoints.down('xs')]:{
+            flexDirection: "column",
+        }
+    },
+    phone : {
+        flexDirection: "column",
+        [theme.breakpoints.down('xs')]:{
+            flexDirection: "row",
+        }
+    }
+}));
+
 const ColorButton = styled(Button)({
     width: '126px',
     height: '41px',
@@ -80,7 +98,7 @@ function EditedContent({writer, content, originalContent}){
     }, []);
     return(
         <Box sx={{width: "50%", display:"flex", alignItems: "center", borderLeft: "1px solid #C0C0C0"}}>
-            <Typography variant="body1" sx={{borderRadius: "5px", marginRight:"5px",minWidth: "40px", padding: "5px", backgroundColor: userColor}}>{writer}</Typography>
+            <Typography variant="body1" sx={{borderRadius: "5px", marginRight:"5px",minWidth: "40px", padding: "5px", backgroundColor: userColor, display:"flex", alignItems: "center",justifyContent:"center"}}>{writer}</Typography>
             <Typography variant="body1">{coloredContent}</Typography>
         </Box>
     );
@@ -174,7 +192,7 @@ function Block({originalContent, editedDataList, line, userNickname, postId, set
                         multiline
                         style={{width:"90%", fontSize:"18px", borderLeft: "1px solid #C0C0C0"}} 
                         inputStyle ={{width: '90%', fontSize:"18px"}}/>
-                    <Button variant="outlined" onClick={handleClick}>Submit</Button>
+                    <Button variant="outlined" onClick={handleClick} size="small">Submit</Button>
                 </Box>
             </Box>
             {
@@ -203,6 +221,8 @@ function SharpenPost({}){
     const [title, setTitle] = useState("");
     const [originalList, setOriginalList] = useState([]);
     const [editedList, setEditedList] = useState([]);
+
+    const classes = useStyles();
 
     useEffect( async () => {
         var groupInfo = JSON.parse(localStorage.getItem('curGroup'));
@@ -264,7 +284,7 @@ function SharpenPost({}){
     }, []);
 
     return(
-        <Box sx={{width:"100%", display:"flex"}}>
+        <Box sx={{width:"100%", display:"flex"}} className={classes.notebook}>
             <GroupSidebar groupIdx={groupIdx} groupName={groupName} groupImg={groupImg} groupUserList={groupUserList}/>
             <Box sx={{width:"100%", padding:"20px"}}>
                 <BackBtn nextLoc={`/home/diary/${groupIdx}/${year}-${month}-${day}`}/>

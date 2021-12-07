@@ -17,7 +17,23 @@ import {ButtonGroup, Button, List, TextField, Box, Typography ,
 import { styled } from '@mui/material/styles';
 
 import randomColor from 'randomcolor';
+import { makeStyles } from '@material-ui/core/styles';
 
+
+const useStyles = makeStyles((theme) => ({
+    notebook : {
+        flexDirection: "row",
+        [theme.breakpoints.down('xs')]:{
+            flexDirection: "column",
+        }
+    },
+    phone : {
+        flexDirection: "column",
+        [theme.breakpoints.down('xs')]:{
+            flexDirection: "row",
+        }
+    }
+  }));
 
 let sample_img = "https://w.namu.la/s/adb56b09aef6d27319fe0fed21df3cf9e282fe7964308413845ab53649de0ac7e4003aa7abb7b2fe51b934bfc22b68d7183381a532e6ffca6849ad42672b4fc580161f61963aefaa808acaa4c788504ec2212a4a827718b8451f23098f8f24d7fa2d12cb721787c3cd3e098b609a9555";
 const ColorButton = styled(Button)({
@@ -339,6 +355,8 @@ function Day({}){
     const [openDeleteDialog,setOpenDeleteDialog] = useState(false);
     const [deletePost, setDeletePost] = useState(null);
 
+    const classes = useStyles();
+
     useEffect(async () => {
         var groupInfo = JSON.parse(localStorage.getItem('curGroup'));
         setGroupName(groupInfo.groupName);
@@ -371,7 +389,7 @@ function Day({}){
 
     return(
 
-        <Box sx={{display: "flex", width: "100%", justifyContent:"center"}}>
+        <Box sx={{display: "flex", width: "100%", justifyContent:"center"}} className={classes.notebook}>
             <DeletePostDialog 
                 open={openDeleteDialog} 
                 setOpen={setOpenDeleteDialog} 

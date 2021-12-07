@@ -11,7 +11,7 @@ import GroupSidebar from "../../components/GroupSidebar";
 import BackBtn from "../../components/BackBtn";
 
 import axios from 'axios';
-
+import { makeStyles } from '@material-ui/core/styles';
 
 const PictureBtn = styled(Button)({
     width: '100%',
@@ -25,7 +25,34 @@ const PictureBtn = styled(Button)({
     }
   });
 
-
+  const useStyles = makeStyles((theme) => ({
+    notebook : {
+        flexDirection: "row",
+        [theme.breakpoints.down('xs')]:{
+            flexDirection: "column",
+        }
+    },
+    phone : {
+        flexDirection: "column",
+        [theme.breakpoints.down('xs')]:{
+            flexDirection: "row",
+        }
+    }
+  }));
+  const useButtonStyles = makeStyles((theme) => ({
+    notebook : {
+        display: "block",
+        [theme.breakpoints.down('xs')]:{
+            display: "none",
+        }
+    },
+    phone : {
+        display: "none",
+        [theme.breakpoints.down('xs')]:{
+            display: "block",
+        }
+    }
+}));
 
 function EditGroupProfile(){
     const inputFile = useRef(null);
@@ -45,7 +72,8 @@ function EditGroupProfile(){
     };
 
     const imageRegex = /.*\.(gif|jpe?g|bmp|png)$/igm;
-
+    const classes = useStyles();
+    const buttonClasses = useButtonStyles();
 
     const handleGroupNameChange = (event) => {
         event.preventDefault();
@@ -124,10 +152,12 @@ function EditGroupProfile(){
 
 
     return(
-        <Box sx={{display:"flex"}}>
+        <Box sx={{display:"flex"}} className={classes.notebook}>
             <GroupSidebar diaryIdx={groupIdx}/>
             <Box sx={{width:"100%", padding: "20px"}}>
-                <BackBtn nextLoc={`/home/diary/${groupIdx}/group-setting`}/>
+                <Box className={buttonClasses.notebook}>
+                    <BackBtn nextLoc={`/home/diary/${groupIdx}/group-setting`}/>
+                </Box>
                 <Typography variant="h4" sx={{marginTop:"20px", borderBottom: "1px solid #7c7c7c", paddingBottom:"10px"}}>Edit Group Profile</Typography>
                 <Box sx={{width:"100%", display:"flex"}}>
                     <Box sx={{width:"50%", borderRight:"1px solid #7c7c7c", padding: "10px"}}>

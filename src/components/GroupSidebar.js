@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import {Drawer,Divider, Avatar, Typography,Button,Box,AvatarGroup, AppBar, Menu, MenuItem,IconButton   } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -62,6 +62,8 @@ function GroupSidebar({}){
 
     const [open, setOpen] = useState(false);
 
+    const history = useHistory();
+
     const ClickedBtn = styled(ColorButton)({
         color: 'black',
         backgroundColor: 'white'
@@ -102,8 +104,10 @@ function GroupSidebar({}){
                 <Box sx={{display:"flex", justifyContent:"space-between"}}>
                     <Box sx={{display:"flex", padding: "0px 5px"}}>
                         <IconButton
+                            title="Go back to group list"
                             color="inherit"
                             edge="start"
+                            // onClick={() => {history.goBack();}}
                             onClick={() => {window.location.href="/home"}}
                             sx={{display:"flex", width:"50px"}}
                             >
