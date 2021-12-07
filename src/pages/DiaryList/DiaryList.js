@@ -6,9 +6,11 @@ import Matching from "../../components/Matching";
 import DiaryThumbnail from "../../components/DiaryThumbnail";
 import "./DiaryList.css";
 
-import { Button, Grid, Box , Typography, CircularProgress  } from '@mui/material';
+import { Button, Grid, Box , Typography, CircularProgress,Fab   } from '@mui/material';
 import { styled } from '@mui/material/styles';
-// import useMediaQuery from '@mui/material/useMediaQuery';
+import { makeStyles } from '@material-ui/core/styles';
+
+import AddIcon from '@mui/icons-material/Add';
 
 const ColorButton = styled(Button)({
     width: '126px',
@@ -36,6 +38,21 @@ const ColorButton = styled(Button)({
 
 
 
+const useStyles = makeStyles((theme) => ({
+    notebook : {
+        display: "block",
+        [theme.breakpoints.down('xs')]:{
+            display: "none",
+        }
+    },
+    phone : {
+        display: "none",
+        [theme.breakpoints.down('xs')]:{
+            display:"block",
+        }
+    }
+}));
+
 
 function DiaryList({departmentList}){
     // console.log("render diarylist");
@@ -54,7 +71,7 @@ function DiaryList({departmentList}){
         headers: { Authorization: `Bearer ${token}` }
     };
 
-    
+    const classes = useStyles();
 
     useEffect(async () => {
         // console.log("diarylist-user information: ", userEmail, userNickname, userDepartment, userMajor, userImage, userLanguage);
@@ -93,9 +110,9 @@ function DiaryList({departmentList}){
 
     return(
         
-        <Box sx={{display:"flex"}}>
+        <Box sx={{display:"flex", height:"80vh"}}>
             <SideBar departmentList={departmentList} clickedMenuId={"0"}/>
-            <Box sx={{padding: "20px", width: "100%"}}>
+            <Box sx={{padding: "20px", width: "100%", height:"100%"}}>
             {
                 isLoading?
                 <Box sx={{display:"flex", alignItems: "center", justifyContent:"center", height: "90vh"}}>
@@ -105,9 +122,15 @@ function DiaryList({departmentList}){
                 showAddFriend?
                 <Matching departmentList={departmentList} setShowAddFriend={setShowAddFriend} showAddFriend={showAddFriend}/>
                 :
-                <Box>
-                    <ColorButton variant="contained" className="diarylist__addBtn" onClick={handleClick}>+ Add Friend</ColorButton>
-                    {/* <Box sx={{ flexGrow: 1 , marginTop:"20px"}}> */}
+                <Box sx={{height: "100%"}}>
+                    <Box className={classes.notebook}>
+                        <ColorButton 
+                            variant="contained" 
+                            onClick={handleClick}
+                            >
+                            + Add Friend
+                        </ColorButton>
+                    </Box>
                     <Box sx={{  marginTop:"20px"}}>
                         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                             {diaryList.map((elem, index) => (
@@ -117,8 +140,21 @@ function DiaryList({departmentList}){
                             ))}
                         </Grid>
                     </Box>
+
                 </Box>
             }
+               
+                <Fab 
+                    color="primary"
+                    size="medium"  
+                    className={classes.phone} 
+                    onClick={() => setShowAddFriend(!showAddFriend)}
+                    sx={{position:"fixed", bottom:"10px", right:"10px", display:"flex", justifyContent:"center", alignItems:"center"}}>
+                    <Box sx={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+                        <AddIcon />
+                    </Box>
+                </Fab>
+                
             </Box>
         </Box>
     

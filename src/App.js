@@ -20,6 +20,7 @@ import Chat from "./pages/Chat/Chat";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import {Box } from '@mui/material'
 
 const lightTheme = createTheme({
     typography:{
@@ -60,7 +61,7 @@ function App(){
     ];
 
     return(
-        <>
+        <Box sx={{display:"flex"}}>
             <ThemeProvider theme={lightTheme}>
             <Router>
                 <Switch>
@@ -70,10 +71,6 @@ function App(){
                             <Main {...props} />
                         )}
                     />
-                    {/* <Route
-                        exact path="/login"
-                        render={(props)=><LogIn setUser={setUser} {...props} />}
-                    /> */}
                     <Route
                         exact path="/signUp"
                         render={(props)=><SignUp departmentList={departmentList} {...props}/>}
@@ -128,7 +125,7 @@ function App(){
                 </Switch>
             </Router>
             </ThemeProvider>
-        </>
+        </Box>
     );
 }
 

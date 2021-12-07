@@ -28,13 +28,13 @@ const ColorButton = styled(Button)({
     },
   });
 
-function PlusBtn({setShowContents, desc}){
+function PlusBtn({setShowContents, desc, theme}){
     const handleClick = (e) => {
         e.preventDefault();
         setShowContents(true);
     }
     return(
-        <ColorButton className="plusBtn" onClick={handleClick}>
+        <ColorButton className={theme} onClick={handleClick}>
             {desc}
         </ColorButton>
     );

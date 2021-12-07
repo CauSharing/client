@@ -6,58 +6,23 @@ import PlusBtn from "./PlusBtn";
 import BackBtn from "./BackBtn";
 
 import {Dialog, DialogActions, DialogContent, DialogContentText, 
-    DialogTitle, TextField, Button , Typography, Box, Badge } from '@mui/material';
-    import FeedIcon from '@mui/icons-material/Feed';
+    DialogTitle, TextField, Button , Typography, Box, Badge,Fab } from '@mui/material';
 
 import DatePicker from '@mui/lab/DatePicker';
-/*
- eventArr = [
-    {id: 0, startDate: "2021-10-29", endDate:"2021-10-30", desc:"party", color: "#111111"},
-    ...
- ]
-*/
 
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DatePicker';
-// import StaticDatePicker from '@mui/lab/StaticDatePicker';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 import { styled } from '@mui/material/styles';
+import { makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@mui/icons-material/Add';
 
 import { ColorPicker } from 'material-ui-color';
 
 import axios from "axios";
 
 import './Calendar.css';
-
-const ColorButton = styled(Button)({
-    width: '126px',
-    height: '41px',
-    boxShadow: 'none',
-    textTransform: 'none',
-    fontSize: '18px',
-    padding: '10px',
-    lineHeight: 1.5,
-    color: 'white',
-    backgroundColor: '#3181C6',
-    borderColor: '#0063cc',
-    fontFamily: 'Roboto Condensed',
-    marginTop: '60px',
-    '&:hover': {
-      backgroundColor: '#4892d2',
-      boxShadow: 'none',
-    },
-    '&:active': {
-      boxShadow: 'none',
-      backgroundColor: '#4892d2',
-    },
-    '&:focus': {
-      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
-    },
-  });
-
-
 
 function AddEvent({open, setOpen, groupIdx, seeingMonth, seeingYear , daysInMonth, setTags}){
     const [eventName, setEventName] = useState("");
@@ -85,8 +50,6 @@ function AddEvent({open, setOpen, groupIdx, seeingMonth, seeingYear , daysInMont
             startDate: `${eventStartDate.getFullYear()}-${eventStartDate.getMonth()+1 < 10? '0'+`${eventStartDate.getMonth()+1}` : eventStartDate.getMonth()+1}-${eventStartDate.getDate() < 10 ? '0'+`${eventStartDate.getDate()}`: eventStartDate.getDate()}`,
             tagName: eventName
         };
-
-        console.log(data);
         
         await instance.post(`/api/tag`,data, config)
         .then(res => {
@@ -124,11 +87,9 @@ function AddEvent({open, setOpen, groupIdx, seeingMonth, seeingYear , daysInMont
                 }
             });
             setTags(arr);
-            // console.log(arr);
         })
         .catch(err =>{
             console.log(err);
-            // setTags(err);
         });     
 
         await setOpen(false);
@@ -229,6 +190,21 @@ function Day({isBlank, day,  year, month, location, groupName, groupImg, groupUs
     )
 }
 
+const useStyles = makeStyles((theme) => ({
+    notebook : {
+        display: "block",
+        [theme.breakpoints.down('xs')]:{
+            display: "none",
+        }
+    },
+    phone : {
+        display: "none",
+        [theme.breakpoints.down('xs')]:{
+            display:"block",
+        }
+    }
+}));
+
 function Calendar({ groupName, groupImg, groupUserList}){
     // console.log( groupName, groupImg, groupUserList);
     const {groupIdx} = useParams();
@@ -249,6 +225,8 @@ function Calendar({ groupName, groupImg, groupUserList}){
     const [tags, setTags] = useState([]);
 
     // const [postInfo, setPostInfo] = useState([]);
+
+    const classes = useStyles();
 
     useEffect(async () => {
         const instance = axios.create({
@@ -288,22 +266,10 @@ function Calendar({ groupName, groupImg, groupUserList}){
                 }
             });
             setTags(arr);
-            // console.log(arr);
         })
         .catch(err =>{
             console.log(err);
-            // setTags(err);
         });     
-
-        // console.log(`/api/postDate?MatchingRoomId=${groupIdx}&postDate=${`${year}-${month<10? `0${month}`:month}-${day<10? `0${day}`: day}`}`);
-        // await instance.get(`/api/postDate?MatchingRoomId=${groupIdx}&postDate=${`${year}-${month<10? `0${month}`:month}-01`}`,config)
-        // .then(res => {
-        //     setPostNum(res.data.value.length);
-        //     // console.log(res);
-        // })
-        // .catch(err => {
-        //     console.log(err);
-        // });
 
         sessionStorage.setItem('seeingYear', JSON.stringify(seeingYear));
         sessionStorage.setItem('seeingMonth', JSON.stringify(seeingMonth));
@@ -323,31 +289,6 @@ function Calendar({ groupName, groupImg, groupUserList}){
             setDatePickerVal(moment(`${year}-${month<10? `0${month}`: month}-01`, "YYYY-MM-DD"));
         }    
     },[]);
-    
-    const handleClick = (e) => {
-        e.preventDefault();
-        window.location.href = "/home";
-    }
-
-    const handleCalendarBtn = (e) => {
-        e.preventDefault();
-        setShowDatePicker(!showDatePicker);
-    }
-
-    // event 부르는 api 호출
-
-    // const handleChange = (e) => {
-    //     console.log(e.target.value);
-    //     let dateArr = e.target.value.split('-');
-    //     let year = parseInt(dateArr[0]);
-    //     let month = parseInt(dateArr[1]);
-
-    //     setSeeingYear(year);
-    //     setSeeingMonth(month);
-    //     setFirstDayOfMonth(moment(e.target.value, "YYYY-MM").startOf("month").format("d"));
-    //     setDaysInMonth(moment(e.target.value).daysInMonth());
-    //     setSeeingMonthStr(moment().month(month-1).format("MMMM"));
-    // }
 
     const weekdayshort = moment.weekdaysShort();
     const weekdayshortname = weekdayshort.map(day => {
@@ -357,10 +298,6 @@ function Calendar({ groupName, groupImg, groupUserList}){
             </th>
         );
     })
-
-    const currentDay = () => {
-        return moment().format("D");
-    };
 
      let blanks = [];
      for(let i=0; i<firstDayOfMonth; i++)
@@ -418,21 +355,13 @@ function Calendar({ groupName, groupImg, groupUserList}){
         return <tr>{d}</tr>;
      });
 
-
-
     return(
-        // showAddEvent ?
-        //     <AddEvent setShowAddEvent={setShowAddEvent}/>
-        //     :
-        <div className="entire-calendar">
-            <AddEvent open={showAddEvent} setOpen={setShowAddEvent} groupIdx={groupIdx} setTags={setTags}
-                seeingMonth={seeingMonth} seeingYear={seeingYear} daysInMonth={daysInMonth}/>
-            <div className="tail-datetime-calendar">
-                
-                <div className="calendar-navi">
-                    <div className="calendar-navi__monthIndicator">
-                        <div className="calendar-navi__month">{seeingMonthStr}</div>
-                        <Box>
+        <Box sx={{display:"flex", flexDirection:"column", width:"100%"}}>
+            <AddEvent open={showAddEvent} setOpen={setShowAddEvent} groupIdx={groupIdx} setTags={setTags} seeingMonth={seeingMonth} seeingYear={seeingYear} daysInMonth={daysInMonth}/>
+            <Box sx={{display:"flex", alignItems:"center", width:"100%", justifyContent:"space-between"}}>
+                <Box sx={{display:"flex", alignItems:"center", padding:"20px 0px"}}>
+                    <Typography variant="h4">{seeingMonthStr}</Typography>
+                    <Box>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DesktopDatePicker
                                 sx={{color:"primary"}}
@@ -446,7 +375,7 @@ function Calendar({ groupName, groupImg, groupUserList}){
                                     await setDaysInMonth(moment(date).daysInMonth());
                                     await setSeeingMonthStr(moment().month(date.getMonth()).format("MMMM"));
                                 }}
-                                renderInput={({ inputRef, inputProps, InputProps }) => (
+                                renderInput={({ inputRef, InputProps }) => (
                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                         <Box ref={inputRef}></Box>
                                         {InputProps?.endAdornment}
@@ -454,12 +383,24 @@ function Calendar({ groupName, groupImg, groupUserList}){
                                 )}
                             />
                         </LocalizationProvider>
+                    </Box>
+                </Box>
+                    <PlusBtn 
+                        setShowContents={setShowAddEvent} 
+                        desc={"+ Add Event"}
+                        theme={classes.notebook}/>
+
+                    <Fab 
+                        color="primary"
+                        size="medium"  
+                        className={classes.phone} 
+                        onClick={() => setShowAddEvent(!showAddEvent)}
+                        sx={{position:"fixed", bottom:"10px", right:"10px", display:"flex", justifyContent:"center", alignItems:"center"}}>
+                        <Box sx={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+                            <AddIcon />
                         </Box>
-                    </div>
-                    
-                    <PlusBtn setShowContents={setShowAddEvent} desc={"+ Add Event"}/>
-                </div>
-            </div>
+                    </Fab>
+                </Box>
             <table className="calendar">
                 <thead>
                     <tr>{weekdayshortname}</tr>
@@ -468,7 +409,7 @@ function Calendar({ groupName, groupImg, groupUserList}){
                     {daysinmonth}
                 </tbody>
             </table>
-        </div>
+        </Box>
 
     );
 }

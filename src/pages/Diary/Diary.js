@@ -7,6 +7,23 @@ import Calendar from "../../components/Calendar";
 
 import {Box, Button } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+    notebook : {
+        display: "block",
+        [theme.breakpoints.down('xs')]:{
+            display: "none",
+        }
+    },
+    phone : {
+        display: "none",
+        [theme.breakpoints.down('xs')]:{
+            display:"block",
+        }
+    }
+}));
+
 
 function Diary({}){
     const {groupIdx} = useParams();
@@ -15,6 +32,7 @@ function Diary({}){
     const [groupUserList, setGroupUserList] = useState([]);
 
     // const location = useLocation();
+    const classes = useStyles();
 
     useEffect(() => {
         var groupInfo = JSON.parse(localStorage.getItem('curGroup'));
@@ -28,17 +46,19 @@ function Diary({}){
     }
 
     return(
-        <Box sx={{display:"flex"}}>
+        <Box sx={{display:"flex", width:"100vw"}}>
             <GroupSidebar groupIdx={groupIdx}/>
             <Box sx={{padding: "20px", width: "100%"}}>
-                {/* <BackBtn nextLoc={"/home"}/> */}
                 <Button 
+                    className={classes.notebook}
                     size="small"
                     variant="outlined"
                     sx={{display:"flex", alignItems:"center", justifyContent:"center", color: "#3181C6"}}
                     onClick={handleBackButton}>
+                        <Box sx={{display:"flex", alignItems:"center", justifyContent:"center"}}>
                     <ArrowBackIcon />
                     View diary list
+                    </Box>
                 </Button>
                 <Calendar groupName={groupName} groupImg={groupImg} groupUserList={groupUserList}/>
             </Box>

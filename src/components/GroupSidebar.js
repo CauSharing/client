@@ -1,9 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { Link } from 'react-router-dom';
 
-import {Drawer,Divider, Avatar, Typography,Button,Box,AvatarGroup   } from '@mui/material';
+import {Drawer,Divider, Avatar, Typography,Button,Box,AvatarGroup, AppBar, Menu, MenuItem,IconButton   } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Logo from '../icons/CxC_logo.png';
+
+import { makeStyles } from '@material-ui/core/styles';
+import MenuIcon from '@mui/icons-material/Menu';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import axios from "axios";
 
@@ -29,6 +33,23 @@ const ColorButton = styled(Button)({
       boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
     },
   });
+
+const useStyles = makeStyles((theme) => ({
+    notebook : {
+        display: "block",
+        [theme.breakpoints.down('xs')]:{
+            display: "none",
+        }
+    },
+    phone : {
+        display: "none",
+        [theme.breakpoints.down('xs')]:{
+            display:"block",
+        }
+    }
+}));
+
+
 function GroupSidebar({}){
     // const [user, setUser] = useState(null);
     const [curMenu, setCurMenu] = useState(null);
@@ -39,6 +60,8 @@ function GroupSidebar({}){
     const [groupUserList, setGroupUserList] = useState([]);
     // const [numOfUnseenChat, setNumOfUnseenChat] = useState(0);
 
+    const [open, setOpen] = useState(false);
+
     const ClickedBtn = styled(ColorButton)({
         color: 'black',
         backgroundColor: 'white'
@@ -47,6 +70,13 @@ function GroupSidebar({}){
         color: 'white',
         backgroundColor:  'primary'
     });
+
+    const classes = useStyles();
+    const anchorRef = useRef(null);
+
+    const handleAppBarClick = () => {
+        setOpen(!open);
+    };
 
     useEffect( () => {
         var groupInfo = JSON.parse(localStorage.getItem('curGroup'));
@@ -65,7 +95,77 @@ function GroupSidebar({}){
     }, []);
 
     return(
-        <Box>
+        <>
+         <Box className={classes.phone}>
+        {
+            <AppBar position="fixed" sx={{top:0,bottom:"auto", padding:"5px"}}>
+                <Box sx={{display:"flex", justifyContent:"space-between"}}>
+                    <Box sx={{display:"flex", padding: "0px 5px"}}>
+                        <IconButton
+                            color="inherit"
+                            edge="start"
+                            onClick={() => {window.location.href="/home"}}
+                            sx={{display:"flex", width:"50px"}}
+                            >
+                            <ArrowBackIcon sx={{margin:"0px", padding:"0px"}}/>
+                        </IconButton>
+                        <IconButton
+                            color="inherit"
+                            id="menuIcon"
+                            edge="start"
+                            ref={anchorRef}
+                            onClick={handleAppBarClick}
+                            sx={{display:"flex", width:"50px"}}
+                            >
+                            <MenuIcon sx={{margin:"0px", padding:"0px"}}/>
+                        </IconButton>
+                    </Box>
+                <Box sx={{display:"flex", alignItems:"center", padding: "0px 5px"}}>
+                    <Typography variant="body1">{groupName? groupName : "undefined"}</Typography>
+                    {
+                        groupImg ?
+                        <Avatar
+                            sx={{margin:'5px'}}
+                            alt={groupName}
+                            src={groupImg}>
+                        </Avatar>       
+                        :
+                        <AvatarGroup max={2} sx={{margin:'5px'}}>
+                        {
+                            groupUserList.map(user => 
+                                // console.log(user)
+                                <Avatar 
+                                    src={user.image? user.image : user.nickname}
+                                    alt={user.nickname}/>
+                                    )
+                        }
+                        </AvatarGroup>
+                    }
+                </Box>
+                {        
+                    open?
+                    <Menu 
+                        open={open} 
+                        onClose={handleAppBarClick}
+                        anchorEl={anchorRef.current}
+                        placement="bottom-start">
+
+                        <Link to={`/home/diary/${groupIdx}`} style={{ textDecoration: 'none' }}>
+                            <MenuItem>Home</MenuItem>
+                        </Link>
+                        <MenuItem onClick={() => {window.location.replace(`/home/diary/${groupIdx}/chat`);}}>Chat</MenuItem>
+                        <Link to={`/home/diary/${groupIdx}/group-setting`} style={{ textDecoration: 'none' }}>
+                            <MenuItem>Setting</MenuItem>
+                        </Link>
+                    </Menu>
+                    :
+                    null
+                }
+                </Box>
+            </AppBar>
+        }
+        </Box>
+        <Box className={classes.notebook}>
         <Drawer
             PaperProps={{
                 sx: {
@@ -100,11 +200,11 @@ function GroupSidebar({}){
                 <AvatarGroup max={2} sx={{marginBottom:"20px"}}>
                 {
                     groupUserList.map(user => 
-                        console.log(user)
-                        // <Avatar 
-                        //     sx={{width:"60px", height:"60px"}}
-                        //     src={user.image? user.image : user.nickname}
-                        //     alt={user.nickname}/>
+                        // console.log(user)
+                        <Avatar 
+                            sx={{width:"60px", height:"60px"}}
+                            src={user.image? user.image : user.nickname}
+                            alt={user.nickname}/>
                             )
                 }
                 </AvatarGroup>
@@ -162,6 +262,7 @@ function GroupSidebar({}){
             </Box>
         </Drawer>
         </Box>
+        </>
     );
 }
 

@@ -5,12 +5,9 @@ import {Drawer,Divider, Avatar, Typography,Button,Box ,IconButton,AppBar ,Menu ,
 // import Logo from '../icons/CxC_logo.png';
 import { styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { makeStyles } from '@material-ui/core/styles';
 
-import useMediaQuery from '@mui/material/useMediaQuery';
-
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const ColorButton = styled(Button)({
     border: "none",
@@ -91,20 +88,30 @@ function SideBar(){
         <>
         <Box className={classes.phone}>
         {
-            <AppBar>
+            <AppBar sx={{padding:"5px"}}>
                 <Box sx={{display:"flex", justifyContent:"space-between"}}>
-                <IconButton
-                    color="inherit"
-                    id="menuIcon"
-                    edge="start"
-                    ref={anchorRef}
-                    onClick={handleAppBarClick}
-                    sx={{display:"flex", width:"70px"}}
-                    >
-                    <MenuIcon sx={{margin:"0px", padding:"0px"}}/>
-                </IconButton>
+                    <Box sx={{display:"flex", padding: "0px 5px"}}>
+                        <IconButton
+                            color="inherit"
+                            edge="start"
+                            onClick={() => {window.location.href="/"}}
+                            sx={{display:"flex", width:"50px"}}
+                            >
+                            <ArrowBackIcon sx={{margin:"0px", padding:"0px"}}/>
+                        </IconButton>
+                        <IconButton
+                            color="inherit"
+                            id="menuIcon"
+                            edge="start"
+                            ref={anchorRef}
+                            onClick={handleAppBarClick}
+                            sx={{display:"flex", width:"50px"}}
+                            >
+                            <MenuIcon sx={{margin:"0px", padding:"0px"}}/>
+                        </IconButton>
+                    </Box>
                 <Box sx={{display:"flex", alignItems:"center"}}>
-                    <Typography variant="body1">{user? user.nickname : "undefined"}</Typography>
+                    <Typography variant="body1" >{user? user.nickname : "undefined"}</Typography>
                     <Avatar 
                         sx={{margin:"5px"}}
                         alt={user? user.nickname : "undefined"}
