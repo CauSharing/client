@@ -1,9 +1,31 @@
 import React from "react";
 import {Box, Typography,Avatar } from '@mui/material';
-
+import { makeStyles } from '@material-ui/core/styles';
 import Puang from "../../icons/푸앙_사랑.png";
 
+
+const useStyles = makeStyles((theme) => ({
+  notebook : {
+      display: "flex",
+      width:"40%", height: "100%", display:"flex", justifyContent: "center", alignItems:"end",
+      [theme.breakpoints.down('sm')]:{
+        display: "none",
+      }
+  },
+  phone : {
+      display: "none",
+      [theme.breakpoints.down('sm')]:{
+          display: "flex",
+          flexDirection:"column",
+      }
+  },
+}));
+
+
 function AboutUsTablePanel({value, index}){
+
+  const classes = useStyles();
+
     return(
         <div
             role="tabpanel"
@@ -14,7 +36,7 @@ function AboutUsTablePanel({value, index}){
         {value === index && (
           <Box sx={{display: "flex", width:"100%", height: "100%", alignItems: "end"}}>
             <Box sx={{width:"60%", height: "100%",display: "flex", padding: "20px", flexDirection:"column"}}>
-            <Typography variant="h4" sx={{marginBottom:"40px"}}>About us</Typography>
+            <Typography variant="h4" sx={{margin:"40px 0px"}}>About us</Typography>
             <Typography variant="h5" sx={{marginBottom:"10px"}}>Our goal</Typography>
             <Typography variant="body1" color="#646464" sx={{marginBottom:"40px"}}>
               We have seen many CAU students who don't talk to students from other countries.<br/>
@@ -25,7 +47,7 @@ function AboutUsTablePanel({value, index}){
             <Typography variant="h5" sx={{marginBottom:"20px"}}>Team information</Typography>
             <Box sx={{display:"flex"}}>
               <Box sx={{margin: "0px 20px", display: "flex"}}>
-                <Avatar sx={{width: 100, height: 100, marginRight:"10px"}}>
+                <Avatar sx={{marginRight:"10px"}} size="medium">
 
                 </Avatar>
                 <Box sx={{display:"flex", flexDirection:"column"}}>
@@ -34,7 +56,7 @@ function AboutUsTablePanel({value, index}){
                 </Box>
               </Box>
               <Box sx={{margin: "0px 20px", display: "flex"}}>
-                <Avatar sx={{width: 100, height: 100, marginRight:"10px"}}>
+                <Avatar sx={{marginRight:"10px"}} size="medium">
 
                 </Avatar>
                 <Box sx={{display:"flex", flexDirection:"column"}}>
@@ -43,7 +65,7 @@ function AboutUsTablePanel({value, index}){
                 </Box>
               </Box>
               <Box sx={{margin: "0px 20px", display: "flex"}}>
-                <Avatar sx={{width: 100, height: 100, marginRight:"10px"}}>
+                <Avatar sx={{ marginRight:"10px"}} size="medium">
 
                 </Avatar>
                 <Box sx={{display:"flex", flexDirection:"column"}}>
@@ -53,8 +75,8 @@ function AboutUsTablePanel({value, index}){
               </Box>
             </Box>
           </Box>
-          <Box sx={{width:"40%", height: "100%", display:"flex", justifyContent: "center", alignItems:"end"}}>
-            <img src={Puang} style={{  width: "60%", height:"60%"}}/>
+          <Box className={classes.notebook}>
+            <img src={Puang} style={{  width: "60%"}}/>
           </Box>
           </Box>
         )}

@@ -3,10 +3,22 @@ import Info from './Info';
 
 import Puang from "../../icons/푸앙_미소.png";
 import {Box, Grid } from '@mui/material';
-
+import { makeStyles } from '@material-ui/core/styles';
 import './HomeTabPanel.css';
 
+const useStyles = makeStyles((theme) => ({
+  notebook : {
+      display: "flex",
+      [theme.breakpoints.down('sm')]:{
+        display: "none",
+      }
+  },
+}));
+
 function HomeTabPanel({value, index}){
+
+  const classes = useStyles();
+
     return(
         <div
             role="tabpanel"
@@ -18,6 +30,7 @@ function HomeTabPanel({value, index}){
                 <Info />
               </Box>
               <Box 
+                className={classes.notebook}
                 sx={{
                   width: "40%", 
                   height: "100%", 
