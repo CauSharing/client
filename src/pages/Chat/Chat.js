@@ -250,7 +250,7 @@ const Chat = () => {
         <GroupSidebar />
         <Box sx={{padding:"20px 5px", display: "flex", flexDirection: "column", height: "100vh"}} className={chatClasses.notebook}>
           <Setting srcLang = {srcLang} setSrcLang={setSrcLang} destLang={destLang} setDestLang={setDestLang} groupIdx={groupIdx}/>
-          <Box sx={{width: "100%", padding: "20px", overflowY: "scroll"}} className="container">
+          <Box sx={{width: "100%", padding: "20px", overflowY: "scroll", minHeight:"70vh"}} className="container">
             {
               originalContents?
               null

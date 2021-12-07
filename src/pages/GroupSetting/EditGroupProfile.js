@@ -152,7 +152,7 @@ function EditGroupProfile(){
 
 
     return(
-        <Box sx={{display:"flex"}} className={classes.notebook}>
+        <Box sx={{display:"flex", width:"100vw"}} className={classes.notebook}>
             <GroupSidebar diaryIdx={groupIdx}/>
             <Box sx={{width:"100%", padding: "20px"}}>
                 <Box className={buttonClasses.notebook}>

@@ -64,7 +64,7 @@ function MySetting(){
                     <BackBtn nextLoc={"/home"}/>
                 </Box>
                 
-                <Box sx={{marginTop: "20px", paddingBottom: "10px", borderBottom: "1px solid #7c7c7c", width: "90%"}}>
+                <Box sx={{marginTop: "20px", paddingBottom: "10px", borderBottom: "1px solid #7c7c7c", width: "80vw"}}>
                     <Typography variant="h4">Setting</Typography>
                 </Box>
                 <List
