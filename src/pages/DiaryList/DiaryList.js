@@ -40,6 +40,21 @@ const ColorButton = styled(Button)({
 
 const useStyles = makeStyles((theme) => ({
     notebook : {
+        flexDirection: "row",
+        [theme.breakpoints.down('xs')]:{
+            flexDirection: "column",
+        }
+    },
+    phone : {
+        flexDirection: "column",
+        [theme.breakpoints.down('xs')]:{
+            flexDirection: "row",
+        }
+    }
+}));
+
+const useButtonStyles = makeStyles((theme) => ({
+    notebook : {
         display: "block",
         [theme.breakpoints.down('xs')]:{
             display: "none",
@@ -48,15 +63,14 @@ const useStyles = makeStyles((theme) => ({
     phone : {
         display: "none",
         [theme.breakpoints.down('xs')]:{
-            display:"block",
+            display: "block",
         }
     }
 }));
 
 
 function DiaryList({departmentList}){
-    // console.log("render diarylist");
-    
+
     const [showAddFriend, setShowAddFriend] = useState(false);
     const [matchingRoomList, setMatchingRoomList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -72,9 +86,9 @@ function DiaryList({departmentList}){
     };
 
     const classes = useStyles();
+    const buttonClasses = useButtonStyles();
 
     useEffect(async () => {
-        // console.log("diarylist-user information: ", userEmail, userNickname, userDepartment, userMajor, userImage, userLanguage);
         const instance = axios.create({
             timeout: 30000,
           });
@@ -110,12 +124,12 @@ function DiaryList({departmentList}){
 
     return(
         
-        <Box sx={{display:"flex", height:"80vh"}}>
-            <SideBar departmentList={departmentList} clickedMenuId={"0"}/>
-            <Box sx={{padding: "20px", width: "100%", height:"100%"}}>
+        <Box sx={{display:"flex", width: "100vw", height:"100vh"}} className={classes.phone, classes.notebook}>
+            <SideBar/>
+            <Box sx={{padding: "20px"}}>
             {
                 isLoading?
-                <Box sx={{display:"flex", alignItems: "center", justifyContent:"center", height: "90vh"}}>
+                <Box sx={{display:"flex", alignItems: "center", justifyContent:"center"}}>
                     <CircularProgress  color="primary"/>
                 </Box>
                 :
@@ -123,8 +137,9 @@ function DiaryList({departmentList}){
                 <Matching departmentList={departmentList} setShowAddFriend={setShowAddFriend} showAddFriend={showAddFriend}/>
                 :
                 <Box sx={{height: "100%"}}>
-                    <Box className={classes.notebook}>
+                    <Box >
                         <ColorButton 
+                            className={buttonClasses.notebook}
                             variant="contained" 
                             onClick={handleClick}
                             >
@@ -143,19 +158,18 @@ function DiaryList({departmentList}){
 
                 </Box>
             }
-               
-                <Fab 
-                    color="primary"
-                    size="medium"  
-                    className={classes.phone} 
-                    onClick={() => setShowAddFriend(!showAddFriend)}
-                    sx={{position:"fixed", bottom:"10px", right:"10px", display:"flex", justifyContent:"center", alignItems:"center"}}>
-                    <Box sx={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-                        <AddIcon />
-                    </Box>
-                </Fab>
                 
             </Box>
+            <Fab 
+                color="primary"
+                size="medium"  
+                className={buttonClasses.phone} 
+                onClick={() => setShowAddFriend(!showAddFriend)}
+                sx={{position:"fixed", bottom:"10px", right:"10px", display:"flex", justifyContent:"center", alignItems:"center"}}>
+                <Box sx={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+                    <AddIcon />
+                </Box>
+            </Fab>
         </Box>
     
     );

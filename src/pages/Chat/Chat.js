@@ -13,7 +13,48 @@ import Stomp from 'stompjs';
 
 import moment from 'moment';
 
+import { makeStyles } from '@material-ui/core/styles';
+
 import "./Chat.css";
+
+const useStyles = makeStyles((theme) => ({
+  notebook : {
+      flexDirection: "row",
+      [theme.breakpoints.down('xs')]:{
+          flexDirection: "column",
+      }
+  },
+  phone : {
+      flexDirection: "column",
+      [theme.breakpoints.down('xs')]:{
+          flexDirection: "row",
+      }
+  }
+}));
+
+const useButtonStyles = makeStyles((theme) => ({
+  notebook : {
+      display: "block",
+      [theme.breakpoints.down('xs')]:{
+          display: "none",
+      }
+  },
+  phone : {
+      display: "none",
+      [theme.breakpoints.down('xs')]:{
+          display: "block",
+      }
+  }
+}));
+
+const useChatStyles = makeStyles((theme) => ({
+  notebook:{
+    width:"50%",
+    [theme.breakpoints.down('xs')]:{
+      width:"100%",
+    }
+  }
+}))
 
 const sockJS = new SockJS("http://3.37.167.224:8080/api/ws-stomp");
 const stompClient  = Stomp.over(sockJS);
@@ -129,16 +170,16 @@ const InputContainer = ({groupIdx, email}) => {
 
 
   return(
-    <Box sx={{width: "100%", position: "sticky", bottom: "0", backgroundColor:"white",height: "20vh", zIndex: "100", display:"flex", paddingLeft: '20px'}}>
-    <TextField
-      multiline
-      rows={4}
-      variant="standard"
-      onChange={handleChange}
-      value={message}
-      sx={{ height: "100%", width: "90%"}}
-    />
-    <Button variant="contained" onClick={handleClick} sx={{ height: "100%", width:"10%"}} disabled={message===""}>Send</Button>
+    <Box sx={{width: "100%", position: "sticky", bottom: "0", backgroundColor:"white",maxHeight: "20vh", zIndex: "100", display:"flex", paddingLeft: '20px', marginTop:'20px'}}>
+      <TextField
+        multiline
+        rows={4}
+        variant="standard"
+        onChange={handleChange}
+        value={message}
+        sx={{ height: "100%", width: "90%"}}
+      />
+      <Button variant="contained" onClick={handleClick} sx={{maxHeight: "20vh", width:"10%"}} disabled={message===""}>Send</Button>
   </Box>
   );
 }
@@ -164,7 +205,9 @@ const Chat = () => {
   
 
   const messageEndRef = useRef();
-
+  const classes = useStyles();
+  const buttonClasses = useButtonStyles();
+  const chatClasses = useChatStyles();
 
   useEffect(async () => {
     console.log("chat render");
@@ -203,13 +246,19 @@ const Chat = () => {
 
 
     return(
-      <Box sx={{display:"flex", height:"100vh", overflow:"hidden"}}>
-        <GroupSidebar groupIdx={groupIdx} groupName={groupName} groupImg={groupImg} groupUserList={groupUserList}/>
-        <Box sx={{width: "50%", paddingTop:"20px", display: "flex", flexDirection: "column", height: "100vh"}}>
-          <Box sx={{width: "100%", display: "flex", position: "sticky", zIndex: "100",top:"0", backgroundColor:"white"}}>
-            <Setting srcLang = {srcLang} setSrcLang={setSrcLang} destLang={destLang} setDestLang={setDestLang} groupIdx={groupIdx}/>
-          </Box>
-          <Box sx={{width: "100%", padding: "20px", overflowY: "scroll", minHeight: "70vh"}} className="container">
+      <Box sx={{display:"flex",width:"100vw", height:"100vh"}} className={classes.notebook}>
+        <GroupSidebar />
+        <Box sx={{padding:"20px 5px", display: "flex", flexDirection: "column", height: "100vh"}} className={chatClasses.notebook}>
+          <Setting srcLang = {srcLang} setSrcLang={setSrcLang} destLang={destLang} setDestLang={setDestLang} groupIdx={groupIdx}/>
+          <Box sx={{width: "100%", padding: "20px", overflowY: "scroll"}} className="container">
+            {
+              originalContents?
+              null
+              :
+              <Box sx={{minHeight:"70vh"}}>
+
+              </Box>
+            }
             {
               originalContents.map((elem,index) => {
                 var splitedDate = null;
@@ -274,6 +323,7 @@ const Chat = () => {
           <InputContainer groupIdx={groupIdx} email={user.email} />
             
         </Box>
+        
       </Box>
     );
 

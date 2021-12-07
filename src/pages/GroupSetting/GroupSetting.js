@@ -10,7 +10,40 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import BackBtn from '../../components/BackBtn';
 
+import { makeStyles } from '@material-ui/core/styles';
+
 import axios from "axios";
+
+const useStyles = makeStyles((theme) => ({
+    notebook : {
+        flexDirection: "row",
+        [theme.breakpoints.down('xs')]:{
+            flexDirection: "column",
+        }
+    },
+    phone : {
+        flexDirection: "column",
+        [theme.breakpoints.down('xs')]:{
+            flexDirection: "row",
+        }
+    }
+}));
+
+const useButtonStyles = makeStyles((theme) => ({
+    notebook : {
+        display: "block",
+        [theme.breakpoints.down('xs')]:{
+            display: "none",
+        }
+    },
+    phone : {
+        display: "none",
+        [theme.breakpoints.down('xs')]:{
+            display: "block",
+        }
+    }
+}));
+
 
 const AddGroupMemberDialog = ({open, setOpen}) => {
     const [email, setEmail] = useState('');
@@ -18,6 +51,8 @@ const AddGroupMemberDialog = ({open, setOpen}) => {
     const [loading, setLoading] = useState(false);
     const [seeResult, setSeeResult] = useState(false);
     const {groupIdx} = useParams();
+
+    
 
     const handleClose = () => {
         setOpen(false);
@@ -118,6 +153,9 @@ function GroupSetting(){
 
     const [openDialog, setOpenDialog] = useState(false);
 
+    const buttonClasses = useButtonStyles();
+    const classes = useStyles();
+
     const handleAddGroupMemberBtn = (e) => {
         e.preventDefault();
         setOpenDialog(true);
@@ -128,12 +166,13 @@ function GroupSetting(){
     }
 
     return(
-        <>
-        <AddGroupMemberDialog open={openDialog} setOpen={setOpenDialog}/>
-        <Box sx={{display:"flex"}}>
+        <Box sx={{display:"flex", width: "100vw", height:"100vh"}} className={classes.notebook}>
+            <AddGroupMemberDialog open={openDialog} setOpen={setOpenDialog}/>
             <GroupSidebar diaryIdx={groupIdx}/>
             <Box sx={{width: "100%", padding: "20px"}}>
-                <BackBtn nextLoc={`/home/diary/${groupIdx}`}/>
+                <Box className={buttonClasses.notebook}>
+                    <BackBtn nextLoc={`/home/diary/${groupIdx}`}/>
+                </Box>
                 <Box sx={{marginTop: "20px", paddingBottom: "10px", borderBottom: "1px solid #7c7c7c", width: "90%"}}>
                     <Typography variant="h4">Group Setting</Typography>
                 </Box>
@@ -158,7 +197,6 @@ function GroupSetting(){
                 
             </Box>
         </Box>
-        </>
     );
 }
 

@@ -25,6 +25,41 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import "./invitation.css";
 
+import { makeStyles } from '@material-ui/core/styles';
+
+
+const useStyles = makeStyles((theme) => ({
+    notebook : {
+        flexDirection: "row",
+        [theme.breakpoints.down('xs')]:{
+            flexDirection: "column",
+        }
+    },
+    phone : {
+        flexDirection: "column",
+        [theme.breakpoints.down('xs')]:{
+            flexDirection: "row",
+        }
+    }
+}));
+
+const useButtonStyles = makeStyles((theme) => ({
+    notebook : {
+        display: "block",
+        [theme.breakpoints.down('xs')]:{
+            display: "none",
+        }
+    },
+    phone : {
+        display: "none",
+        [theme.breakpoints.down('xs')]:{
+            display: "block",
+        }
+    }
+}));
+
+
+
 function Alert({open, handleYes, handleNo, isAccept, nickname, isFromMatchingRoom}){
     return(
         <Dialog
@@ -203,19 +238,14 @@ function Invitation({departmentList}){
 
     const [invitationList, setInvitationList] = useState([]);
 
+    const classes = useStyles();
+    const buttonClasses = useButtonStyles();
+
     useEffect(() => {
         axios.get('/api/invitedList', config)
             .then(res => {
                 var list = res.data.value.invitationList;
-                // console.log(list);
-                // let set = new Set();
-                // list.forEach((elem) => {
-                //     set.add(elem.invitePerson);
-                // });
-
-                // setInvitationList(Array.from(set));
                 setInvitationList(list);
-                // console.log(list);
             })
 
             .catch(err =>{
@@ -225,11 +255,12 @@ function Invitation({departmentList}){
 
 
     return(
-        <Box sx={{width: "100%", display: "flex"}}>
-            <SideBar departmentList={departmentList} clickedMenuId={"2"} />
-            <Box sx={{width:"90%", padding: "20px"}}>
-                <BackBtn nextLoc={`/home`}/>
-                
+        <Box sx={{ width: "100vw", height:"100vh", display: "flex"}} className={classes.notebook}>
+            <SideBar/>
+            <Box sx={{ padding: "20px"}}>
+                <Box className={buttonClasses.notebook}>
+                    <BackBtn nextLoc={`/home`}/>
+                </Box>
                 <Box sx={{marginTop: "20px", paddingBottom: "10px", borderBottom: "1px solid #7c7c7c", width: "90%"}}>
                 <Typography variant="h4">Invitation List</Typography>
                 </Box>

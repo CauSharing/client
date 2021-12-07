@@ -12,11 +12,44 @@ import ListItemText from '@mui/material/ListItemText';
 // import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import EditIcon from '@mui/icons-material/Edit';
 
+import { makeStyles } from '@material-ui/core/styles';
+
 import "./MySetting.css";
 
-function MySetting({departmentList}){
-    const [open, setOpen] = useState(true);
-    // const [user, setUser] = useState(null);
+const useStyles = makeStyles((theme) => ({
+    notebook : {
+        flexDirection: "row",
+        [theme.breakpoints.down('xs')]:{
+            flexDirection: "column",
+        }
+    },
+    phone : {
+        flexDirection: "column",
+        [theme.breakpoints.down('xs')]:{
+            flexDirection: "row",
+        }
+    }
+}));
+
+const useButtonStyles = makeStyles((theme) => ({
+    notebook : {
+        display: "block",
+        [theme.breakpoints.down('xs')]:{
+            display: "none",
+        }
+    },
+    phone : {
+        display: "none",
+        [theme.breakpoints.down('xs')]:{
+            display: "block",
+        }
+    }
+}));
+
+
+function MySetting(){
+    const classes = useStyles();
+    const buttonClasses = useButtonStyles();
 
     const handleEditProfileBtn = (e) => {
         e.preventDefault();
@@ -24,10 +57,13 @@ function MySetting({departmentList}){
     }
 
     return(
-        <Box sx={{ display:"flex"}}>
-            <SideBar departmentList={departmentList} clickedMenuId={"3"}/>
-            <Box  sx={{width: "100%", padding: "20px"}}>
-                <BackBtn nextLoc={"/home"}/>
+        <Box sx={{ display:"flex", width:"100vw", height:"100vh"}} className={classes.notebook}>
+            <SideBar />
+            <Box  sx={{padding: "20px"}}>
+                <Box className={buttonClasses.notebook}>
+                    <BackBtn nextLoc={"/home"}/>
+                </Box>
+                
                 <Box sx={{marginTop: "20px", paddingBottom: "10px", borderBottom: "1px solid #7c7c7c", width: "90%"}}>
                     <Typography variant="h4">Setting</Typography>
                 </Box>

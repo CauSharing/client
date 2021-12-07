@@ -16,7 +16,7 @@ function BackBtn({nextLoc, setShowContents}){
     }
 
     return(
-        <button className="backBtn" onClick={handleClick}>
+        <button className={"backBtn" } onClick={handleClick}>
             <ArrowBackIcon />
         </button>
     );

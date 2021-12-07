@@ -9,7 +9,24 @@ import {Box, Button } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { makeStyles } from '@material-ui/core/styles';
 
+import './Diary.css';
+
 const useStyles = makeStyles((theme) => ({
+    notebook : {
+        flexDirection: "row",
+        [theme.breakpoints.down('xs')]:{
+            flexDirection: "column",
+        }
+    },
+    phone : {
+        flexDirection: "column",
+        [theme.breakpoints.down('xs')]:{
+            flexDirection: "row",
+        }
+    }
+}));
+
+const useButtonStyles = makeStyles((theme) => ({
     notebook : {
         display: "block",
         [theme.breakpoints.down('xs')]:{
@@ -19,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     phone : {
         display: "none",
         [theme.breakpoints.down('xs')]:{
-            display:"block",
+            display: "block",
         }
     }
 }));
@@ -31,7 +48,7 @@ function Diary({}){
     const [groupImg, setGroupImg] = useState("");
     const [groupUserList, setGroupUserList] = useState([]);
 
-    // const location = useLocation();
+    const buttonClasses = useButtonStyles();
     const classes = useStyles();
 
     useEffect(() => {
@@ -46,11 +63,11 @@ function Diary({}){
     }
 
     return(
-        <Box sx={{display:"flex", width:"100vw"}}>
+        <Box sx={{display:"flex", width: "100vw", height:"100vh", overflowY:"auto"}} className={classes.phone, classes.notebook+" container"}>
             <GroupSidebar groupIdx={groupIdx}/>
             <Box sx={{padding: "20px", width: "100%"}}>
                 <Button 
-                    className={classes.notebook}
+                    className={buttonClasses.notebook}
                     size="small"
                     variant="outlined"
                     sx={{display:"flex", alignItems:"center", justifyContent:"center", color: "#3181C6"}}

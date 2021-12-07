@@ -52,6 +52,7 @@ function SideBar(){
     const [user, setUser] = useState(null);
     const [clickedMenu, setClickedMenu] = useState(null);
     const [open, setOpen] = useState(false);
+    const [avatarOpen, setAvatarOpen] = useState(false);
 
     const ClickedBtn = styled(ColorButton)({
         color: 'black',
@@ -70,8 +71,13 @@ function SideBar(){
         setOpen(!open);
     };
 
+    const handleAvatarClick = () => {
+        setAvatarOpen(!avatarOpen);
+    }
+
     const classes = useStyles();
     const anchorRef = useRef(null);
+    const anchorAvatarRef = useRef(null);
 
     useEffect(() => {
         setUser(JSON.parse(window.localStorage.getItem('user')));
@@ -88,7 +94,7 @@ function SideBar(){
         <>
         <Box className={classes.phone}>
         {
-            <AppBar sx={{padding:"5px"}}>
+            <AppBar position="sticky" sx={{top:0,bottom:"auto", padding:"5px", width:"100vw"}}>
                 <Box sx={{display:"flex", justifyContent:"space-between"}}>
                     <Box sx={{display:"flex", padding: "0px 5px"}}>
                         <IconButton
@@ -112,12 +118,30 @@ function SideBar(){
                     </Box>
                 <Box sx={{display:"flex", alignItems:"center"}}>
                     <Typography variant="body1" >{user? user.nickname : "undefined"}</Typography>
-                    <Avatar 
-                        sx={{margin:"5px"}}
-                        alt={user? user.nickname : "undefined"}
-                        src={user? user.image : null}>
-                    </Avatar>
+                    <Button
+                        onClick={handleAvatarClick}
+                        ref={anchorAvatarRef}>
+                        <Avatar 
+                            sx={{margin:"5px"}}
+                            alt={user? user.nickname : "undefined"}
+                            src={user? user.image : null}>
+                        </Avatar>
+                    </Button>
                 </Box>
+                {
+                    avatarOpen?
+                    <Menu
+                        open={avatarOpen}
+                        onClose={handleAvatarClick}
+                        anchorEl={anchorAvatarRef.current}
+                        placement="bottom-start">
+                        <Link to="/" style={{textDecoration:"none"}}>
+                            <MenuItem>Logout</MenuItem>
+                        </Link>
+                    </Menu>
+                    :
+                    null
+                }
                 {        
                     open?
                     <Menu 

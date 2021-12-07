@@ -98,7 +98,7 @@ function GroupSidebar({}){
         <>
          <Box className={classes.phone}>
         {
-            <AppBar position="fixed" sx={{top:0,bottom:"auto", padding:"5px"}}>
+            <AppBar position="sticky" sx={{top:0,bottom:"auto", padding:"5px", width:"100vw"}}>
                 <Box sx={{display:"flex", justifyContent:"space-between"}}>
                     <Box sx={{display:"flex", padding: "0px 5px"}}>
                         <IconButton

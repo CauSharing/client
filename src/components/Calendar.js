@@ -206,7 +206,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Calendar({ groupName, groupImg, groupUserList}){
-    // console.log( groupName, groupImg, groupUserList);
     const {groupIdx} = useParams();
     const location = useLocation();
 
@@ -224,7 +223,6 @@ function Calendar({ groupName, groupImg, groupUserList}){
     const [datePickerVal, setDatePickerVal] = useState(new Date());
     const [tags, setTags] = useState([]);
 
-    // const [postInfo, setPostInfo] = useState([]);
 
     const classes = useStyles();
 
@@ -389,17 +387,6 @@ function Calendar({ groupName, groupImg, groupUserList}){
                         setShowContents={setShowAddEvent} 
                         desc={"+ Add Event"}
                         theme={classes.notebook}/>
-
-                    <Fab 
-                        color="primary"
-                        size="medium"  
-                        className={classes.phone} 
-                        onClick={() => setShowAddEvent(!showAddEvent)}
-                        sx={{position:"fixed", bottom:"10px", right:"10px", display:"flex", justifyContent:"center", alignItems:"center"}}>
-                        <Box sx={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-                            <AddIcon />
-                        </Box>
-                    </Fab>
                 </Box>
             <table className="calendar">
                 <thead>
@@ -409,6 +396,17 @@ function Calendar({ groupName, groupImg, groupUserList}){
                     {daysinmonth}
                 </tbody>
             </table>
+
+            <Fab 
+                        color="primary"
+                        size="medium"  
+                        className={classes.phone} 
+                        onClick={() => setShowAddEvent(!showAddEvent)}
+                        sx={{position:"fixed", bottom:"10px", right:"10px", display:"flex", justifyContent:"center", alignItems:"center"}}>
+                        <Box sx={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+                            <AddIcon />
+                        </Box>
+                    </Fab>
         </Box>
 
     );
