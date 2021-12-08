@@ -74,7 +74,7 @@ function Diary({}){
                     onClick={handleBackButton}>
                         <Box sx={{display:"flex", alignItems:"center", justifyContent:"center"}}>
                     <ArrowBackIcon />
-                    View diary list
+                    View group list
                     </Box>
                 </Button>
                 <Calendar groupName={groupName} groupImg={groupImg} groupUserList={groupUserList}/>
