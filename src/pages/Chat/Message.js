@@ -30,6 +30,7 @@ function Message({nickname, image, content, isUserSent , srcLang, dstLang, time,
   const [translatedContent, setTranslatedContent] = useState("");
   const [showOriginal, setShowOriginal] = useState(true);
   const [loading, setLoading]= useState(false);
+  const img_reg = /.*\.(gif|jpe?g|bmp|png)$/igm;
 
   const handleTranslateButtonClick= async (e) => {
     // await e.preventDefault();
@@ -70,7 +71,7 @@ function Message({nickname, image, content, isUserSent , srcLang, dstLang, time,
             null
             :
             <Box sx={{display:"flex", flexDirection: "column", alignItems: "center", margin:"0px 5px", visibility: isGrouped ? "hidden" : "visible"}}>
-                <Avatar alt={nickname? nickname: "undefined"} src={image? image: null} size="small"/>
+                <Avatar alt={nickname? nickname: "undefined"} src={img_reg.test(image)? image: null} size="small"/>
                 <Typography variant="body1">{nickname}</Typography>
             </Box>
           }

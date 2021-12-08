@@ -61,12 +61,13 @@ const stompClient  = Stomp.over(sockJS);
 
 function NewContents({messageEndRef, groupIdx, user, srcLang, destLang, groupUserList, lastMessage}){
   const [newContents, setNewContents] = useState([]);
+  
 
   const onMessageReceived = async (payload) => {
      var newChatList = JSON.parse(sessionStorage.getItem('newChats'));
      var newData =JSON.parse(payload.body);
      var user = groupUserList.find(elem => elem.email === newData.email);
-    newData["image"] = user? (user.image? user.image: null) : null;
+    newData["image"] = user? (user.image?  user.image: null): null;
     await sessionStorage.setItem('newChats',JSON.stringify([...newChatList, newData]));
     await setNewContents([...newChatList, newData]);
     await messageEndRef.current.scrollIntoView();
