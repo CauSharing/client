@@ -121,7 +121,7 @@ function EditPost(){
             }
             <GroupSidebar groupIdx={groupIdx} groupName={groupName} groupImg={groupImg} groupUserList={groupUserList}/>
             <Box sx={{width: "100%", display: "flex", flexDirection: "column", padding: "20px"}}>
-                <BackBtn nextLoc={'dfsf'}/>
+                <BackBtn nextLoc={`/home/group/${groupIdx}/${year}-${month}-${day}`}/>
                 <Box sx={{width: "90%", display:"flex", justifyContent: "space-between", alignItems:"center",marginTop:"20px"}}>
                     <Typography variant="h5">{`${year}/${month}/${day}/${dayName}`}</Typography>
                     <ColorButton onClick={handleSaveBtn}>Save</ColorButton>
