@@ -156,7 +156,7 @@ function EditGroupProfile(){
             <GroupSidebar diaryIdx={groupIdx}/>
             <Box sx={{width:"100%", padding: "20px"}}>
                 <Box className={buttonClasses.notebook}>
-                    <BackBtn nextLoc={`/home/diary/${groupIdx}/group-setting`}/>
+                    <BackBtn nextLoc={`/home/group/${groupIdx}/group-setting`}/>
                 </Box>
                 <Typography variant="h4" sx={{marginTop:"20px", borderBottom: "1px solid #7c7c7c", paddingBottom:"10px"}}>Edit Group Profile</Typography>
                 <Box sx={{width:"100%", display:"flex"}}>

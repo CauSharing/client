@@ -124,12 +124,11 @@ function LogIn(){
                     />
                 <Box sx={{maxWidth:"450px", display:"flex", justifyContent:"space-between", marginTop:"20px"}}>
                     <LoginBtn onClick={handleClick}>Sign in</LoginBtn>
-                    {/* <ForgetPWBtn>Forgot password?</ForgetPWBtn> */}
                 </Box>
             </Box>
             <Box sx={{display:"flex", justifyContent:"center", maxWidth: "450px",marginTop:"20px"}}>
                 <span className="login__signUpDesc">Don’t have an account?</span>
-                <Link to="/signUp" className="login__signUpLink">Create an account</Link>
+                <Link to="/sign-up" className="login__signUpLink">Create an account</Link>
             </Box>
         </Box>
     );

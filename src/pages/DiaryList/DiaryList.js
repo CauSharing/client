@@ -147,7 +147,7 @@ function DiaryList({departmentList}){
                         </ColorButton>
                     </Box>
                     <Box sx={{  marginTop:"20px"}}>
-                        <Grid container spacing={2} columns={{ xs: 2, sm: 6, md: 6 ,lg:8, xl:10 }}>
+                        <Grid container spacing={{xs:2,sm:2,md:2, lg:4,xl:6}} columns={{ xs: 2, sm: 6, md: 6 ,lg:8, xl:10 }}>
                             {diaryList.map((elem, index) => (
                             <Grid item xs={1} sm={2} md={2} lg={2} xl={2} key={index}>
                                 {elem}

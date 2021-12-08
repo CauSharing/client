@@ -57,7 +57,7 @@ function MySetting(){
     }
 
     return(
-        <Box sx={{ display:"flex", width:"100vw", height:"100vh"}} className={classes.notebook}>
+        <Box sx={{ display:"flex", width:"80%", height:"100vh"}} className={classes.notebook}>
             <SideBar />
             <Box  sx={{padding: "20px"}}>
                 <Box className={buttonClasses.notebook}>

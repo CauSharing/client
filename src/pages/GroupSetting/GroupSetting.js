@@ -171,7 +171,7 @@ function GroupSetting(){
             <GroupSidebar diaryIdx={groupIdx}/>
             <Box sx={{width: "100%", padding: "20px"}}>
                 <Box className={buttonClasses.notebook}>
-                    <BackBtn nextLoc={`/home/diary/${groupIdx}`}/>
+                    <BackBtn nextLoc={`/home/group/${groupIdx}`}/>
                 </Box>
                 <Box sx={{marginTop: "20px", paddingBottom: "10px", borderBottom: "1px solid #7c7c7c", width: "90%"}}>
                     <Typography variant="h4">Group Setting</Typography>

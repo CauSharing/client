@@ -54,7 +54,7 @@ function DiaryThumbnail({groupName, groupImg, groupUserList, groupIdx}){
             ref={cardRef}>
             <Link
                 to={{
-                    pathname: `home/diary/${groupIdx}`
+                    pathname: `home/group/${groupIdx}`
                 }}
                 style={{ textDecoration: 'none', width: 200 }}
                 onClick={handleClick}>

@@ -76,7 +76,7 @@ function Setting({srcLang, setSrcLang, destLang, setDestLang, groupIdx}){
         <Box
             className={buttonClasses.notebook} 
             sx={{width: "100%", display: "flex",position: "sticky",  zIndex: "100",top:"0", backgroundColor:"white", justifyContent: "space-between",alignItems:"center", padding: "0px 20px"}}>
-            <BackBtn nextLoc={`/home/diary/${groupIdx}`} />
+            <BackBtn nextLoc={`/home/group/${groupIdx}`} />
             <Box>
             <FormControl variant="standard" sx={{ m: 1, minWidth: '180px' }}>
                 <InputLabel id="source-language-select-label">Source language</InputLabel>

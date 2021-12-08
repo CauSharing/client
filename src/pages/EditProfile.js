@@ -163,7 +163,7 @@ function EditProfile({departmentList}){
         // });
     }
     return(
-        <Box sx={{display:"flex"}}>
+        <Box sx={{display:"flex", width:"80%"}}>
             <SideBar departmentList={departmentList} clickedMenuId={"3"} />
             <Box sx={{width:"100%", padding: "20px"}}>
                 <BackBtn nextLoc={"/setting"}/>

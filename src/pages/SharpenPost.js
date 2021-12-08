@@ -287,7 +287,7 @@ function SharpenPost({}){
         <Box sx={{width:"100%", display:"flex"}} className={classes.notebook}>
             <GroupSidebar groupIdx={groupIdx} groupName={groupName} groupImg={groupImg} groupUserList={groupUserList}/>
             <Box sx={{width:"100%", padding:"20px"}}>
-                <BackBtn nextLoc={`/home/diary/${groupIdx}/${year}-${month}-${day}`}/>
+                <BackBtn nextLoc={`/home/group/${groupIdx}/${year}-${month}-${day}`}/>
                 <Box 
                     sx={{  display: "flex",
                            justifyContent: "space-between",

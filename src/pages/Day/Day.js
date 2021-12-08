@@ -195,7 +195,7 @@ function Post({title, description, postIdx, writer, postDate, isUser,setOpenDele
 
     const handleClick = (e) => {
         e.preventDefault();
-        window.location.replace(window.location.href + `/${postIdx}/sharpening`);
+        window.location.replace(window.location.href + `/${postIdx}/sharpen`);
     }
 
     const handleEditClick = (e) => {
@@ -420,7 +420,7 @@ function Day({}){
                 :
                 <Box sx={{width: "100%", padding: "20px"}}>
                     <Box sx={{marginBottom: "20px"}}>
-                        <BackBtn nextLoc={`/home/diary/${groupIdx}`} />
+                        <BackBtn nextLoc={`/home/group/${groupIdx}`} />
                     </Box>
                     <Typography variant="h5">
                         {timeObj.format("dddd, MMMM Do YYYY")}

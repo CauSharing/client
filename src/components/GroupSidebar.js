@@ -88,9 +88,9 @@ function GroupSidebar({}){
         setGroupUserList(groupInfo.groupUserList);
 
         console.log("group sidebar render");
-        if(window.location.pathname.includes(`/home/diary/${groupInfo.groupIdx}/group-setting`))
+        if(window.location.pathname.includes(`/home/group/${groupInfo.groupIdx}/group-setting`))
             setCurMenu("3");
-        else if(window.location.pathname === `/home/diary/${groupInfo.groupIdx}/chat`)
+        else if(window.location.pathname === `/home/group/${groupInfo.groupIdx}/chat`)
             setCurMenu("1");
         else
             setCurMenu("0");
@@ -108,7 +108,14 @@ function GroupSidebar({}){
                             color="inherit"
                             edge="start"
                             // onClick={() => {history.goBack();}}
-                            onClick={() => {window.location.href="/home"}}
+                            onClick={() => {
+                                
+                                if(window.location.pathname === `/home/group/${groupIdx}`){
+                                    window.location.href = `/home`;
+                                }else{
+                                    window.location.href=`/home/group/${groupIdx}`;
+                                }
+                                }}
                             sx={{display:"flex", width:"50px"}}
                             >
                             <ArrowBackIcon sx={{margin:"0px", padding:"0px"}}/>
@@ -154,11 +161,11 @@ function GroupSidebar({}){
                         anchorEl={anchorRef.current}
                         placement="bottom-start">
 
-                        <Link to={`/home/diary/${groupIdx}`} style={{ textDecoration: 'none' }}>
+                        <Link to={`/home/group/${groupIdx}`} style={{ textDecoration: 'none' }}>
                             <MenuItem>Home</MenuItem>
                         </Link>
-                        <MenuItem onClick={() => {window.location.replace(`/home/diary/${groupIdx}/chat`);}}>Chat</MenuItem>
-                        <Link to={`/home/diary/${groupIdx}/group-setting`} style={{ textDecoration: 'none' }}>
+                        <MenuItem onClick={() => {window.location.replace(`/home/group/${groupIdx}/chat`);}}>Chat</MenuItem>
+                        <Link to={`/home/group/${groupIdx}/group-setting`} style={{ textDecoration: 'none' }}>
                             <MenuItem>Setting</MenuItem>
                         </Link>
                     </Menu>
@@ -218,7 +225,7 @@ function GroupSidebar({}){
             <Typography variant="h5" sx={{marginBottom:"40px"}}>{groupName? groupName : "undefined"}</Typography>
             <Divider />
             {
-                <Link to={`/home/diary/${groupIdx}`} style={{ textDecoration: 'none' }}>
+                <Link to={`/home/group/${groupIdx}`} style={{ textDecoration: 'none' }}>
                 {
                     curMenu === "0"?
                     <ClickedBtn>
@@ -234,17 +241,17 @@ function GroupSidebar({}){
             <Divider />
             {
                 curMenu === "1"?
-                <ClickedBtn onClick={() => {window.location.replace(`/home/diary/${groupIdx}/chat`);}} variant="contained" color="primary">
+                <ClickedBtn onClick={() => {window.location.replace(`/home/group/${groupIdx}/chat`);}} variant="contained" color="primary">
                     Chat    
                 </ClickedBtn>
                 :
-                <NotClickedBtn onClick={() => {window.location.replace(`/home/diary/${groupIdx}/chat`);}}  variant="contained" color="primary">
+                <NotClickedBtn onClick={() => {window.location.replace(`/home/group/${groupIdx}/chat`);}}  variant="contained" color="primary">
                     Chat   
                 </NotClickedBtn>
             }
             <Divider />
             {
-                <Link to={`/home/diary/${groupIdx}/group-setting`} style={{ textDecoration: 'none' }}>
+                <Link to={`/home/group/${groupIdx}/group-setting`} style={{ textDecoration: 'none' }}>
                 {
                     curMenu === "3"?
                     <ClickedBtn>

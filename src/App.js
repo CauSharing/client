@@ -72,7 +72,7 @@ function App(){
                         )}
                     />
                     <Route
-                        exact path="/signUp"
+                        exact path="/sign-up"
                         render={(props)=><SignUp departmentList={departmentList} {...props}/>}
                         />
                     <AuthRoute
@@ -82,15 +82,15 @@ function App(){
                                                 {...props}/> }
                         />
                     <AuthRoute
-                        exact path="/home/diary/:groupIdx"
+                        exact path="/home/group/:groupIdx"
                         render={(props) => <Diary {...props}/>}
                         />
                     <AuthRoute
-                        exact path="/home/diary/:groupIdx/group-setting"
+                        exact path="/home/group/:groupIdx/group-setting"
                         render={(props) => <GroupSetting {...props}/>}
                         />
                     <AuthRoute
-                        exact path="/home/diary/:groupIdx/:year-:month-:day"
+                        exact path="/home/group/:groupIdx/:year-:month-:day"
                         render={(props) => <Day {...props} />}
                         />
                     <AuthRoute
@@ -98,15 +98,15 @@ function App(){
                         render={(props) => <Invitation departmentList={departmentList}/>}
                         />
                     <AuthRoute
-                        exact path='/home/diary/:groupIdx/chat'
+                        exact path='/home/group/:groupIdx/chat'
                         render={(props) => <Chat {...props}/> }
                         />
                     <AuthRoute
-                        exact path="/home/diary/:groupIdx/:year-:month-:day/:postIdx/sharpening"
+                        exact path="/home/group/:groupIdx/:year-:month-:day/:postIdx/sharpen"
                         render={(props) => <SharpenPost />}
                         />
                     <AuthRoute
-                        exact path="/home/diary/:groupIdx/:year-:month-:day/:postIdx/edit-post"
+                        exact path="/home/group/:groupIdx/:year-:month-:day/:postIdx/edit-post"
                         render={(props) => <EditPost />}
                         />
                     <AuthRoute
@@ -118,7 +118,7 @@ function App(){
                         render={(props) => <EditProfile departmentList={departmentList} />}
                         />
                     <AuthRoute
-                        exact path="/home/diary/:groupIdx/group-setting/edit-group-profile"
+                        exact path="/home/group/:groupIdx/group-setting/edit-group-profile"
                         render={(props) => <EditGroupProfile {...props} />}
                         />
                     <Route component={NotFound}/>
