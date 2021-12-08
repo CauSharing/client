@@ -65,7 +65,8 @@ function NewContents({messageEndRef, groupIdx, user, srcLang, destLang, groupUse
   const onMessageReceived = async (payload) => {
      var newChatList = JSON.parse(sessionStorage.getItem('newChats'));
      var newData =JSON.parse(payload.body);
-    newData["image"] = groupUserList.find(elem => elem.email === newData.email).image;
+     var user = groupUserList.find(elem => elem.email === newData.email);
+    newData["image"] = user? (user.image? user.image: null) : null;
     await sessionStorage.setItem('newChats',JSON.stringify([...newChatList, newData]));
     await setNewContents([...newChatList, newData]);
     await messageEndRef.current.scrollIntoView();
