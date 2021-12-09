@@ -142,6 +142,7 @@ function InvitationElem({email, img, major, nickname, isFromMatchingRoom, matchi
                 if(res.data.result){
                     
                     setHideElem(true);
+                    alert("Group is created!");
                 }
                 else{
                     alert(res.data.description);
